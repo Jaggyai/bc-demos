@@ -10,6 +10,33 @@ sys.stdout.reconfigure(encoding='utf-8')
 XLSX = r'C:/Users/jmang/OneDrive/Desktop/No_Website_Leads_Combined.xlsx'
 OUT_ROOT = r'C:/Users/jmang/OneDrive/Desktop/Claude access/bc-demos'
 
+# Per-city config: slug, regional label (for "Greater {region}"), neighborhoods (10-14 chips)
+CITY_CONFIG = {
+    'Victoria':       ('victoria',       'Greater Victoria',     ['Victoria','Oak Bay','Saanich','Esquimalt','View Royal','Colwood','Langford','Sooke','Sidney','North Saanich','Central Saanich','James Bay','Fairfield','Fernwood']),
+    'Surrey':         ('surrey',         'Surrey & South Fraser',['Surrey','Newton','Cloverdale','Fleetwood','Guildford','Whalley','South Surrey','White Rock','Delta','Langley','Tsawwassen','Ladner']),
+    'Vancouver':      ('vancouver',      'Metro Vancouver',      ['Downtown','West End','Kitsilano','Mount Pleasant','Fairview','Kerrisdale','Marpole','East Vancouver','Strathcona','Yaletown','Point Grey','Dunbar']),
+    'Chilliwack':     ('chilliwack',     'the Fraser Valley',    ['Chilliwack','Sardis','Promontory','Yarrow','Cultus Lake','Rosedale','Greendale','Vedder Crossing','Hope','Agassiz']),
+    'Abbotsford':     ('abbotsford',     'the Fraser Valley',    ['Abbotsford','Mission','Aldergrove','Sumas Mountain','McCallum','Clearbrook','Sevenoaks','East Abbotsford','West Abbotsford','Matsqui']),
+    'Kelowna':        ('kelowna',        'the Okanagan',         ['Kelowna','West Kelowna','Lake Country','Peachland','Glenmore','Rutland','Mission','Mid-Town','Lower Mission','Upper Mission']),
+    'Kamloops':       ('kamloops',       'the Thompson-Okanagan',['Kamloops','Brocklehurst','North Shore','Sahali','Aberdeen','Westsyde','Valleyview','Juniper Ridge','Dallas','Barnhartvale']),
+    'Richmond':       ('richmond',       'Metro Vancouver',      ['Richmond','Steveston','Brighouse','Thompson','Hamilton','East Richmond','Sea Island','Bridgeport','Granville','Broadmoor']),
+    'Prince George':  ('prince-george',  'Northern BC',          ['Prince George','College Heights','Hart','Heritage','Westwood','Foothills','College Park','Spruceland','Pinewood','Lakewood']),
+    'Nanaimo':        ('nanaimo',        'Central Vancouver Island', ['Nanaimo','Lantzville','Cedar','Chase River','North Nanaimo','South Nanaimo','Departure Bay','Hammond Bay','Pleasant Valley','Old City']),
+    'Burnaby':        ('burnaby',        'Metro Vancouver',      ['Burnaby','Brentwood','Metrotown','Edmonds','Lougheed','Burnaby Heights','North Burnaby','South Burnaby','Cariboo','Capitol Hill']),
+    'Coquitlam':      ('coquitlam',      'Metro Vancouver',      ['Coquitlam','Port Coquitlam','Port Moody','Burke Mountain','Westwood Plateau','Coquitlam Centre','Maillardville','Eagle Ridge']),
+    'New Westminster':('new-westminster','Metro Vancouver',      ['New Westminster','Queens Park','Sapperton','Uptown','Downtown','Glenbrooke North','West End','Connaught Heights']),
+    'North Vancouver':('north-vancouver','the North Shore',      ['North Vancouver','Lynn Valley','Lonsdale','Deep Cove','Capilano','Edgemont','Grouse Mountain','Seymour']),
+    'Rosedale':       ('rosedale',       'the Fraser Valley',    ['Rosedale','Chilliwack','Sardis','Greendale','Yarrow','Promontory','Agassiz']),
+    'CPG':            ('prince-george',  'Northern BC',          ['Prince George','College Heights','Hart','Heritage','Westwood','Foothills']),
+    'Victoria West':  ('victoria',       'Greater Victoria',     ['Victoria','Esquimalt','Saanich','Oak Bay','View Royal','Colwood','Langford']),
+}
+
+def city_info(city_name: str):
+    """Return (slug, region_label, neighborhoods) for a city. None if unknown."""
+    if not city_name or pd.isna(city_name):
+        return None
+    return CITY_CONFIG.get(str(city_name).strip())
+
 # ---------------- helpers ----------------
 
 def slugify(name: str) -> str:
@@ -57,6 +84,8 @@ def render_plumber(b: dict) -> str:
     rating = b['rating']
     reviews = b['reviews']
     city = b['city']
+    region = b.get('region', f'Greater {city}')
+    neighborhoods = b.get('neighborhoods', [city])
     year = datetime.datetime.now().year
 
     # Conditional: nav CTA
@@ -86,15 +115,19 @@ def render_plumber(b: dict) -> str:
         f'<div class="trust-item"><div class="trust-num">{rating}<span style="color: #ffc940;">★</span></div>'
         f'<div class="trust-label">{int(reviews)} Google Reviews</div></div>'
     ) if has_rating else (
-        '<div class="trust-item"><div class="trust-num">Local</div>'
-        '<div class="trust-label">Victoria-Based</div></div>'
+        f'<div class="trust-item"><div class="trust-num">Local</div>'
+        f'<div class="trust-label">{city}-Based</div></div>'
     )
 
     # Hero subhead - subtle adjustment if no phone
     hero_sub = (
         'Family-owned. Licensed. Insured. From emergency leaks to full bathroom renovations, '
-        f'{name} keeps Victoria homes running with quality plumbing and gas work you can trust.'
+        f'{name} keeps {city} homes running with quality plumbing and gas work you can trust.'
     )
+
+    # Testimonial neighborhoods (use real local neighborhoods)
+    nb = neighborhoods + ['Local','Downtown','Westside']  # fallbacks
+    nb1, nb2, nb3 = nb[1] if len(nb) > 1 else city, nb[2] if len(nb) > 2 else city, nb[3] if len(nb) > 3 else city
 
     # Conditional: reviews section
     if has_rating:
@@ -103,7 +136,7 @@ def render_plumber(b: dict) -> str:
   <div class="container reviews-inner">
     <div class="reviews-head">
       <div class="section-eyebrow" style="color: var(--orange);">Real Customer Reviews</div>
-      <h2 class="section-title">Trusted by Victoria homeowners.</h2>
+      <h2 class="section-title">Trusted by {city} homeowners.</h2>
       <div class="google-rating">
         <div class="google-rating-num">{rating}</div>
         <div>
@@ -118,15 +151,15 @@ def render_plumber(b: dict) -> str:
         <p class="testimonial-quote">"Called in the morning with a leaking water heater. They were at my house within hours, replaced it cleanly, and the price was exactly what they quoted. Honest crew."</p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">SM</div>
-          <div><div class="testimonial-name">Sarah M.</div><div class="testimonial-meta">Oak Bay · Verified Google Review</div></div>
+          <div><div class="testimonial-name">Sarah M.</div><div class="testimonial-meta">{nb1} · Verified Google Review</div></div>
         </div>
       </div>
       <div class="testimonial">
         <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-quote">"Honestly the only plumber I trust in Victoria. Always professional, always fair. Showed up on time, fixed the problem, didn't try to upsell me anything I didn't need."</p>
+        <p class="testimonial-quote">"Honestly the only plumber I trust in {city}. Always professional, always fair. Showed up on time, fixed the problem, didn't try to upsell me anything I didn't need."</p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">DC</div>
-          <div><div class="testimonial-name">David C.</div><div class="testimonial-meta">Saanich · Verified Google Review</div></div>
+          <div><div class="testimonial-name">David C.</div><div class="testimonial-meta">{nb2} · Verified Google Review</div></div>
         </div>
       </div>
       <div class="testimonial">
@@ -134,7 +167,7 @@ def render_plumber(b: dict) -> str:
         <p class="testimonial-quote">"Full bathroom remodel — they handled the rough-in, fixtures, and gas line for our new tankless heater. Clean work, on schedule, and they cleaned up better than they found it."</p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">JL</div>
-          <div><div class="testimonial-name">Jennifer L.</div><div class="testimonial-meta">James Bay · Verified Google Review</div></div>
+          <div><div class="testimonial-name">Jennifer L.</div><div class="testimonial-meta">{nb3} · Verified Google Review</div></div>
         </div>
       </div>
     </div>
@@ -189,6 +222,12 @@ def render_plumber(b: dict) -> str:
 
     # Brand sub
     brand_sub = 'Plumbing & Gas · ' + city + ' BC'
+
+    # Service area chips (dynamic per city)
+    area_chips_html = '\n      '.join(f'<div class="area-chip">{n}</div>' for n in neighborhoods)
+
+    # Footer area chips (first 5)
+    footer_area_html = '\n        '.join(f'<li>{n}</li>' for n in neighborhoods[:5])
 
     html = f'''<!DOCTYPE html>
 <html lang="en">
@@ -410,15 +449,11 @@ section {{ padding: 100px 24px; }}
   <div class="container">
     <div class="area-head">
       <div class="section-eyebrow">Service Area</div>
-      <h2 class="section-title">Proudly serving Greater {city}.</h2>
-      <p class="section-sub">From downtown to the outskirts, our trucks cover every neighbourhood on Southern Vancouver Island.</p>
+      <h2 class="section-title">Proudly serving {region}.</h2>
+      <p class="section-sub">From downtown to the outskirts, our trucks cover every neighbourhood in the area.</p>
     </div>
     <div class="area-grid">
-      <div class="area-chip">Victoria</div><div class="area-chip">Oak Bay</div><div class="area-chip">Saanich</div>
-      <div class="area-chip">Esquimalt</div><div class="area-chip">View Royal</div><div class="area-chip">Colwood</div>
-      <div class="area-chip">Langford</div><div class="area-chip">Sooke</div><div class="area-chip">Sidney</div>
-      <div class="area-chip">North Saanich</div><div class="area-chip">Central Saanich</div>
-      <div class="area-chip">James Bay</div><div class="area-chip">Fairfield</div><div class="area-chip">Fernwood</div>
+      {area_chips_html}
     </div>
   </div>
 </section>
@@ -461,10 +496,12 @@ section {{ padding: 100px 24px; }}
   <div class="footer-grid">
     <div class="footer-brand">
       <div class="brand"><div class="brand-mark">{mark}</div><div><div class="brand-text" style="color: white;">{name}</div><div class="brand-sub">{brand_sub}</div></div></div>
-      <p>Family-owned and operated in {city}, BC. Licensed Red Seal plumbers and certified gas fitters serving Greater {city}.</p>
+      <p>Family-owned and operated in {city}, BC. Licensed Red Seal plumbers and certified gas fitters serving {region}.</p>
     </div>
     <div><h4>Services</h4><ul><li><a href="#services">Emergency Repairs</a></li><li><a href="#services">Drain Cleaning</a></li><li><a href="#services">Water Heaters</a></li><li><a href="#services">Gas Fitting</a></li><li><a href="#services">Leak Detection</a></li></ul></div>
-    <div><h4>Service Area</h4><ul><li>Victoria</li><li>Saanich</li><li>Oak Bay</li><li>Esquimalt</li><li>Langford</li></ul></div>
+    <div><h4>Service Area</h4><ul>
+        {footer_area_html}
+      </ul></div>
     <div><h4>Contact</h4><ul>{footer_contact}</ul></div>
   </div>
   <div class="footer-bottom">
@@ -481,53 +518,76 @@ section {{ padding: 100px 24px; }}
 
 def main():
     df = pd.read_excel(XLSX)
-    vic_plumbers = df[(df['City'] == 'Victoria') & (df['Category 1'] == 'Plumber')].copy()
-    print(f'Found {len(vic_plumbers)} Victoria plumbers')
+    plumbers = df[df['Category 1'] == 'Plumber'].copy()
+    print(f'Total BC plumbers: {len(plumbers)}')
     print()
 
     generated = []
-    for _, row in vic_plumbers.iterrows():
+    used_slugs = {}  # (city_slug, biz_slug) -> count, for collision suffixing
+    by_city_count = {}
+
+    for _, row in plumbers.iterrows():
         raw_name = str(row['Business Name'])
         name = clean_name(raw_name)
-        slug = slugify(name)
+        biz_slug = slugify(name)
         mark = brand_mark(name)
         phone_tel, phone_display = format_phone(row.get('Phone'))
         has_phone = phone_tel is not None
         street = row.get('Street')
-        has_address = pd.notna(street) and str(street).strip()
+        has_address = bool(pd.notna(street) and str(street).strip())
         rating = row.get('Rating')
         reviews = row.get('Reviews')
-        has_rating = pd.notna(rating) and pd.notna(reviews)
-        city = str(row.get('City') or 'Victoria').strip()
+        has_rating = bool(pd.notna(rating) and pd.notna(reviews))
+
+        raw_city = row.get('City')
+        info = city_info(raw_city)
+        if info is None:
+            # Unknown / missing city → generic BC bucket
+            city = 'British Columbia'
+            city_slug = 'bc'
+            region = 'British Columbia'
+            neighborhoods = ['Vancouver','Surrey','Burnaby','Richmond','Victoria','Kelowna','Kamloops','Nanaimo','Abbotsford','Chilliwack','Prince George','Coquitlam']
+        else:
+            city_slug, region, neighborhoods = info
+            city = str(raw_city).strip()
+
+        # Slug collision protection
+        key = (city_slug, biz_slug)
+        used_slugs[key] = used_slugs.get(key, 0) + 1
+        final_slug = biz_slug if used_slugs[key] == 1 else f'{biz_slug}-{used_slugs[key]}'
 
         biz = {
-            'name': name, 'mark': mark, 'slug': slug,
+            'name': name, 'mark': mark, 'slug': final_slug,
             'phone_tel': phone_tel or '', 'phone_display': phone_display or '',
             'has_phone': has_phone,
             'street': str(street) if has_address else '', 'has_address': has_address,
             'rating': rating, 'reviews': reviews, 'has_rating': has_rating,
-            'city': city,
+            'city': city, 'region': region, 'neighborhoods': neighborhoods,
         }
 
         html = render_plumber(biz)
-        out_dir = os.path.join(OUT_ROOT, 'victoria', 'plumbers', slug)
+        out_dir = os.path.join(OUT_ROOT, city_slug, 'plumbers', final_slug)
         os.makedirs(out_dir, exist_ok=True)
         out_path = os.path.join(out_dir, 'index.html')
         with open(out_path, 'w', encoding='utf-8') as f:
             f.write(html)
-        url = f'victoria/plumbers/{slug}/'
-        generated.append((name, url, has_phone, has_address, has_rating))
-        print(f'✓ {name}')
-        print(f'   {out_path}')
-        print(f'   phone={has_phone} address={has_address} rating={has_rating}')
-        print()
+        url = f'{city_slug}/plumbers/{final_slug}/'
+        generated.append((name, url, city, has_phone, has_address, has_rating))
+        by_city_count[city] = by_city_count.get(city, 0) + 1
 
     print('=' * 70)
-    print(f'Generated {len(generated)} site(s)')
+    print(f'Generated {len(generated)} plumber sites across {len(by_city_count)} cities')
     print()
-    print('GitHub Pages URLs (once pushed):')
-    for n, u, _, _, _ in generated:
-        print(f'  https://jaggyai.github.io/bc-demos/{u}')
+    print('Sites per city:')
+    for c, n in sorted(by_city_count.items(), key=lambda x: -x[1]):
+        print(f'  {c}: {n}')
+    print()
+    print('Sample GitHub Pages URLs (showing 1 per city):')
+    seen_cities = set()
+    for n, u, c, _, _, _ in generated:
+        if c not in seen_cities:
+            print(f'  https://jaggyai.github.io/bc-demos/{u}  ({n})')
+            seen_cities.add(c)
 
 if __name__ == '__main__':
     main()
