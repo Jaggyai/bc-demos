@@ -514,19 +514,471 @@ section {{ padding: 100px 24px; }}
 </html>'''
     return html
 
+# ---------------- contractor template renderer ----------------
+
+def render_contractor(b: dict) -> str:
+    name = b['name']
+    mark = b['mark']
+    phone_tel = b['phone_tel']
+    phone_display = b['phone_display']
+    has_phone = b['has_phone']
+    street = b['street']
+    has_address = b['has_address']
+    has_rating = b['has_rating']
+    rating = b['rating']
+    reviews = b['reviews']
+    city = b['city']
+    region = b.get('region', f'Greater {city}')
+    neighborhoods = b.get('neighborhoods', [city])
+    year = datetime.datetime.now().year
+
+    nav_cta = (
+        f'<a href="tel:{phone_tel}" class="nav-cta">'
+        f'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+        f'{phone_display}</a>'
+    ) if has_phone else (
+        '<a href="#contact" class="nav-cta">Free Estimate</a>'
+    )
+
+    hero_ctas = ''
+    if has_phone:
+        hero_ctas += (
+            f'<a href="tel:{phone_tel}" class="btn-primary">'
+            f'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+            f'Call {phone_display}</a>'
+        )
+    hero_ctas += (
+        '<a href="#contact" class="btn-secondary">Get a Free Estimate'
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>'
+    )
+
+    rating_tile = (
+        f'<div class="trust-item"><div class="trust-num">{rating}<span style="color: #ffc940;">★</span></div>'
+        f'<div class="trust-label">{int(reviews)} Google Reviews</div></div>'
+    ) if has_rating else (
+        f'<div class="trust-item"><div class="trust-num">Local</div>'
+        f'<div class="trust-label">{city}-Based</div></div>'
+    )
+
+    hero_sub = (
+        'Licensed. Insured. Family-owned. From kitchen remodels to ground-up custom builds, '
+        f'{name} delivers quality construction across {region} — on schedule, on budget, every time.'
+    )
+
+    nb = neighborhoods + ['Local','Downtown','Westside']
+    nb1, nb2, nb3 = nb[1] if len(nb) > 1 else city, nb[2] if len(nb) > 2 else city, nb[3] if len(nb) > 3 else city
+
+    if has_rating:
+        reviews_block = f'''
+<section class="reviews" id="reviews">
+  <div class="container reviews-inner">
+    <div class="reviews-head">
+      <div class="section-eyebrow" style="color: var(--orange);">Real Customer Reviews</div>
+      <h2 class="section-title">Trusted by {city} homeowners.</h2>
+      <div class="google-rating">
+        <div class="google-rating-num">{rating}</div>
+        <div>
+          <div class="google-rating-stars">★★★★★</div>
+          <div class="google-rating-count">Based on {int(reviews)} Google reviews</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonials">
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Did a full kitchen renovation for us — finished on time, on budget, and the quality is incredible. Worth every dollar. Crew was professional from start to finish."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MR</div>
+          <div><div class="testimonial-name">Michael R.</div><div class="testimonial-meta">{nb1} · Verified Google Review</div></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Built our custom home from the ground up. Communication was perfect, every decision was made WITH us not for us. We're moved in and still amazed at the craftsmanship. Would 100% hire again."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">KH</div>
+          <div><div class="testimonial-name">Karen H.</div><div class="testimonial-meta">{nb2} · Verified Google Review</div></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Two-storey addition with a basement suite. They handled permits, design, demo, and build. We never felt out of the loop. Honest, skilled, and fair priced."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">TB</div>
+          <div><div class="testimonial-name">Tom B.</div><div class="testimonial-meta">{nb3} · Verified Google Review</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>'''
+    else:
+        reviews_block = ''
+
+    contact_items = ''
+    if has_phone:
+        contact_items += f'''
+      <div class="contact-info-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><div class="contact-label">Call Us</div><div class="contact-value"><a href="tel:{phone_tel}">{phone_display}</a></div></div>
+      </div>'''
+    if has_address:
+        contact_items += f'''
+      <div class="contact-info-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="contact-label">Office</div><div class="contact-value">{street}<br>{city}, BC</div></div>
+      </div>'''
+    contact_items += '''
+      <div class="contact-info-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="contact-label">Hours</div><div class="contact-value">Mon–Fri: 7am – 6pm<br>Sat by appointment</div></div>
+      </div>'''
+    if has_rating:
+        contact_items += f'''
+      <div class="contact-info-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div><div class="contact-label">Google Rating</div><div class="contact-value">{rating} ★ · {int(reviews)} reviews</div></div>
+      </div>'''
+
+    if has_phone:
+        final_cta_btn = (
+            f'<a href="tel:{phone_tel}" class="btn-white">'
+            f'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+            f'Call {phone_display} Today</a>'
+        )
+    else:
+        final_cta_btn = '<a href="#contact" class="btn-white">Get a Free Estimate →</a>'
+
+    footer_contact = ''
+    if has_phone:
+        footer_contact += f'<li><a href="tel:{phone_tel}">{phone_display}</a></li>'
+    if has_address:
+        footer_contact += f'<li>{street}</li><li>{city}, BC</li>'
+    footer_contact += '<li>Mon–Fri 7am–6pm</li><li>By appointment Sat</li>'
+
+    brand_sub = 'Construction & Renovation · ' + city + ' BC'
+
+    area_chips_html = '\n      '.join(f'<div class="area-chip">{n}</div>' for n in neighborhoods)
+    footer_area_html = '\n        '.join(f'<li>{n}</li>' for n in neighborhoods[:5])
+
+    html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{name} — Trusted {city} general contractor. Custom homes, renovations, additions. Licensed, insured, on-budget, on-schedule.">
+<title>{name} | {city} General Contractor & Custom Home Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* {{ margin: 0; padding: 0; box-sizing: border-box; }}
+:root {{
+  --navy: #0a2540; --navy-dark: #061a30; --orange: #ff6b35; --orange-dark: #e55525;
+  --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-500: #64748b;
+  --gray-700: #334155; --gray-900: #0f172a; --white: #ffffff;
+  --shadow: 0 10px 40px rgba(10, 37, 64, 0.08); --shadow-lg: 0 20px 60px rgba(10, 37, 64, 0.15);
+}}
+html {{ scroll-behavior: smooth; }}
+body {{ font-family: 'Inter', system-ui, sans-serif; color: var(--gray-900); line-height: 1.6; -webkit-font-smoothing: antialiased; }}
+img {{ max-width: 100%; display: block; }}
+a {{ color: inherit; text-decoration: none; }}
+.nav {{ position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); z-index: 100; box-shadow: 0 1px 0 rgba(10,37,64,0.06); }}
+.nav-inner {{ max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }}
+.brand {{ display: flex; align-items: center; gap: 12px; }}
+.brand-mark {{ width: 40px; height: 40px; background: var(--navy); color: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; letter-spacing: -0.5px; }}
+.brand-text {{ font-weight: 800; font-size: 17px; letter-spacing: -0.3px; color: var(--navy); }}
+.brand-sub {{ font-size: 11px; color: var(--gray-500); font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; }}
+.nav-links {{ display: flex; gap: 32px; }}
+.nav-links a {{ font-size: 14px; font-weight: 500; color: var(--gray-700); transition: color 0.2s; }}
+.nav-links a:hover {{ color: var(--orange); }}
+.nav-cta {{ background: var(--orange); color: var(--white); padding: 12px 22px; border-radius: 8px; font-weight: 700; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }}
+.nav-cta:hover {{ background: var(--orange-dark); transform: translateY(-1px); }}
+@media (max-width: 768px) {{ .nav-links {{ display: none; }} .brand-sub {{ display: none; }} }}
+.hero {{ position: relative; min-height: 92vh; padding-top: 90px; display: flex; align-items: center; overflow: hidden; background: var(--navy); }}
+.hero-bg {{ position: absolute; inset: 0; background: linear-gradient(110deg, rgba(10,37,64,0.92) 0%, rgba(10,37,64,0.70) 50%, rgba(10,37,64,0.40) 100%), url('../../../assets/contractor/hero.jpg') center/cover; }}
+.hero-content {{ position: relative; max-width: 1200px; margin: 0 auto; padding: 60px 24px; width: 100%; }}
+.hero-eyebrow {{ display: inline-flex; align-items: center; gap: 8px; background: rgba(255,107,53,0.15); color: var(--orange); padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(255,107,53,0.25); }}
+.hero-eyebrow::before {{ content: ''; width: 8px; height: 8px; background: var(--orange); border-radius: 50%; box-shadow: 0 0 12px var(--orange); animation: pulse 2s infinite; }}
+@keyframes pulse {{ 0%, 100% {{ opacity: 1; }} 50% {{ opacity: 0.5; }} }}
+.hero h1 {{ color: var(--white); font-size: clamp(38px, 5.5vw, 68px); font-weight: 900; line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 24px; max-width: 760px; }}
+.hero h1 span {{ color: var(--orange); }}
+.hero-sub {{ color: rgba(255,255,255,0.85); font-size: clamp(17px, 1.6vw, 20px); max-width: 580px; margin-bottom: 40px; line-height: 1.6; }}
+.hero-ctas {{ display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }}
+.btn-primary {{ background: var(--orange); color: var(--white); padding: 18px 32px; border-radius: 10px; font-weight: 700; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s; box-shadow: 0 8px 24px rgba(255,107,53,0.35); }}
+.btn-primary:hover {{ background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,107,53,0.45); }}
+.btn-secondary {{ background: rgba(255,255,255,0.1); color: var(--white); padding: 18px 32px; border-radius: 10px; font-weight: 600; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s; backdrop-filter: blur(10px); }}
+.btn-secondary:hover {{ background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); }}
+.hero-trust {{ display: flex; gap: 40px; flex-wrap: wrap; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.12); }}
+.trust-item {{ color: rgba(255,255,255,0.9); }}
+.trust-num {{ font-size: 28px; font-weight: 800; color: var(--white); letter-spacing: -0.5px; }}
+.trust-label {{ font-size: 13px; color: rgba(255,255,255,0.65); font-weight: 500; }}
+section {{ padding: 100px 24px; }}
+.container {{ max-width: 1200px; margin: 0 auto; }}
+.section-eyebrow {{ display: inline-block; color: var(--orange); font-weight: 700; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }}
+.section-title {{ font-size: clamp(32px, 4vw, 48px); font-weight: 800; color: var(--navy); letter-spacing: -1px; line-height: 1.15; margin-bottom: 20px; }}
+.section-sub {{ font-size: 18px; color: var(--gray-500); max-width: 640px; line-height: 1.6; }}
+.services {{ background: var(--gray-50); }}
+.services-head {{ text-align: center; max-width: 720px; margin: 0 auto 64px; }}
+.services-head .section-sub {{ margin: 0 auto; }}
+.services-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }}
+.service-card {{ background: var(--white); padding: 36px 32px; border-radius: 16px; transition: all 0.3s; border: 1px solid var(--gray-200); }}
+.service-card:hover {{ transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: transparent; }}
+.service-icon {{ width: 56px; height: 56px; background: rgba(255,107,53,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--orange); }}
+.service-icon svg {{ width: 28px; height: 28px; }}
+.service-card h3 {{ font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 12px; letter-spacing: -0.3px; }}
+.service-card p {{ color: var(--gray-500); font-size: 15px; line-height: 1.6; }}
+.why {{ background: var(--white); }}
+.why-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }}
+@media (max-width: 900px) {{ .why-grid {{ grid-template-columns: 1fr; gap: 48px; }} }}
+.why-image {{ position: relative; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg); }}
+.why-image img {{ width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/5; }}
+.why-badge {{ position: absolute; bottom: 24px; left: 24px; background: var(--white); padding: 20px 24px; border-radius: 14px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 16px; }}
+.why-badge-num {{ font-size: 36px; font-weight: 900; color: var(--orange); letter-spacing: -1px; line-height: 1; }}
+.why-badge-label {{ font-size: 12px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }}
+.why-badge-sub {{ font-size: 14px; color: var(--navy); font-weight: 700; }}
+.why-list {{ margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }}
+.why-item {{ display: flex; gap: 16px; align-items: flex-start; }}
+.why-check {{ width: 28px; height: 28px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--white); }}
+.why-check svg {{ width: 16px; height: 16px; }}
+.why-item-title {{ font-weight: 700; color: var(--navy); margin-bottom: 4px; font-size: 16px; }}
+.why-item-desc {{ font-size: 14px; color: var(--gray-500); line-height: 1.5; }}
+.reviews {{ background: var(--navy); color: var(--white); position: relative; overflow: hidden; }}
+.reviews::before {{ content: ''; position: absolute; inset: 0; background: url('../../../assets/contractor/services.jpg') center/cover; opacity: 0.08; }}
+.reviews-inner {{ position: relative; }}
+.reviews-head {{ text-align: center; margin-bottom: 64px; }}
+.reviews-head .section-title {{ color: var(--white); }}
+.reviews-head .section-sub {{ color: rgba(255,255,255,0.7); margin: 0 auto; }}
+.google-rating {{ display: inline-flex; align-items: center; gap: 20px; background: rgba(255,255,255,0.06); padding: 20px 32px; border-radius: 16px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.1); }}
+.google-rating-num {{ font-size: 48px; font-weight: 900; color: var(--white); letter-spacing: -1.5px; line-height: 1; }}
+.google-rating-stars {{ font-size: 22px; color: #ffc940; letter-spacing: 3px; margin-bottom: 4px; }}
+.google-rating-count {{ font-size: 13px; color: rgba(255,255,255,0.65); }}
+.testimonials {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }}
+.testimonial {{ background: rgba(255,255,255,0.05); padding: 32px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }}
+.testimonial-stars {{ color: #ffc940; letter-spacing: 2px; margin-bottom: 16px; font-size: 14px; }}
+.testimonial-quote {{ color: rgba(255,255,255,0.92); font-size: 15px; line-height: 1.7; margin-bottom: 24px; }}
+.testimonial-author {{ display: flex; align-items: center; gap: 12px; }}
+.testimonial-avatar {{ width: 44px; height: 44px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--white); font-size: 16px; }}
+.testimonial-name {{ font-weight: 700; color: var(--white); font-size: 14px; }}
+.testimonial-meta {{ font-size: 12px; color: rgba(255,255,255,0.55); }}
+.area {{ background: var(--gray-50); text-align: center; }}
+.area-head {{ max-width: 720px; margin: 0 auto 48px; }}
+.area-head .section-sub {{ margin: 0 auto; }}
+.area-grid {{ display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 800px; margin: 0 auto; }}
+.area-chip {{ background: var(--white); padding: 14px 24px; border-radius: 100px; font-weight: 600; color: var(--navy); border: 1px solid var(--gray-200); font-size: 14px; transition: all 0.2s; }}
+.area-chip:hover {{ border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }}
+.contact {{ background: var(--white); }}
+.contact-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }}
+@media (max-width: 900px) {{ .contact-grid {{ grid-template-columns: 1fr; gap: 48px; }} }}
+.contact-info-block {{ background: var(--gray-50); padding: 40px; border-radius: 20px; }}
+.contact-info-item {{ display: flex; gap: 20px; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid var(--gray-200); }}
+.contact-info-item:last-child {{ border-bottom: none; }}
+.contact-icon {{ width: 48px; height: 48px; background: var(--white); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--orange); flex-shrink: 0; box-shadow: var(--shadow); }}
+.contact-icon svg {{ width: 22px; height: 22px; }}
+.contact-label {{ font-size: 12px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }}
+.contact-value {{ font-size: 17px; color: var(--navy); font-weight: 700; }}
+.contact-value a:hover {{ color: var(--orange); }}
+.contact-form h2 {{ margin-bottom: 8px; }}
+.contact-form-sub {{ color: var(--gray-500); margin-bottom: 32px; }}
+.form-row {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }}
+@media (max-width: 600px) {{ .form-row {{ grid-template-columns: 1fr; }} }}
+.form-field {{ display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }}
+.form-field label {{ font-size: 13px; font-weight: 600; color: var(--gray-700); }}
+.form-field input, .form-field textarea, .form-field select {{ padding: 14px 16px; border: 1px solid var(--gray-200); border-radius: 10px; font-size: 15px; font-family: inherit; transition: border-color 0.2s; background: var(--white); }}
+.form-field input:focus, .form-field textarea:focus, .form-field select:focus {{ outline: none; border-color: var(--orange); }}
+.form-field textarea {{ resize: vertical; min-height: 120px; }}
+.form-submit {{ background: var(--orange); color: var(--white); padding: 16px 32px; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 24px rgba(255,107,53,0.3); width: 100%; }}
+.form-submit:hover {{ background: var(--orange-dark); transform: translateY(-2px); }}
+.final-cta {{ background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%); color: var(--white); text-align: center; padding: 80px 24px; }}
+.final-cta h2 {{ font-size: clamp(28px, 4vw, 42px); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }}
+.final-cta p {{ font-size: 18px; margin-bottom: 32px; opacity: 0.95; max-width: 580px; margin-left: auto; margin-right: auto; }}
+.final-cta .btn-white {{ background: var(--white); color: var(--orange); padding: 18px 36px; border-radius: 10px; font-weight: 700; font-size: 17px; display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s; box-shadow: 0 12px 32px rgba(0,0,0,0.15); }}
+.final-cta .btn-white:hover {{ transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }}
+.footer {{ background: var(--navy-dark); color: rgba(255,255,255,0.7); padding: 64px 24px 32px; }}
+.footer-grid {{ max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }}
+@media (max-width: 768px) {{ .footer-grid {{ grid-template-columns: 1fr 1fr; gap: 32px; }} }}
+.footer h4 {{ color: var(--white); font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }}
+.footer ul {{ list-style: none; }}
+.footer ul li {{ margin-bottom: 10px; font-size: 14px; }}
+.footer ul li a:hover {{ color: var(--orange); }}
+.footer-brand p {{ font-size: 14px; line-height: 1.7; max-width: 360px; margin-top: 16px; }}
+.footer-bottom {{ max-width: 1200px; margin: 0 auto; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 13px; }}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="brand">
+      <div class="brand-mark">{mark}</div>
+      <div><div class="brand-text">{name}</div><div class="brand-sub">{brand_sub}</div></div>
+    </a>
+    <div class="nav-links">
+      <a href="#services">Services</a><a href="#why">Why Us</a>
+      {('<a href="#reviews">Reviews</a>' if has_rating else '')}<a href="#contact">Contact</a>
+    </div>
+    {nav_cta}
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Now Booking · Free Consultations</div>
+    <h1>{city} <span>Custom Homes</span> & Renovation Experts.</h1>
+    <p class="hero-sub">{hero_sub}</p>
+    <div class="hero-ctas">{hero_ctas}</div>
+    <div class="hero-trust">
+      <div class="trust-item"><div class="trust-num">Local</div><div class="trust-label">{city}-Based</div></div>
+      {rating_tile}
+      <div class="trust-item"><div class="trust-num">2-Yr</div><div class="trust-label">Workmanship Warranty</div></div>
+      <div class="trust-item"><div class="trust-num">100%</div><div class="trust-label">Licensed & Insured</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-head">
+      <div class="section-eyebrow">What We Build</div>
+      <h2 class="section-title">From Custom Homes to Full Renovations</h2>
+      <p class="section-sub">Whether you're starting from scratch or transforming what's already there, our crews bring the same craftsmanship to every project — big or small.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><h3>Custom Home Builds</h3><p>Ground-up new construction, designed around how you actually live. From foundation to finish.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><h3>Major Renovations</h3><p>Whole-home transformations, structural rework, open-concept conversions. We handle the messy stuff.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v11"/><path d="M3 21h18M9 21V14M15 21V14"/></svg></div><h3>Kitchen & Bath Remodels</h3><p>Premium finishes, modern layouts, smart storage. Where the home actually gets used.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><h3>Additions & Extensions</h3><p>Second storeys, garages, in-law suites, sunrooms. Add the square footage you need.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 4v16"/></svg></div><h3>Commercial Buildouts</h3><p>Office, retail, restaurant fit-outs. Permit-savvy crews who know commercial code.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h3>Design-Build Services</h3><p>One team, one timeline, one budget. We handle design, permits, and build under one roof.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-image">
+        <img src="../../../assets/contractor/about.jpg" alt="{name} master builder">
+        <div class="why-badge"><div class="why-badge-num">★</div><div><div class="why-badge-sub">Trusted Local</div><div class="why-badge-label">{city} Builder</div></div></div>
+      </div>
+      <div>
+        <div class="section-eyebrow">Why {city} Chooses Us</div>
+        <h2 class="section-title">Built right. Delivered on time.</h2>
+        <p style="color: var(--gray-500); font-size: 17px; line-height: 1.7;">Every project gets a detailed scope, a clear timeline, and a single point of contact. No mystery change orders. No "the trades didn't show" excuses. Just clean execution.</p>
+        <div class="why-list">
+          <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">Detailed, Upfront Quotes</div><div class="why-item-desc">Line-item breakdowns. You know exactly what every dollar is doing before we break ground.</div></div></div>
+          <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">Licensed & WCB Insured</div><div class="why-item-desc">Fully ticketed, bonded, and insured. Your home and our crew are protected.</div></div></div>
+          <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">2-Year Workmanship Warranty</div><div class="why-item-desc">We stand behind every job. If our work fails, we come back free.</div></div></div>
+          <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">On-Schedule, On-Budget</div><div class="why-item-desc">Weekly progress updates. No surprise overruns. We hit the dates we commit to.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{reviews_block}
+<section class="area">
+  <div class="container">
+    <div class="area-head">
+      <div class="section-eyebrow">Service Area</div>
+      <h2 class="section-title">Proudly building across {region}.</h2>
+      <p class="section-sub">Residential and commercial projects throughout the region.</p>
+    </div>
+    <div class="area-grid">
+      {area_chips_html}
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <div class="section-eyebrow">Get In Touch</div>
+        <h2 class="section-title" style="margin-bottom: 32px;">Got a project? Let's scope it.</h2>
+        <div class="contact-info-block">{contact_items}</div>
+      </div>
+      <div class="contact-form">
+        <h2 class="section-title">Request a free estimate</h2>
+        <p class="contact-form-sub">Tell us about your project. We'll get back to you within 1 business day with next steps.</p>
+        <form>
+          <div class="form-row">
+            <div class="form-field"><label>First Name</label><input type="text" placeholder="Your name"></div>
+            <div class="form-field"><label>Phone</label><input type="tel" placeholder="(250) 555-0000"></div>
+          </div>
+          <div class="form-field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+          <div class="form-field"><label>Project Type</label><select><option>Custom Home Build</option><option>Major Renovation</option><option>Kitchen Remodel</option><option>Bathroom Remodel</option><option>Addition / Extension</option><option>Commercial Project</option><option>Other / Not Sure</option></select></div>
+          <div class="form-field"><label>Tell us about your project</label><textarea placeholder="Square footage, timeline, budget range, anything you've already decided..."></textarea></div>
+          <button type="submit" class="form-submit">Send My Project Details →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="container">
+    <h2>Got a build or reno in mind? Let's talk.</h2>
+    <p>Free consultations. Detailed quotes. No surprises.</p>
+    {final_cta_btn}
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="brand"><div class="brand-mark">{mark}</div><div><div class="brand-text" style="color: white;">{name}</div><div class="brand-sub">{brand_sub}</div></div></div>
+      <p>Family-owned general contractor based in {city}, BC. Custom homes, renovations, and commercial projects throughout {region}. Licensed, bonded, and WCB insured.</p>
+    </div>
+    <div><h4>Services</h4><ul><li><a href="#services">Custom Home Builds</a></li><li><a href="#services">Major Renovations</a></li><li><a href="#services">Kitchen & Bath</a></li><li><a href="#services">Additions</a></li><li><a href="#services">Design-Build</a></li></ul></div>
+    <div><h4>Service Area</h4><ul>
+        {footer_area_html}
+      </ul></div>
+    <div><h4>Contact</h4><ul>{footer_contact}</ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© {year} {name}. All rights reserved.</div>
+    <div>Licensed · Bonded · WCB Insured</div>
+  </div>
+</footer>
+
+</body>
+</html>'''
+    return html
+
+# ---------------- category routing ----------------
+
+CONTRACTOR_CATS = {'General contractor','Construction company','General Contractor','Construction Company','Contractor','Home builder','Custom home builder'}
+PLUMBER_CATS = {'Plumber'}
+
+def route_category(cat1: str):
+    """Return (renderer, category_slug) for a Category 1 value, or None to skip."""
+    if cat1 in PLUMBER_CATS:
+        return render_plumber, 'plumbers'
+    if cat1 in CONTRACTOR_CATS:
+        return render_contractor, 'contractors'
+    return None
+
 # ---------------- main ----------------
 
 def main():
     df = pd.read_excel(XLSX)
-    plumbers = df[df['Category 1'] == 'Plumber'].copy()
-    print(f'Total BC plumbers: {len(plumbers)}')
-    print()
 
     generated = []
-    used_slugs = {}  # (city_slug, biz_slug) -> count, for collision suffixing
-    by_city_count = {}
+    used_slugs = {}
+    by_city_cat = {}
+    skipped = 0
 
-    for _, row in plumbers.iterrows():
+    for _, row in df.iterrows():
+        cat1 = row.get('Category 1')
+        if pd.isna(cat1):
+            skipped += 1
+            continue
+        routing = route_category(str(cat1).strip())
+        if routing is None:
+            skipped += 1
+            continue
+        renderer, cat_slug = routing
+
         raw_name = str(row['Business Name'])
         name = clean_name(raw_name)
         biz_slug = slugify(name)
@@ -542,7 +994,6 @@ def main():
         raw_city = row.get('City')
         info = city_info(raw_city)
         if info is None:
-            # Unknown / missing city → generic BC bucket
             city = 'British Columbia'
             city_slug = 'bc'
             region = 'British Columbia'
@@ -551,8 +1002,7 @@ def main():
             city_slug, region, neighborhoods = info
             city = str(raw_city).strip()
 
-        # Slug collision protection
-        key = (city_slug, biz_slug)
+        key = (city_slug, cat_slug, biz_slug)
         used_slugs[key] = used_slugs.get(key, 0) + 1
         final_slug = biz_slug if used_slugs[key] == 1 else f'{biz_slug}-{used_slugs[key]}'
 
@@ -565,29 +1015,34 @@ def main():
             'city': city, 'region': region, 'neighborhoods': neighborhoods,
         }
 
-        html = render_plumber(biz)
-        out_dir = os.path.join(OUT_ROOT, city_slug, 'plumbers', final_slug)
+        html = renderer(biz)
+        out_dir = os.path.join(OUT_ROOT, city_slug, cat_slug, final_slug)
         os.makedirs(out_dir, exist_ok=True)
         out_path = os.path.join(out_dir, 'index.html')
         with open(out_path, 'w', encoding='utf-8') as f:
             f.write(html)
-        url = f'{city_slug}/plumbers/{final_slug}/'
-        generated.append((name, url, city, has_phone, has_address, has_rating))
-        by_city_count[city] = by_city_count.get(city, 0) + 1
+        url = f'{city_slug}/{cat_slug}/{final_slug}/'
+        generated.append((name, url, city, cat_slug))
+        by_city_cat.setdefault((city, cat_slug), 0)
+        by_city_cat[(city, cat_slug)] += 1
 
     print('=' * 70)
-    print(f'Generated {len(generated)} plumber sites across {len(by_city_count)} cities')
+    print(f'Generated {len(generated)} sites ({skipped} rows skipped — not in active categories)')
     print()
-    print('Sites per city:')
-    for c, n in sorted(by_city_count.items(), key=lambda x: -x[1]):
-        print(f'  {c}: {n}')
+    by_cat_total = {}
+    for (c, cat), n in by_city_cat.items():
+        by_cat_total[cat] = by_cat_total.get(cat, 0) + n
+    print('Totals by category:')
+    for cat, n in sorted(by_cat_total.items(), key=lambda x: -x[1]):
+        print(f'  {cat}: {n}')
     print()
-    print('Sample GitHub Pages URLs (showing 1 per city):')
-    seen_cities = set()
-    for n, u, c, _, _, _ in generated:
-        if c not in seen_cities:
+    print('Sample URLs (1 per city/category combo):')
+    seen = set()
+    for n, u, c, cat in generated:
+        k = (c, cat)
+        if k not in seen:
             print(f'  https://jaggyai.github.io/bc-demos/{u}  ({n})')
-            seen_cities.add(c)
+            seen.add(k)
 
 if __name__ == '__main__':
     main()
