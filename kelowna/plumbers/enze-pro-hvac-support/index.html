@@ -31,9 +31,10 @@ a { color: inherit; text-decoration: none; }
 .nav-links a:hover { color: var(--orange); }
 .nav-cta { background: var(--orange); color: var(--white); padding: 12px 22px; border-radius: 8px; font-weight: 700; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
 .nav-cta:hover { background: var(--orange-dark); transform: translateY(-1px); }
+.nav-cta svg { width: 16px; height: 16px; }
 @media (max-width: 768px) { .nav-links { display: none; } .brand-sub { display: none; } }
 .hero { position: relative; min-height: 92vh; padding-top: 90px; display: flex; align-items: center; overflow: hidden; background: var(--navy); }
-.hero-bg { position: absolute; inset: 0; background: linear-gradient(110deg, rgba(10,37,64,0.92) 0%, rgba(10,37,64,0.70) 50%, rgba(10,37,64,0.40) 100%), url('../../../assets/plumber/hero.jpg') center/cover; }
+.hero-bg { position: absolute; inset: 0; }
 .hero-content { position: relative; max-width: 1200px; margin: 0 auto; padding: 60px 24px; width: 100%; }
 .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,107,53,0.15); color: var(--orange); padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(255,107,53,0.25); }
 .hero-eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--orange); border-radius: 50%; box-shadow: 0 0 12px var(--orange); animation: pulse 2s infinite; }
@@ -44,6 +45,7 @@ a { color: inherit; text-decoration: none; }
 .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
 .btn-primary { background: var(--orange); color: var(--white); padding: 18px 32px; border-radius: 10px; font-weight: 700; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s; box-shadow: 0 8px 24px rgba(255,107,53,0.35); }
 .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,107,53,0.45); }
+.btn-primary svg, .btn-secondary svg { width: 20px; height: 20px; }
 .btn-secondary { background: rgba(255,255,255,0.1); color: var(--white); padding: 18px 32px; border-radius: 10px; font-weight: 600; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s; backdrop-filter: blur(10px); }
 .btn-secondary:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); }
 .hero-trust { display: flex; gap: 40px; flex-wrap: wrap; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.12); }
@@ -81,7 +83,7 @@ section { padding: 100px 24px; }
 .why-item-title { font-weight: 700; color: var(--navy); margin-bottom: 4px; font-size: 16px; }
 .why-item-desc { font-size: 14px; color: var(--gray-500); line-height: 1.5; }
 .reviews { background: var(--navy); color: var(--white); position: relative; overflow: hidden; }
-.reviews::before { content: ''; position: absolute; inset: 0; background: url('../../../assets/plumber/services.jpg') center/cover; opacity: 0.08; }
+.reviews-bg { position: absolute; inset: 0; opacity: 0.08; }
 .reviews-inner { position: relative; }
 .reviews-head { text-align: center; margin-bottom: 64px; }
 .reviews-head .section-title { color: var(--white); }
@@ -151,23 +153,22 @@ section { padding: 100px 24px; }
       <div><div class="brand-text">Enze Pro HVAC Support</div><div class="brand-sub">Plumbing & Gas · Kelowna BC</div></div>
     </a>
     <div class="nav-links">
-      <a href="#services">Services</a><a href="#why">Why Us</a>
-      <a href="#reviews">Reviews</a><a href="#contact">Contact</a>
+      <a href="#services">Services</a><a href="#why">Why Us</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a>
     </div>
-    <a href="tel:+17785880778" class="nav-cta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>(778) 588-0778</a>
+    <a href="tel:+17785880778" class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>(778) 588-0778</a>
   </div>
 </nav>
 
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-bg" style="background: linear-gradient(110deg, rgba(10,37,64,0.92) 0%, rgba(10,37,64,0.70) 50%, rgba(10,37,64,0.40) 100%), url('../../../assets/plumber/hero.jpg') center/cover;"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">Available Now · Same-Day Service</div>
     <h1>Kelowna's Trusted <span>Plumbing & Gas</span> Experts.</h1>
     <p class="hero-sub">Family-owned. Licensed. Insured. From emergency leaks to full bathroom renovations, Enze Pro HVAC Support keeps Kelowna homes running with quality plumbing and gas work you can trust.</p>
-    <div class="hero-ctas"><a href="tel:+17785880778" class="btn-primary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call (778) 588-0778</a><a href="#contact" class="btn-secondary">Request Free Quote<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+    <div class="hero-ctas"><a href="tel:+17785880778" class="btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call (778) 588-0778</a><a href="#contact" class="btn-secondary">Request Free Quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
     <div class="hero-trust">
       <div class="trust-item"><div class="trust-num">Local</div><div class="trust-label">Kelowna-Based</div></div>
-      <div class="trust-item"><div class="trust-num">5.0<span style="color: #ffc940;">★</span></div><div class="trust-label">28 Google Reviews</div></div>
+      <div class="trust-item"><div class="trust-num">5.0<span style="color:#ffc940;">★</span></div><div class="trust-label">28 Google Reviews</div></div>
       <div class="trust-item"><div class="trust-num">24/7</div><div class="trust-label">Emergency Service</div></div>
       <div class="trust-item"><div class="trust-num">100%</div><div class="trust-label">Licensed & Insured</div></div>
     </div>
@@ -188,6 +189,7 @@ section { padding: 100px 24px; }
       <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><h3>Gas Fitting</h3><p>Certified gas line installation, repair, and inspection. Furnaces, ranges, BBQs, fireplaces.</p></div>
       <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v11"/><path d="M3 21h18M9 21V14M15 21V14M12 6V2"/></svg></div><h3>Bathroom & Kitchen</h3><p>Full renovations and fixture upgrades — toilets, faucets, showers, garburators, dishwashers.</p></div>
       <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><h3>Leak Detection</h3><p>Non-invasive leak location using thermal imaging and acoustic detection. We find it before we cut.</p></div>
+      
     </div>
   </div>
 </section>
@@ -196,7 +198,7 @@ section { padding: 100px 24px; }
   <div class="container">
     <div class="why-grid">
       <div class="why-image">
-        <img src="../../../assets/plumber/about.jpg" alt="Enze Pro HVAC Support master plumber">
+        <img src="../../../assets/plumber/about.jpg" alt="Enze Pro HVAC Support">
         <div class="why-badge"><div class="why-badge-num">★</div><div><div class="why-badge-sub">Trusted Local</div><div class="why-badge-label">Kelowna Plumber</div></div></div>
       </div>
       <div>
@@ -208,6 +210,7 @@ section { padding: 100px 24px; }
           <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">Licensed Red Seal Plumbers</div><div class="why-item-desc">Every tech is fully ticketed, gas-certified, and background-checked.</div></div></div>
           <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">5-Year Workmanship Warranty</div><div class="why-item-desc">If our work fails, we come back free. That's our promise.</div></div></div>
           <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">Same-Day Service Available</div><div class="why-item-desc">Most calls answered same-day. 24/7 emergency line always open.</div></div></div>
+          
         </div>
       </div>
     </div>
@@ -215,6 +218,7 @@ section { padding: 100px 24px; }
 </section>
 
 <section class="reviews" id="reviews">
+  <div class="reviews-bg" style="background: url('../../../assets/plumber/services.jpg') center/cover;"></div>
   <div class="container reviews-inner">
     <div class="reviews-head">
       <div class="section-eyebrow" style="color: var(--orange);">Real Customer Reviews</div>
@@ -252,6 +256,7 @@ section { padding: 100px 24px; }
           <div><div class="testimonial-name">Jennifer L.</div><div class="testimonial-meta">Peachland · Verified Google Review</div></div>
         </div>
       </div>
+      
     </div>
   </div>
 </section>
@@ -263,16 +268,7 @@ section { padding: 100px 24px; }
       <p class="section-sub">From downtown to the outskirts, our trucks cover every neighbourhood in the area.</p>
     </div>
     <div class="area-grid">
-      <div class="area-chip">Kelowna</div>
-      <div class="area-chip">West Kelowna</div>
-      <div class="area-chip">Lake Country</div>
-      <div class="area-chip">Peachland</div>
-      <div class="area-chip">Glenmore</div>
-      <div class="area-chip">Rutland</div>
-      <div class="area-chip">Mission</div>
-      <div class="area-chip">Mid-Town</div>
-      <div class="area-chip">Lower Mission</div>
-      <div class="area-chip">Upper Mission</div>
+      <div class="area-chip">Kelowna</div><div class="area-chip">West Kelowna</div><div class="area-chip">Lake Country</div><div class="area-chip">Peachland</div><div class="area-chip">Glenmore</div><div class="area-chip">Rutland</div><div class="area-chip">Mission</div><div class="area-chip">Mid-Town</div><div class="area-chip">Lower Mission</div><div class="area-chip">Upper Mission</div>
     </div>
   </div>
 </section>
@@ -283,23 +279,7 @@ section { padding: 100px 24px; }
       <div>
         <div class="section-eyebrow">Get In Touch</div>
         <h2 class="section-title" style="margin-bottom: 32px;">Need a plumber? We're ready.</h2>
-        <div class="contact-info-block">
-      <div class="contact-info-item">
-        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-        <div><div class="contact-label">Call Us 24/7</div><div class="contact-value"><a href="tel:+17785880778">(778) 588-0778</a></div></div>
-      </div>
-      <div class="contact-info-item">
-        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-        <div><div class="contact-label">Visit Us</div><div class="contact-value">373 Trumpeter Ct<br>Kelowna, BC</div></div>
-      </div>
-      <div class="contact-info-item">
-        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div><div class="contact-label">Hours</div><div class="contact-value">Mon–Fri: 7am – 6pm<br>Emergency: 24/7</div></div>
-      </div>
-      <div class="contact-info-item">
-        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <div><div class="contact-label">Google Rating</div><div class="contact-value">5.0 ★ · 28 reviews</div></div>
-      </div></div>
+        <div class="contact-info-block"><div class="contact-info-item"><div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="contact-label">Call Us 24/7</div><div class="contact-value"><a href="tel:+17785880778">(778) 588-0778</a></div></div></div><div class="contact-info-item"><div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="contact-label">Visit Us</div><div class="contact-value">373 Trumpeter Ct<br>Kelowna, BC</div></div></div><div class="contact-info-item"><div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="contact-label">Hours</div><div class="contact-value">Mon–Fri: 7am – 6pm<br>Emergency: 24/7</div></div></div><div class="contact-info-item"><div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div><div class="contact-label">Google Rating</div><div class="contact-value">5.0 ★ · 28 reviews</div></div></div></div>
       </div>
       <div class="contact-form">
         <h2 class="section-title">Request a free quote</h2>
@@ -323,7 +303,7 @@ section { padding: 100px 24px; }
   <div class="container">
     <h2>Got a plumbing problem? Let's solve it today.</h2>
     <p>One call. Fast response. Honest pricing.</p>
-    <a href="tel:+17785880778" class="btn-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call (778) 588-0778 Now</a>
+    <a href="tel:+17785880778" class="btn-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call (778) 588-0778 Now</a>
   </div>
 </section>
 
@@ -334,14 +314,8 @@ section { padding: 100px 24px; }
       <p>Family-owned and operated in Kelowna, BC. Licensed Red Seal plumbers and certified gas fitters serving the Okanagan.</p>
     </div>
     <div><h4>Services</h4><ul><li><a href="#services">Emergency Repairs</a></li><li><a href="#services">Drain Cleaning</a></li><li><a href="#services">Water Heaters</a></li><li><a href="#services">Gas Fitting</a></li><li><a href="#services">Leak Detection</a></li></ul></div>
-    <div><h4>Service Area</h4><ul>
-        <li>Kelowna</li>
-        <li>West Kelowna</li>
-        <li>Lake Country</li>
-        <li>Peachland</li>
-        <li>Glenmore</li>
-      </ul></div>
-    <div><h4>Contact</h4><ul><li><a href="tel:+17785880778">(778) 588-0778</a></li><li>373 Trumpeter Ct</li><li>Kelowna, BC</li><li>Mon–Fri 7am–6pm</li><li>24/7 Emergency</li></ul></div>
+    <div><h4>Service Area</h4><ul><li>Kelowna</li><li>West Kelowna</li><li>Lake Country</li><li>Peachland</li><li>Glenmore</li></ul></div>
+    <div><h4>Contact</h4><ul><li><a href="tel:+17785880778">(778) 588-0778</a></li><li>373 Trumpeter Ct</li><li>Kelowna, BC</li><li>Mon–Fri: 7am – 6pm</li><li>Emergency: 24/7</li></ul></div>
   </div>
   <div class="footer-bottom">
     <div>© 2026 Enze Pro HVAC Support. All rights reserved.</div>

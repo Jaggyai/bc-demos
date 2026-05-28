@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Gehring Comfort Heating and Cooling — Licensed Prince George HVAC contractor. Furnaces, AC, heat pumps, ductless mini-splits. 24/7 service.">
+<title>Gehring Comfort Heating and Cooling | Prince George HVAC, Heating & Cooling Specialists</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --navy: #0a2540; --navy-dark: #061a30; --orange: #ff6b35; --orange-dark: #e55525;
+  --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-500: #64748b;
+  --gray-700: #334155; --gray-900: #0f172a; --white: #ffffff;
+  --shadow: 0 10px 40px rgba(10, 37, 64, 0.08); --shadow-lg: 0 20px 60px rgba(10, 37, 64, 0.15);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', system-ui, sans-serif; color: var(--gray-900); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+.nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); z-index: 100; box-shadow: 0 1px 0 rgba(10,37,64,0.06); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark { width: 40px; height: 40px; background: var(--navy); color: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; letter-spacing: -0.5px; }
+.brand-text { font-weight: 800; font-size: 17px; letter-spacing: -0.3px; color: var(--navy); }
+.brand-sub { font-size: 11px; color: var(--gray-500); font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; }
+.nav-links { display: flex; gap: 32px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--gray-700); transition: color 0.2s; }
+.nav-links a:hover { color: var(--orange); }
+.nav-cta { background: var(--orange); color: var(--white); padding: 12px 22px; border-radius: 8px; font-weight: 700; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.nav-cta:hover { background: var(--orange-dark); transform: translateY(-1px); }
+.nav-cta svg { width: 16px; height: 16px; }
+@media (max-width: 768px) { .nav-links { display: none; } .brand-sub { display: none; } }
+.hero { position: relative; min-height: 92vh; padding-top: 90px; display: flex; align-items: center; overflow: hidden; background: var(--navy); }
+.hero-bg { position: absolute; inset: 0; }
+.hero-content { position: relative; max-width: 1200px; margin: 0 auto; padding: 60px 24px; width: 100%; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,107,53,0.15); color: var(--orange); padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(255,107,53,0.25); }
+.hero-eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--orange); border-radius: 50%; box-shadow: 0 0 12px var(--orange); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.hero h1 { color: var(--white); font-size: clamp(38px, 5.5vw, 68px); font-weight: 900; line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 24px; max-width: 760px; }
+.hero h1 span { color: var(--orange); }
+.hero-sub { color: rgba(255,255,255,0.85); font-size: clamp(17px, 1.6vw, 20px); max-width: 580px; margin-bottom: 40px; line-height: 1.6; }
+.hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
+.btn-primary { background: var(--orange); color: var(--white); padding: 18px 32px; border-radius: 10px; font-weight: 700; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s; box-shadow: 0 8px 24px rgba(255,107,53,0.35); }
+.btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,107,53,0.45); }
+.btn-primary svg, .btn-secondary svg { width: 20px; height: 20px; }
+.btn-secondary { background: rgba(255,255,255,0.1); color: var(--white); padding: 18px 32px; border-radius: 10px; font-weight: 600; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s; backdrop-filter: blur(10px); }
+.btn-secondary:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); }
+.hero-trust { display: flex; gap: 40px; flex-wrap: wrap; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.12); }
+.trust-item { color: rgba(255,255,255,0.9); }
+.trust-num { font-size: 28px; font-weight: 800; color: var(--white); letter-spacing: -0.5px; }
+.trust-label { font-size: 13px; color: rgba(255,255,255,0.65); font-weight: 500; }
+section { padding: 100px 24px; }
+.container { max-width: 1200px; margin: 0 auto; }
+.section-eyebrow { display: inline-block; color: var(--orange); font-weight: 700; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }
+.section-title { font-size: clamp(32px, 4vw, 48px); font-weight: 800; color: var(--navy); letter-spacing: -1px; line-height: 1.15; margin-bottom: 20px; }
+.section-sub { font-size: 18px; color: var(--gray-500); max-width: 640px; line-height: 1.6; }
+.services { background: var(--gray-50); }
+.services-head { text-align: center; max-width: 720px; margin: 0 auto 64px; }
+.services-head .section-sub { margin: 0 auto; }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.service-card { background: var(--white); padding: 36px 32px; border-radius: 16px; transition: all 0.3s; border: 1px solid var(--gray-200); }
+.service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: transparent; }
+.service-icon { width: 56px; height: 56px; background: rgba(255,107,53,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--orange); }
+.service-icon svg { width: 28px; height: 28px; }
+.service-card h3 { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 12px; letter-spacing: -0.3px; }
+.service-card p { color: var(--gray-500); font-size: 15px; line-height: 1.6; }
+.why { background: var(--white); }
+.why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+@media (max-width: 900px) { .why-grid { grid-template-columns: 1fr; gap: 48px; } }
+.why-image { position: relative; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg); }
+.why-image img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/5; }
+.why-badge { position: absolute; bottom: 24px; left: 24px; background: var(--white); padding: 20px 24px; border-radius: 14px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 16px; }
+.why-badge-num { font-size: 36px; font-weight: 900; color: var(--orange); letter-spacing: -1px; line-height: 1; }
+.why-badge-label { font-size: 12px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.why-badge-sub { font-size: 14px; color: var(--navy); font-weight: 700; }
+.why-list { margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
+.why-item { display: flex; gap: 16px; align-items: flex-start; }
+.why-check { width: 28px; height: 28px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--white); }
+.why-check svg { width: 16px; height: 16px; }
+.why-item-title { font-weight: 700; color: var(--navy); margin-bottom: 4px; font-size: 16px; }
+.why-item-desc { font-size: 14px; color: var(--gray-500); line-height: 1.5; }
+.reviews { background: var(--navy); color: var(--white); position: relative; overflow: hidden; }
+.reviews-bg { position: absolute; inset: 0; opacity: 0.08; }
+.reviews-inner { position: relative; }
+.reviews-head { text-align: center; margin-bottom: 64px; }
+.reviews-head .section-title { color: var(--white); }
+.reviews-head .section-sub { color: rgba(255,255,255,0.7); margin: 0 auto; }
+.google-rating { display: inline-flex; align-items: center; gap: 20px; background: rgba(255,255,255,0.06); padding: 20px 32px; border-radius: 16px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.1); }
+.google-rating-num { font-size: 48px; font-weight: 900; color: var(--white); letter-spacing: -1.5px; line-height: 1; }
+.google-rating-stars { font-size: 22px; color: #ffc940; letter-spacing: 3px; margin-bottom: 4px; }
+.google-rating-count { font-size: 13px; color: rgba(255,255,255,0.65); }
+.testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.testimonial { background: rgba(255,255,255,0.05); padding: 32px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+.testimonial-stars { color: #ffc940; letter-spacing: 2px; margin-bottom: 16px; font-size: 14px; }
+.testimonial-quote { color: rgba(255,255,255,0.92); font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar { width: 44px; height: 44px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--white); font-size: 16px; }
+.testimonial-name { font-weight: 700; color: var(--white); font-size: 14px; }
+.testimonial-meta { font-size: 12px; color: rgba(255,255,255,0.55); }
+.area { background: var(--gray-50); text-align: center; }
+.area-head { max-width: 720px; margin: 0 auto 48px; }
+.area-head .section-sub { margin: 0 auto; }
+.area-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 800px; margin: 0 auto; }
+.area-chip { background: var(--white); padding: 14px 24px; border-radius: 100px; font-weight: 600; color: var(--navy); border: 1px solid var(--gray-200); font-size: 14px; transition: all 0.2s; }
+.area-chip:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+.contact { background: var(--white); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+@media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; gap: 48px; } }
+.contact-info-block { background: var(--gray-50); padding: 40px; border-radius: 20px; }
+.contact-info-item { display: flex; gap: 20px; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid var(--gray-200); }
+.contact-info-item:last-child { border-bottom: none; }
+.contact-icon { width: 48px; height: 48px; background: var(--white); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--orange); flex-shrink: 0; box-shadow: var(--shadow); }
+.contact-icon svg { width: 22px; height: 22px; }
+.contact-label { font-size: 12px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.contact-value { font-size: 17px; color: var(--navy); font-weight: 700; }
+.contact-value a:hover { color: var(--orange); }
+.contact-form h2 { margin-bottom: 8px; }
+.contact-form-sub { color: var(--gray-500); margin-bottom: 32px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+.form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.form-field label { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+.form-field input, .form-field textarea, .form-field select { padding: 14px 16px; border: 1px solid var(--gray-200); border-radius: 10px; font-size: 15px; font-family: inherit; transition: border-color 0.2s; background: var(--white); }
+.form-field input:focus, .form-field textarea:focus, .form-field select:focus { outline: none; border-color: var(--orange); }
+.form-field textarea { resize: vertical; min-height: 120px; }
+.form-submit { background: var(--orange); color: var(--white); padding: 16px 32px; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 24px rgba(255,107,53,0.3); width: 100%; }
+.form-submit:hover { background: var(--orange-dark); transform: translateY(-2px); }
+.final-cta { background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%); color: var(--white); text-align: center; padding: 80px 24px; }
+.final-cta h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+.final-cta p { font-size: 18px; margin-bottom: 32px; opacity: 0.95; max-width: 580px; margin-left: auto; margin-right: auto; }
+.final-cta .btn-white { background: var(--white); color: var(--orange); padding: 18px 36px; border-radius: 10px; font-weight: 700; font-size: 17px; display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s; box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
+.final-cta .btn-white:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
+.footer { background: var(--navy-dark); color: rgba(255,255,255,0.7); padding: 64px 24px 32px; }
+.footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+@media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+.footer h4 { color: var(--white); font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+.footer ul { list-style: none; }
+.footer ul li { margin-bottom: 10px; font-size: 14px; }
+.footer ul li a:hover { color: var(--orange); }
+.footer-brand p { font-size: 14px; line-height: 1.7; max-width: 360px; margin-top: 16px; }
+.footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="brand">
+      <div class="brand-mark">GC</div>
+      <div><div class="brand-text">Gehring Comfort Heating and Cooling</div><div class="brand-sub">HVAC, Heating & Cooling · Prince George BC</div></div>
+    </a>
+    <div class="nav-links">
+      <a href="#services">Services</a><a href="#why">Why Us</a><a href="#contact">Contact</a>
+    </div>
+    <a href="tel:+12506409392" class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>(250) 640-9392</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg" style="background: linear-gradient(110deg, rgba(10,37,64,0.92) 0%, rgba(10,37,64,0.70) 50%, rgba(10,37,64,0.40) 100%), url('../../../assets/hvac/hero.jpg') center/cover;"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Available Now · 24/7 Emergency</div>
+    <h1>Prince George's Trusted <span>Heating</span> & Cooling Experts.</h1>
+    <p class="hero-sub">Heat pump specialists. Furnace pros. AC experts. From a no-heat emergency to a complete system replacement, Gehring Comfort Heating and Cooling keeps Northern BC homes comfortable year-round.</p>
+    <div class="hero-ctas"><a href="tel:+12506409392" class="btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call (250) 640-9392</a><a href="#contact" class="btn-secondary">Get a Free Quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+    <div class="hero-trust">
+      <div class="trust-item"><div class="trust-num">Local</div><div class="trust-label">Prince George-Based</div></div>
+      <div class="trust-item"><div class="trust-num">Local</div><div class="trust-label">Prince George-Based</div></div>
+      <div class="trust-item"><div class="trust-num">24/7</div><div class="trust-label">Emergency Service</div></div>
+      <div class="trust-item"><div class="trust-num">100%</div><div class="trust-label">Licensed & Insured</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-head">
+      <div class="section-eyebrow">What We Do</div>
+      <h2 class="section-title">Full-Service Heating, Cooling & Air</h2>
+      <p class="section-sub">Modern, energy-efficient systems installed and serviced by ticketed gas-and-refrigeration techs.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg></div><h3>Furnaces</h3><p>Gas, electric, propane. New installs, replacements, repairs, tune-ups. Lennox, Carrier, Trane.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/></svg></div><h3>Air Conditioning</h3><p>Central AC, ductless splits, heat pumps. Energy-efficient cooling for BC summers.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h6l3-9 4 18 3-9h4"/></svg></div><h3>Heat Pumps</h3><p>Cold-climate heat pumps with $11K+ rebate eligibility. Heating + cooling, one system.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v10l8 5 8-5V7l-8-5zM12 22V12M4 7l8 5 8-5"/></svg></div><h3>Emergency Repairs</h3><p>No heat in the middle of winter? No cold air in summer? We're on call 24/7.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><h3>Maintenance Tune-Ups</h3><p>Annual checks, filter changes, coil cleans. Keep your warranty valid, your bills low.</p></div>
+      <div class="service-card"><div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div><h3>Indoor Air Quality</h3><p>HRVs, ERVs, humidifiers, HEPA filtration, UV lights. Clean air, every breath.</p></div>
+      
+    </div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-image">
+        <img src="../../../assets/hvac/about.jpg" alt="Gehring Comfort Heating and Cooling">
+        <div class="why-badge"><div class="why-badge-num">★</div><div><div class="why-badge-sub">Trusted Local</div><div class="why-badge-label">Prince George HVAC Tech</div></div></div>
+      </div>
+      <div>
+        <div class="section-eyebrow">Why Prince George Chooses Us</div>
+        <h2 class="section-title">Comfort done right. Backed by warranty.</h2>
+        <p style="color: var(--gray-500); font-size: 17px; line-height: 1.7;">Your HVAC system is the heartbeat of your home. We install it properly, size it correctly, and stand behind the work for years.</p>
+        <div class="why-list">
+          <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">Red Seal Gas + Refrigeration Techs</div><div class="why-item-desc">All certified, all bondable. Every install is to code, every time.</div></div></div>
+          <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">Manufacturer-Trained</div><div class="why-item-desc">Lennox, Carrier, Trane, Mitsubishi factory trained. We know your system inside out.</div></div></div>
+          <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">Rebate Paperwork Handled</div><div class="why-item-desc">Up to $11,000 in heat pump rebates available. We handle the applications for you.</div></div></div>
+          <div class="why-item"><div class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-item-title">10-Year Warranty Available</div><div class="why-item-desc">Parts and labour warranty extensions on most major brand installs.</div></div></div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="area">
+  <div class="container">
+    <div class="area-head">
+      <div class="section-eyebrow">Service Area</div>
+      <h2 class="section-title">Proudly serving Northern BC.</h2>
+      <p class="section-sub">Residential and commercial HVAC service across the region.</p>
+    </div>
+    <div class="area-grid">
+      <div class="area-chip">Prince George</div><div class="area-chip">College Heights</div><div class="area-chip">Hart</div><div class="area-chip">Heritage</div><div class="area-chip">Westwood</div><div class="area-chip">Foothills</div><div class="area-chip">College Park</div><div class="area-chip">Spruceland</div><div class="area-chip">Pinewood</div><div class="area-chip">Lakewood</div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <div class="section-eyebrow">Get In Touch</div>
+        <h2 class="section-title" style="margin-bottom: 32px;">Need HVAC service? Let's get you comfortable.</h2>
+        <div class="contact-info-block"><div class="contact-info-item"><div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="contact-label">Call Us 24/7</div><div class="contact-value"><a href="tel:+12506409392">(250) 640-9392</a></div></div></div><div class="contact-info-item"><div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="contact-label">Visit Us</div><div class="contact-value">6001 Teichman Crescent<br>Prince George, BC</div></div></div><div class="contact-info-item"><div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="contact-label">Hours</div><div class="contact-value">Mon–Fri: 7am – 6pm<br>Emergency: 24/7</div></div></div></div>
+      </div>
+      <div class="contact-form">
+        <h2 class="section-title">Request a free quote</h2>
+        <p class="contact-form-sub">Tell us what's going on. We respond within 1 business hour.</p>
+        <form>
+          <div class="form-row">
+            <div class="form-field"><label>First Name</label><input type="text" placeholder="Your name"></div>
+            <div class="form-field"><label>Phone</label><input type="tel" placeholder="(250) 555-0000"></div>
+          </div>
+          <div class="form-field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+          <div class="form-field"><label>Service Needed</label><select><option>Furnace Service</option><option>AC Install / Repair</option><option>Heat Pump</option><option>Emergency Repair</option><option>Maintenance</option><option>Indoor Air Quality</option><option>Other / Not Sure</option></select></div>
+          <div class="form-field"><label>Tell us what's happening</label><textarea placeholder="System type, age, what's wrong, urgency..."></textarea></div>
+          <button type="submit" class="form-submit">Send My Request →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="container">
+    <h2>Cold? Hot? Stuck? We can help today.</h2>
+    <p>24/7 emergency service. Licensed techs. Honest pricing.</p>
+    <a href="tel:+12506409392" class="btn-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call (250) 640-9392 Now</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="brand"><div class="brand-mark">GC</div><div><div class="brand-text" style="color: white;">Gehring Comfort Heating and Cooling</div><div class="brand-sub">HVAC, Heating & Cooling · Prince George BC</div></div></div>
+      <p>Heating, cooling, and HVAC contractor in Prince George, BC. Furnaces, AC, heat pumps, and indoor air quality systems throughout Northern BC.</p>
+    </div>
+    <div><h4>Services</h4><ul><li><a href="#services">Furnaces</a></li><li><a href="#services">Air Conditioning</a></li><li><a href="#services">Heat Pumps</a></li><li><a href="#services">Repairs</a></li><li><a href="#services">Maintenance</a></li></ul></div>
+    <div><h4>Service Area</h4><ul><li>Prince George</li><li>College Heights</li><li>Hart</li><li>Heritage</li><li>Westwood</li></ul></div>
+    <div><h4>Contact</h4><ul><li><a href="tel:+12506409392">(250) 640-9392</a></li><li>6001 Teichman Crescent</li><li>Prince George, BC</li><li>Mon–Fri: 7am – 6pm</li><li>Emergency: 24/7</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Gehring Comfort Heating and Cooling. All rights reserved.</div>
+    <div>Licensed · Insured · Red Seal Certified</div>
+  </div>
+</footer>
+
+</body>
+</html>
