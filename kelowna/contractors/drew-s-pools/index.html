@@ -323,5 +323,188 @@ section { padding: 100px 24px; }
   </div>
 </footer>
 
+<!-- JAGGYAI-CHATBOT -->
+<style>
+.jai-l{position:fixed;bottom:22px;right:22px;z-index:2147483000;display:flex;align-items:center;gap:9px;background:#4f46e5;color:#fff;border:none;cursor:pointer;padding:13px 18px 13px 15px;border-radius:100px;font-family:system-ui,Arial,sans-serif;font-weight:700;font-size:15px;box-shadow:0 10px 30px rgba(79,70,229,.45)}
+.jai-l:hover{filter:brightness(1.08)}
+.jai-l svg{width:21px;height:21px}
+.jai-l .jd{position:absolute;top:-3px;right:-3px;width:13px;height:13px;background:#22c55e;border:2px solid #fff;border-radius:50%}
+@keyframes jaiP{0%,100%{box-shadow:0 10px 30px rgba(79,70,229,.45)}50%{box-shadow:0 10px 30px rgba(79,70,229,.45),0 0 0 12px rgba(79,70,229,0)}}
+.jai-l.p{animation:jaiP 2s ease-out 4}
+.jai-p{position:fixed;bottom:22px;right:22px;z-index:2147483000;width:372px;max-width:calc(100vw - 28px);height:548px;max-height:calc(100vh - 44px);background:#fff;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden;font-family:system-ui,Arial,sans-serif}
+.jai-p.o{display:flex}
+.jai-h{background:#0f172a;color:#fff;padding:15px 17px;display:flex;align-items:center;gap:11px}
+.jai-h .a{width:40px;height:40px;border-radius:10px;background:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.jai-h .t{font-weight:800;font-size:14.5px}
+.jai-h .s{font-size:11.5px;color:rgba(255,255,255,.7)}
+.jai-h .x{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.8);font-size:22px;cursor:pointer;line-height:1}
+.jai-b{flex:1;overflow-y:auto;padding:16px;background:#f1f5f9;display:flex;flex-direction:column;gap:10px}
+.jai-m{max-width:82%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.5}
+.jai-m.b{background:#fff;color:#0f172a;align-self:flex-start;border:1px solid #e2e8f0;border-bottom-left-radius:4px}
+.jai-m.u{background:#0f172a;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.jai-c{display:flex;gap:7px;flex-wrap:wrap;padding:0 13px 9px;background:#f1f5f9}
+.jai-chip{font-size:12px;color:#0f172a;background:#fff;border:1px solid #e2e8f0;padding:7px 11px;border-radius:100px;cursor:pointer;font-family:inherit}
+.jai-chip:hover{border-color:#4f46e5;color:#4f46e5}
+.jai-f{background:#fff;border:1px solid #e2e8f0;border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:8px}
+.jai-f input,.jai-f select{padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit}
+.jai-f button{background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:11px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit}
+.jai-i{display:flex;gap:8px;padding:12px;border-top:1px solid #e2e8f0;background:#fff}
+.jai-i input{flex:1;border:1px solid #e2e8f0;border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:inherit}
+.jai-i button{background:#0f172a;color:#fff;border:none;border-radius:9px;width:44px;cursor:pointer;font-size:15px}
+.jai-link{display:inline-block;margin-top:5px;font-size:12px;font-weight:700;color:#4f46e5}
+</style>
+<button class="jai-l p" id="jaiL"><span style="position:relative"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="jd"></span></span> Chat with us</button>
+<div class="jai-p" id="jaiP">
+  <div class="jai-h"><div class="a">🔨</div><div><div class="t">Drew’s Pools</div><div class="s">● Online · replies instantly</div></div><button class="x" id="jaiX">&times;</button></div>
+  <div class="jai-b" id="jaiB"><div class="jai-m b">Hi! 👋 Welcome to Drew’s Pools. I can answer questions and book your <b>free quote</b> any time, 24/7. What can I help with?</div></div>
+  <div class="jai-c" id="jaiC"><button class="jai-chip">What do you offer?</button><button class="jai-chip">Pricing</button><button class="jai-chip">Service area</button><button class="jai-chip">Book a free quote</button></div>
+  <div class="jai-i"><input id="jaiIn" placeholder="Type a message…" autocomplete="off"><button id="jaiS">➤</button></div>
+</div>
+<script>
+(function(){
+ var BIZ="Drew’s Pools", CITY="Kelowna", DASH="../../../../jaggyai-suite/index.html?name=Drew%E2%80%99s%20Pools&city=Kelowna&cat=General%20contractor&site="+encodeURIComponent(location.href);
+ var SERVICES=["Renovation","Home Addition","Repair","New Build","Estimate"];
+ var KB=[
+  {k:['service','offer','do you','what do'],a:"We handle "+SERVICES.slice(0,4).join(', ')+" and more. Want a free quote?"},
+  {k:['price','cost','quote','estimate','how much','rate'],a:"Every job starts with a FREE quote so we can give you an accurate price. Tap 'Book a free quote' and I'll set it up."},
+  {k:['area','serve','where','location','region'],a:"We proudly serve "+CITY+" and the surrounding area. What part are you in?"},
+  {k:['hour','open','time'],a:"Our team works regular hours, but this assistant takes requests 24/7. How can I help?"},
+  {k:['hi','hello','hey'],a:"Hi there! 👋 Are you after a quick repair, a bigger project, or just pricing?"},
+  {k:['thank'],a:"You're welcome! 🙌 Want me to set up your free quote?"}
+ ];
+ var FB="Happy to help! The fastest next step is a free quote — tap 'Book a free quote' and I'll set it up.";
+ var BOOK=['book','quote','estimate','appointment','schedule','yes','sign me up','urgent','emergency','get started'];
+ var P=document.getElementById('jaiP'),B=document.getElementById('jaiB'),L=document.getElementById('jaiL');
+ function sd(){B.scrollTop=B.scrollHeight;}
+ L.onclick=function(){P.classList.add('o');L.style.display='none';sd();};
+ document.getElementById('jaiX').onclick=function(){P.classList.remove('o');L.style.display='';};
+ function add(h,c){var d=document.createElement('div');d.className='jai-m '+c;d.innerHTML=h;B.appendChild(d);sd();return d;}
+ function bot(h){var t=add('<span style="opacity:.5">…</span>','b');setTimeout(function(){t.innerHTML=h;sd();},450);}
+ function form(){
+  var f=document.createElement('div');f.className='jai-f';
+  var opts=SERVICES.map(function(s){return '<option>'+s+'</option>';}).join('');
+  f.innerHTML='<div style="font-weight:700;font-size:13px;color:#0f172a">📋 Book your free quote</div><input id="jfn" placeholder="Your name"><input id="jfp" placeholder="Phone number"><select id="jfs">'+opts+'</select><button id="jfb">Send to the team →</button>';
+  B.appendChild(f);sd();
+  f.querySelector('#jfb').onclick=function(){
+   var n=(f.querySelector('#jfn').value||'').trim(),p=(f.querySelector('#jfp').value||'').trim(),s=f.querySelector('#jfs').value;
+   if(!n||!p){bot("Just need a name and phone number so the team can reach you 🙂");return;}
+   var lead={name:n,phone:p,service:s,source:'Website Chatbot',business:BIZ,city:CITY,msg:'Booked a free quote via the website chatbot.',time:Date.now()};
+   try{var a=JSON.parse(localStorage.getItem('jaggy_inbound_leads')||'[]');a.push(lead);localStorage.setItem('jaggy_inbound_leads',JSON.stringify(a));}catch(e){}
+   f.remove();add(n+' · '+p+'<br>'+s,'u');
+   bot("Perfect, "+n.split(' ')[0]+"! ✅ I've sent this to the "+BIZ+" team — you'll get a text within minutes. "+'<br><a class="jai-link" target="_blank" href="'+DASH+'&inbound='+encodeURIComponent(JSON.stringify(lead))+'">📊 (Demo) see this lead hit the dashboard →</a>');
+  };
+ }
+ function reply(t){t=t.toLowerCase();
+  if(BOOK.some(function(b){return t.indexOf(b)>-1;})){bot("Great — let's get you booked. Fill this in and the team will text you fast:");setTimeout(form,600);return;}
+  for(var i=0;i<KB.length;i++){if(KB[i].k.some(function(k){return t.indexOf(k)>-1;}))return bot(KB[i].a);}
+  bot(FB);
+ }
+ function send(x){var v=(x||document.getElementById('jaiIn').value).trim();if(!v)return;document.getElementById('jaiIn').value='';add(v.replace(/</g,'&lt;'),'u');reply(v);}
+ document.getElementById('jaiS').onclick=function(){send();};
+ document.getElementById('jaiIn').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+ Array.prototype.forEach.call(document.querySelectorAll('#jaiC .jai-chip'),function(c){c.onclick=function(){send(c.textContent);};});
+})();
+</script>
+
+<!-- JAGGYAI-CHATBOT -->
+<style>
+.jai-l{position:fixed;bottom:22px;right:22px;z-index:2147483000;display:flex;align-items:center;gap:9px;background:#4f46e5;color:#fff;border:none;cursor:pointer;padding:13px 18px 13px 15px;border-radius:100px;font-family:system-ui,Arial,sans-serif;font-weight:700;font-size:15px;box-shadow:0 10px 30px rgba(79,70,229,.45)}
+.jai-l:hover{filter:brightness(1.08)}
+.jai-l svg{width:21px;height:21px}
+.jai-l .jd{position:absolute;top:-3px;right:-3px;width:13px;height:13px;background:#22c55e;border:2px solid #fff;border-radius:50%}
+@keyframes jaiP{0%,100%{box-shadow:0 10px 30px rgba(79,70,229,.45)}50%{box-shadow:0 10px 30px rgba(79,70,229,.45),0 0 0 12px rgba(79,70,229,0)}}
+.jai-l.p{animation:jaiP 2s ease-out 4}
+.jai-p{position:fixed;bottom:22px;right:22px;z-index:2147483000;width:372px;max-width:calc(100vw - 28px);height:560px;max-height:calc(100vh - 44px);background:#fff;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden;font-family:system-ui,Arial,sans-serif}
+.jai-p.o{display:flex}
+.jai-h{background:#0f172a;color:#fff;padding:15px 17px;display:flex;align-items:center;gap:11px}
+.jai-h .a{width:40px;height:40px;border-radius:10px;background:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.jai-h .t{font-weight:800;font-size:14.5px}
+.jai-h .s{font-size:11.5px;color:rgba(255,255,255,.7)}
+.jai-h .x{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.8);font-size:22px;cursor:pointer;line-height:1}
+.jai-b{flex:1;overflow-y:auto;padding:16px;background:#f1f5f9;display:flex;flex-direction:column;gap:10px}
+.jai-m{max-width:84%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.5}
+.jai-m.b{background:#fff;color:#0f172a;align-self:flex-start;border:1px solid #e2e8f0;border-bottom-left-radius:4px}
+.jai-m.u{background:#0f172a;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.jai-m.sys{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;align-self:stretch;max-width:100%;font-size:13px}
+.jai-c{display:flex;gap:7px;flex-wrap:wrap;padding:0 13px 9px;background:#f1f5f9}
+.jai-chip{font-size:12px;color:#0f172a;background:#fff;border:1px solid #e2e8f0;padding:7px 11px;border-radius:100px;cursor:pointer;font-family:inherit}
+.jai-chip:hover{border-color:#4f46e5;color:#4f46e5}
+.jai-f{background:#fff;border:1px solid #e2e8f0;border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:8px}
+.jai-f input,.jai-f select{padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit}
+.jai-f button{background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:11px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit}
+.jai-i{display:flex;gap:8px;padding:12px;border-top:1px solid #e2e8f0;background:#fff}
+.jai-i input{flex:1;border:1px solid #e2e8f0;border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:inherit}
+.jai-i button{background:#0f172a;color:#fff;border:none;border-radius:9px;width:44px;cursor:pointer;font-size:15px}
+.jai-link{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;color:#4f46e5}
+</style>
+<button class="jai-l p" id="jaiL"><span style="position:relative"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="jd"></span></span> Chat with us</button>
+<div class="jai-p" id="jaiP">
+  <div class="jai-h"><div class="a">🔨</div><div><div class="t">Drew’s Pools</div><div class="s">● Online · replies instantly</div></div><button class="x" id="jaiX">&times;</button></div>
+  <div class="jai-b" id="jaiB"><div class="jai-m b">Hi! 👋 Welcome to Drew’s Pools. I can answer questions and book your <b>free quote</b> any time, 24/7. What can I help with?</div></div>
+  <div class="jai-c" id="jaiC"><button class="jai-chip">What do you offer?</button><button class="jai-chip">Pricing</button><button class="jai-chip">Service area</button><button class="jai-chip">Book a free quote</button></div>
+  <div class="jai-i"><input id="jaiIn" placeholder="Type a message…" autocomplete="off"><button id="jaiS">➤</button></div>
+</div>
+<script>
+(function(){
+ /* === Set DEMO=false for a real paying client (hides the demo dashboard link) === */
+ var DEMO=true;
+ var BIZ="Drew’s Pools", CITY="Kelowna";
+ var SERVICES=["Renovation","Home Addition","Repair","New Build","Estimate"];
+ var GH="https://jaggyai.github.io/bc-demos/dashboard/index.html?name=Drew%E2%80%99s%20Pools&city=Kelowna&cat=General%20contractor&site=";
+ var LR="../../../../jaggyai-suite/index.html?name=Drew%E2%80%99s%20Pools&city=Kelowna&cat=General%20contractor&site=";
+ var DASH=(location.hostname.indexOf("github")>-1?GH:LR)+encodeURIComponent(location.href);
+ var KB=[
+  {k:['service','offer','do you','what do'],a:"We handle "+SERVICES.slice(0,4).join(', ')+" and more. Want a free quote?"},
+  {k:['price','cost','quote','estimate','how much','rate'],a:"Every job starts with a FREE quote so we can give you an accurate price. Tap 'Book a free quote' and I'll set it up."},
+  {k:['area','serve','where','location','region'],a:"We proudly serve "+CITY+" and the surrounding area. What part are you in?"},
+  {k:['hour','open','time'],a:"Our team works regular hours, but this assistant takes requests 24/7. How can I help?"},
+  {k:['hi','hello','hey'],a:"Hi there! 👋 Are you after a quick repair, a bigger project, or just pricing?"},
+  {k:['thank'],a:"You're welcome! 🙌 Want me to set up your free quote?"}
+ ];
+ var FB="Happy to help! The fastest next step is a free quote — tap 'Book a free quote' and I'll set it up.";
+ var BOOK=['book','quote','estimate','appointment','schedule','yes','sign me up','urgent','emergency','get started'];
+ var P=document.getElementById('jaiP'),B=document.getElementById('jaiB'),L=document.getElementById('jaiL');
+ function sd(){B.scrollTop=B.scrollHeight;}
+ L.onclick=function(){P.classList.add('o');L.style.display='none';sd();};
+ document.getElementById('jaiX').onclick=function(){P.classList.remove('o');L.style.display='';};
+ function add(h,c){var d=document.createElement('div');d.className='jai-m '+c;d.innerHTML=h;B.appendChild(d);sd();return d;}
+ function bot(h){var t=add('<span style="opacity:.5">…</span>','b');setTimeout(function(){t.innerHTML=h;sd();},450);}
+ function bookDate(){var d=new Date();d.setDate(d.getDate()+1);if(d.getDay()===0)d.setDate(d.getDate()+1);if(d.getDay()===6)d.setDate(d.getDate()+2);
+  var wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
+  var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+  return wd+', '+mo+' '+d.getDate();}
+ function form(){
+  var f=document.createElement('div');f.className='jai-f';
+  var opts=SERVICES.map(function(s){return '<option>'+s+'</option>';}).join('');
+  f.innerHTML='<div style="font-weight:700;font-size:13px;color:#0f172a">📋 Book your free quote</div><input id="jfn" placeholder="Your name"><input id="jfp" placeholder="Phone number"><select id="jfs">'+opts+'</select><button id="jfb">Send to the team →</button>';
+  B.appendChild(f);sd();
+  f.querySelector('#jfb').onclick=function(){
+   var n=(f.querySelector('#jfn').value||'').trim(),p=(f.querySelector('#jfp').value||'').trim(),s=f.querySelector('#jfs').value;
+   if(!n||!p){bot("Just need a name and phone number so the team can reach you 🙂");return;}
+   var first=n.split(' ')[0], date=bookDate(), slot='8:00–10:00 AM';
+   var lead={name:n,phone:p,service:s,source:'Website Chatbot',business:BIZ,city:CITY,booked:date+' · '+slot,msg:'Booked a free quote via chatbot for '+date+' '+slot+'.',time:Date.now()};
+   try{var a=JSON.parse(localStorage.getItem('jaggy_inbound_leads')||'[]');a.push(lead);localStorage.setItem('jaggy_inbound_leads',JSON.stringify(a));}catch(e){}
+   f.remove();add(n+' · '+p+'<br>'+s,'u');
+   bot("Got it, "+first+"! One sec while I lock that in… 📲");
+   setTimeout(function(){
+     add('📲 <b>Text sent to '+p+':</b><br>“Hi '+first+'! ✅ You\'re booked with '+BIZ+' for a free '+s+' quote on <b>'+date+', '+slot+'</b>. We\'ll text a reminder the day before. Reply C to reschedule.”','sys');
+     add('📧 <b>Email confirmation</b> is on its way to you with the appointment details + what to expect.','sys');
+     add('👤 <b>'+BIZ+' was notified instantly</b> and will reach out to confirm. See you '+date+'! 🎉','sys');
+     if(DEMO) add('<a class="jai-link" target="_blank" href="'+DASH+'&inbound='+encodeURIComponent(JSON.stringify(lead))+'">📊 (Demo) see this lead hit the dashboard →</a>','b');
+   },1000);
+  };
+ }
+ function reply(t){t=t.toLowerCase();
+  if(BOOK.some(function(b){return t.indexOf(b)>-1;})){bot("Great — let's get you booked. Fill this in and the team will text you a confirmed time:");setTimeout(form,600);return;}
+  for(var i=0;i<KB.length;i++){if(KB[i].k.some(function(k){return t.indexOf(k)>-1;}))return bot(KB[i].a);}
+  bot(FB);
+ }
+ function send(x){var v=(x||document.getElementById('jaiIn').value).trim();if(!v)return;document.getElementById('jaiIn').value='';add(v.replace(/</g,'&lt;'),'u');reply(v);}
+ document.getElementById('jaiS').onclick=function(){send();};
+ document.getElementById('jaiIn').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+ Array.prototype.forEach.call(document.querySelectorAll('#jaiC .jai-chip'),function(c){c.onclick=function(){send(c.textContent);};});
+})();
+</script>
+<!-- /JAGGYAI-CHATBOT -->
 </body>
 </html>

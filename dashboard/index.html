@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JaggyAI — Automation Suite</title>
+<meta name="description" content="JaggyAI Automation Suite — lead capture, CRM, instant response & reporting for service businesses.">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/tour.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237c72ff'/><text x='50' y='70' font-size='62' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>J</text></svg>">
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="login">
+    <form class="login-card">
+      <div class="brand"><div class="logo-mark">J</div><div class="logo-word">Jaggy<span>AI</span></div></div>
+      <div class="login-sub" id="loginBiz">Automation Suite · Acme Roofing client portal</div>
+      <div class="field"><label>Email</label><input type="email" value="owner@acmeroofing.ca" autocomplete="username"></div>
+      <div class="field"><label>Password</label><input type="password" value="••••••••••" autocomplete="current-password"></div>
+      <button class="btn" id="loginBtn" type="submit">Sign in to your dashboard</button>
+      <div class="login-foot">Demo build · any credentials work · powered by JaggyAI</div>
+    </form>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo-mark">J</div><div class="logo-word">Jaggy<span>AI</span></div></div>
+      <nav class="nav">
+        <button data-v="dashboard" class="active"><span class="ic">▤</span> Dashboard</button>
+        <button data-v="journey"><span class="ic">🗺️</span> Customer Journey</button>
+        <button data-v="leads"><span class="ic">☰</span> Leads (CRM)</button>
+        <button data-v="pipeline"><span class="ic">▦</span> Pipeline</button>
+        <button data-v="automations"><span class="ic">⚡</span> Automations</button>
+        <button data-v="simulator"><span class="ic">▶</span> Live Demo</button>
+        <button data-v="assistant"><span class="ic">🤖</span> AI Assistant</button>
+      </nav>
+      <div class="side-foot">Signed in as<br><b id="sideBiz">Acme Roofing</b><br><span id="sideCity">Surrey, BC</span></div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <div class="sub" id="pageSub">Live overview of Acme Roofing's lead engine</div>
+        </div>
+        <div class="acct">
+          <button class="tour-btn" id="tourBtn">🧭 Take a Tour</button>
+          <a class="tour-btn hidden" id="siteBtn" target="_blank" style="color:#7dd3fc;border-color:#1e5a73;background:rgba(34,211,238,.12)">🌐 View Website</a>
+          <span class="pill">● Live</span>
+          <div class="av" id="acctAv">AR</div>
+          <div class="meta"><b id="acctName">Acme Roofing</b><span id="acctEmail">owner@acmeroofing.ca</span></div>
+        </div>
+      </div>
+      <div id="content"></div>
+    </main>
+  </div>
+
+  <!-- DRAWER -->
+  <div class="drawer-bg" id="drawerBg"></div>
+  <div class="drawer" id="drawer"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/tour.js"></script>
+</body>
+</html>

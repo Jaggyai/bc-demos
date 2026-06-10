@@ -280,5 +280,159 @@ section { padding: 100px 24px; }
   </div>
 </footer>
 
+<!-- ===================== JaggyAI CHATBOT WIDGET ===================== -->
+<style>
+.lea-launch{position:fixed;bottom:24px;right:24px;z-index:900;display:flex;align-items:center;gap:10px;background:var(--orange);color:#fff;border:none;cursor:pointer;padding:14px 20px 14px 16px;border-radius:100px;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;box-shadow:0 10px 30px rgba(255,107,53,.45);transition:transform .15s}
+.lea-launch:hover{transform:translateY(-2px)}
+.lea-launch svg{width:22px;height:22px}
+.lea-launch .lea-dot{position:absolute;top:-3px;right:-3px;width:14px;height:14px;background:#22c55e;border:2px solid #fff;border-radius:50%}
+@keyframes leaPulse{0%,100%{box-shadow:0 10px 30px rgba(255,107,53,.45)}50%{box-shadow:0 10px 30px rgba(255,107,53,.45),0 0 0 12px rgba(255,107,53,0)}}
+.lea-launch.pulse{animation:leaPulse 2s ease-out 4}
+.lea-panel{position:fixed;bottom:24px;right:24px;z-index:901;width:380px;max-width:calc(100vw - 32px);height:560px;max-height:calc(100vh - 48px);background:#fff;border-radius:20px;box-shadow:0 24px 70px rgba(10,37,64,.35);display:none;flex-direction:column;overflow:hidden;font-family:'Inter',sans-serif}
+.lea-panel.open{display:flex;animation:leaUp .25s ease}
+@keyframes leaUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.lea-head{background:var(--navy);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px}
+.lea-head .lea-av{width:42px;height:42px;border-radius:11px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.lea-head .lea-t{font-weight:800;font-size:15px}
+.lea-head .lea-s{font-size:12px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px}
+.lea-head .lea-s::before{content:'';width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block}
+.lea-head .lea-x{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.8);font-size:22px;cursor:pointer;line-height:1}
+.lea-body{flex:1;overflow-y:auto;padding:18px;background:var(--gray-50);display:flex;flex-direction:column;gap:11px}
+.lea-msg{max-width:80%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.5}
+.lea-msg.bot{background:#fff;color:var(--gray-900);align-self:flex-start;border:1px solid var(--gray-200);border-bottom-left-radius:5px}
+.lea-msg.user{background:var(--navy);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+.lea-chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 14px 10px;background:var(--gray-50)}
+.lea-chip{font-size:12.5px;color:var(--navy);background:#fff;border:1px solid var(--gray-200);padding:8px 12px;border-radius:100px;cursor:pointer;font-family:inherit}
+.lea-chip:hover{border-color:var(--orange);color:var(--orange)}
+.lea-form{background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:14px;align-self:stretch;display:flex;flex-direction:column;gap:9px}
+.lea-form input,.lea-form select{padding:11px 13px;border:1px solid var(--gray-200);border-radius:9px;font-size:14px;font-family:inherit}
+.lea-form input:focus,.lea-form select:focus{outline:none;border-color:var(--orange)}
+.lea-form button{background:var(--orange);color:#fff;border:none;border-radius:9px;padding:12px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+.lea-inrow{display:flex;gap:9px;padding:13px;border-top:1px solid var(--gray-200);background:#fff}
+.lea-inrow input{flex:1;border:1px solid var(--gray-200);border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit}
+.lea-inrow input:focus{outline:none;border-color:var(--orange)}
+.lea-inrow button{background:var(--navy);color:#fff;border:none;border-radius:10px;width:46px;cursor:pointer;font-size:16px}
+.lea-link{display:inline-block;margin-top:6px;font-size:12.5px;font-weight:700;color:var(--orange)}
+</style>
+
+<button class="lea-launch pulse" id="leaLaunch" aria-label="Chat with us">
+  <span style="position:relative"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="lea-dot"></span></span>
+  Chat with us
+</button>
+
+<div class="lea-panel" id="leaPanel">
+  <div class="lea-head">
+    <div class="lea-av">🌿</div>
+    <div><div class="lea-t">Lima Earth Assistant</div><div class="lea-s">Online · replies instantly</div></div>
+    <button class="lea-x" id="leaClose">&times;</button>
+  </div>
+  <div class="lea-body" id="leaBody">
+    <div class="lea-msg bot">Hi! 👋 Welcome to Lima Earth Construction. I can answer questions and book your <b>free on-site estimate</b> any time, day or night. What can I help with?</div>
+  </div>
+  <div class="lea-chips" id="leaChips">
+    <button class="lea-chip">Landscape design</button>
+    <button class="lea-chip">Lawn maintenance</button>
+    <button class="lea-chip">Pricing</button>
+    <button class="lea-chip">Book a free estimate</button>
+  </div>
+  <div class="lea-inrow">
+    <input id="leaInput" placeholder="Type a message…" autocomplete="off">
+    <button id="leaSend">➤</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* === Set DEMO=false for a real paying client (hides the demo dashboard link) === */
+  var DEMO = true;
+  var QS = 'name=' + encodeURIComponent('Lima Earth Construction Ltd.') + '&city=Edmonton&cat=Landscaper&site=';
+  var GH = 'https://jaggyai.github.io/bc-demos/dashboard/index.html?' + QS;
+  var LR = '../../../../jaggyai-suite/index.html?' + QS;
+  var DASH = (location.hostname.indexOf('github') > -1 ? GH : LR) + encodeURIComponent(location.href);
+  function bookDate(){var d=new Date();d.setDate(d.getDate()+1);if(d.getDay()===0)d.setDate(d.getDate()+1);if(d.getDay()===6)d.setDate(d.getDate()+2);
+    var wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
+    var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+    return wd+', '+mo+' '+d.getDate();}
+  var KB = [
+    {k:['design','renovat','new build','makeover'], a:"Yes! We do full landscape design with 2D & 3D renderings for new builds and makeovers. Want me to book a free on-site consult?"},
+    {k:['lawn','mow','mainten','weekly','grass'], a:"We offer weekly mowing, trimming, edging and blowing on a reliable schedule. Want a quote for seasonal maintenance?"},
+    {k:['hardscap','patio','retaining','wall','paver','walkway','driveway','stone'], a:"We build stone patios, retaining walls, walkways and paver driveways — built to last decades. Want an estimate?"},
+    {k:['irrigation','sprinkler','water'], a:"We install and repair irrigation & smart sprinkler systems that save water. Want someone to take a look?"},
+    {k:['cleanup','snow','seasonal','gutter','fall','spring'], a:"We handle spring & fall cleanups, gutter clearing and snow removal year-round. Want to get on the schedule?"},
+    {k:['garden','plant','tree','bed','perennial'], a:"We design and plant beds, borders, native plants and mature trees suited to Edmonton's climate. Want a free estimate?"},
+    {k:['price','cost','quote','estimate','how much','rate'], a:"Every project starts with a FREE on-site estimate so we can give you an accurate price. Want me to set one up? Just tap 'Book a free estimate'."},
+    {k:['area','serve','where','edmonton','location','region'], a:"We serve Edmonton & the Capital Region — Sherwood Park, St. Albert, Beaumont, Leduc, Spruce Grove and more. What area are you in?"},
+    {k:['hour','open','time'], a:"We're open Mon–Sat, 7am–6pm — but this assistant takes requests 24/7. How can I help?"},
+    {k:['hi','hello','hey'], a:"Hi there! 🌿 Are you looking for landscape design, regular lawn care, or a specific project?"},
+    {k:['thank'], a:"You're welcome! 🙌 Want me to set up your free estimate?"}
+  ];
+  var FALLBACK = "Happy to help! We do design, lawn care, hardscaping, irrigation, gardens and cleanups. The best next step is a free on-site estimate — tap 'Book a free estimate' and I'll set it up.";
+  var BOOK = ['book','estimate','appointment','schedule','sign me up','yes please','get started','urgent','emergency','consult'];
+
+  var panel=document.getElementById('leaPanel'), body=document.getElementById('leaBody');
+  var launch=document.getElementById('leaLaunch');
+  function open(){panel.classList.add('open');launch.style.display='none';scrollDown();}
+  function close(){panel.classList.remove('open');launch.style.display='';}
+  launch.onclick=open; document.getElementById('leaClose').onclick=close;
+  function scrollDown(){body.scrollTop=body.scrollHeight;}
+  function add(html,cls){var d=document.createElement('div');d.className='lea-msg '+cls;d.innerHTML=html;body.appendChild(d);scrollDown();return d;}
+  function botSay(html){var t=add('<span style="opacity:.5">…</span>','bot');setTimeout(function(){t.innerHTML=html;scrollDown();},500);}
+
+  function showForm(){
+    var f=document.createElement('div'); f.className='lea-form';
+    f.innerHTML='<div style="font-weight:700;font-size:13.5px;color:var(--navy)">📋 Book your free estimate</div>'
+      +'<input id="lfName" placeholder="Your name">'
+      +'<input id="lfPhone" placeholder="Phone number">'
+      +'<select id="lfService"><option>Landscape Design</option><option>Lawn Maintenance</option><option>Hardscaping</option><option>Irrigation</option><option>Garden / Planting</option><option>Seasonal Cleanup</option><option>Other</option></select>'
+      +'<button id="lfSubmit">Send to the team →</button>';
+    body.appendChild(f); scrollDown();
+    f.querySelector('#lfSubmit').onclick=function(){
+      var name=(f.querySelector('#lfName').value||'').trim();
+      var phone=(f.querySelector('#lfPhone').value||'').trim();
+      var svc=f.querySelector('#lfService').value;
+      if(!name||!phone){botSay("Just need a name and a phone number so the team can reach you 🙂");return;}
+      var first=name.split(' ')[0], date=bookDate(), slot='8:00–10:00 AM';
+      var lead={name:name,phone:phone,service:svc,source:'Website Chatbot',business:'Lima Earth Construction Ltd.',city:'Edmonton',booked:date+' · '+slot,msg:'Booked a free estimate via chatbot for '+date+' '+slot+'.',time:Date.now()};
+      try{var arr=JSON.parse(localStorage.getItem('jaggy_inbound_leads')||'[]');arr.push(lead);localStorage.setItem('jaggy_inbound_leads',JSON.stringify(arr));}catch(e){}
+      f.remove();
+      add(name+' · '+phone+'<br>'+svc,'user');
+      botSay("Got it, "+first+"! One sec while I lock that in… 📲");
+      setTimeout(function(){
+        add('📲 <b>Text sent to '+phone+':</b><br>“Hi '+first+'! ✅ You\'re booked with Lima Earth for a free '+svc+' estimate on <b>'+date+', '+slot+'</b>. We\'ll text a reminder the day before. Reply C to reschedule.”','bot');
+        add('📧 <b>Email confirmation</b> is on its way with your appointment details + what to expect.','bot');
+        add('👤 <b>Lima Earth was notified instantly</b> and will reach out to confirm. See you '+date+'! 🌿','bot');
+        if(DEMO) add('<a class="lea-link" target="_blank" href="'+DASH+'&inbound='+encodeURIComponent(JSON.stringify(lead))+'">📊 (Demo) see this lead hit the dashboard →</a>','bot');
+      },1000);
+    };
+  }
+
+  function reply(text){
+    var t=text.toLowerCase();
+    if(BOOK.some(function(b){return t.indexOf(b)>-1;})){ botSay("Great — let's get you booked. Fill this out and the team will text you back fast:"); setTimeout(showForm,650); return; }
+    for(var i=0;i<KB.length;i++){ if(KB[i].k.some(function(k){return t.indexOf(k)>-1;})) return botSay(KB[i].a); }
+    botSay(FALLBACK);
+  }
+  function send(txt){
+    var v=(txt||document.getElementById('leaInput').value).trim(); if(!v)return;
+    document.getElementById('leaInput').value=''; add(v.replace(/</g,'&lt;'),'user'); reply(v);
+  }
+  document.getElementById('leaSend').onclick=function(){send();};
+  document.getElementById('leaInput').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+  Array.prototype.forEach.call(document.querySelectorAll('#leaChips .lea-chip'),function(c){c.onclick=function(){send(c.textContent);};});
+
+  // Also wire the page's contact form to feed the dashboard.
+  var cform=document.querySelector('section.contact form');
+  if(cform){ cform.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ins=cform.querySelectorAll('input'), name=(ins[0]&&ins[0].value||'').trim()||'Website lead', phone=(ins[1]&&ins[1].value||'').trim();
+    var svc=(cform.querySelector('select')&&cform.querySelector('select').value)||'Other';
+    var lead={name:name,phone:phone,service:svc,source:'Website Form',business:'Lima Earth Construction Ltd.',city:'Edmonton',msg:'Submitted the website estimate form.',time:Date.now()};
+    try{var arr=JSON.parse(localStorage.getItem('jaggy_inbound_leads')||'[]');arr.push(lead);localStorage.setItem('jaggy_inbound_leads',JSON.stringify(arr));}catch(e2){}
+    var btn=cform.querySelector('.form-submit'); btn.textContent='✓ Sent! We\'ll text you shortly'; btn.style.background='#22c55e';
+  });}
+})();
+</script>
+<!-- =================== END JaggyAI CHATBOT WIDGET =================== -->
+
 </body>
 </html>
