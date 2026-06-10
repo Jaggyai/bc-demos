@@ -19,12 +19,13 @@
 
   /* ---------- ROUTER ---------- */
   const VIEWS = {
-    dashboard: viewDashboard, journey: viewJourney, leads: viewLeads, pipeline: viewPipeline,
+    dashboard: viewDashboard, journey: viewJourney, findleads: viewFindLeads, leads: viewLeads, pipeline: viewPipeline,
     automations: viewAutomations, simulator: viewSimulator, assistant: viewAssistant
   };
   const TITLES = {
     dashboard: ["Dashboard", "Live overview of " + D.CLIENT.name + "'s lead engine"],
     journey: ["Customer Journey", "Exactly what happens when a customer comes in — step by step, while you work"],
+    findleads: ["Find Leads", "Pull a fresh list of local businesses to win — by city and type"],
     leads: ["Leads (CRM)", "Every lead, scored and tracked in one place"],
     pipeline: ["Pipeline", "Drag-free Kanban — value at every stage"],
     automations: ["Automations", "The workflows running 24/7 in the background"],
@@ -356,6 +357,97 @@
     const t = text.toLowerCase();
     for (const e of D.BOT_KB) if (e.keys.some(k => t.includes(k))) return esc(e.a).replace(/\n/g, "<br>");
     return esc(D.BOT_FALLBACK);
+  }
+
+  /* ---------- FIND LEADS (the Outscraper-style button owners expect) ---------- */
+  var flCity = "", flCat = "", flSearch = "", flResults = null;
+  function viewFindLeads(el) {
+    var DB = window.LEADS_DB || [];
+    var cities = [...new Set(DB.map(d => d.city))].sort();
+    var groups = {};
+    DB.forEach(d => { (groups[d.group] = groups[d.group] || new Set()).add(d.cat); });
+    var groupOrder = ["Referral & Property", "Commercial Accounts", "Trade Partners"];
+    var groupHint = {
+      "Referral & Property": "They hire trades constantly + send referrals",
+      "Commercial Accounts": "Big repeat jobs & service contracts",
+      "Trade Partners": "Sub-contract & partner work"
+    };
+    el.innerHTML =
+      '<p class="fl-intro">Pick a <b>city</b> and a <b>lead type</b>, then hit <b>Find Leads</b>. You get a clean list of local businesses — names, phones, emails — ready to call or download. ' + DB.length.toLocaleString() + ' businesses on tap.</p>' +
+      '<div class="fl-panel">' +
+        '<div class="fl-row">' +
+          '<div class="fl-field"><label>City</label><select id="flCity"><option value="">All cities</option>' +
+            cities.map(c => '<option' + (flCity === c ? ' selected' : '') + '>' + esc(c) + '</option>').join("") + '</select></div>' +
+          '<div class="fl-field" style="flex:1"><label>Keyword (optional)</label><input id="flSearch" placeholder="e.g. dental, RE/MAX, fitness…" value="' + esc(flSearch) + '"></div>' +
+          '<button class="fl-go" id="flGo">🔎 Find Leads</button>' +
+        '</div>' +
+        groupOrder.filter(g => groups[g]).map(g =>
+          '<div class="fl-grp"><div class="gl">' + g + ' — <span style="color:var(--muted);text-transform:none;font-weight:600">' + groupHint[g] + '</span></div><div class="fl-cats">' +
+          [...groups[g]].map(c => '<button class="fl-cat' + (flCat === c ? ' on' : '') + '" data-c="' + esc(c) + '">' + esc(c) + '</button>').join("") +
+          '</div></div>').join("") +
+      '</div>' +
+      '<div id="flOut"></div>';
+
+    $("#flCity").addEventListener("change", e => { flCity = e.target.value; });
+    $("#flSearch").addEventListener("input", e => { flSearch = e.target.value; });
+    $("#flSearch").addEventListener("keydown", e => { if (e.key === "Enter") runFind(); });
+    el.querySelectorAll(".fl-cat").forEach(b => b.addEventListener("click", () => {
+      flCat = (flCat === b.dataset.c) ? "" : b.dataset.c;
+      el.querySelectorAll(".fl-cat").forEach(x => x.classList.toggle("on", x.dataset.c === flCat));
+    }));
+    $("#flGo").addEventListener("click", runFind);
+    renderFindResults();
+  }
+  function runFind() {
+    var btn = $("#flGo"); if (!btn) return;
+    btn.disabled = true; btn.innerHTML = '<span class="fl-spin"></span> Searching…';
+    setTimeout(() => {
+      var DB = window.LEADS_DB || [];
+      var q = flSearch.toLowerCase().trim();
+      flResults = DB.filter(d =>
+        (!flCity || d.city === flCity) &&
+        (!flCat || d.cat === flCat) &&
+        (!q || (d.n + " " + d.cat + " " + d.city).toLowerCase().includes(q)));
+      btn.disabled = false; btn.innerHTML = "🔎 Find Leads";
+      renderFindResults(true);
+    }, 700);
+  }
+  function renderFindResults(animate) {
+    var out = $("#flOut"); if (!out) return;
+    if (flResults === null) {
+      out.innerHTML = '<div class="tablewrap"><div class="fl-empty"><div class="big">🧲</div><b>Ready when you are.</b><br>Choose a city + a lead type above and hit <b>Find Leads</b>.</div></div>';
+      return;
+    }
+    if (!flResults.length) {
+      out.innerHTML = '<div class="tablewrap"><div class="fl-empty"><div class="big">🔍</div>No matches — try a different city or remove the keyword.</div></div>';
+      return;
+    }
+    var rows = flResults.slice(0, 400);
+    var label = (flCat || "leads") + (flCity ? " in " + flCity : " across BC");
+    out.innerHTML =
+      '<div class="fl-resbar"><div class="fl-count">' + flResults.length.toLocaleString() + ' <span>found · ' + esc(label) + '</span></div>' +
+      '<button class="fl-dl" id="flDl">⬇ Download CSV</button></div>' +
+      '<div class="tablewrap"><table><thead><tr><th>Business</th><th>Type</th><th>City</th><th>Phone</th><th>Email</th><th>Rating</th></tr></thead><tbody>' +
+      rows.map(d =>
+        '<tr><td class="lead-name">' + esc(d.n) + '<div class="lead-sub">' + esc(d.addr) + '</div></td>' +
+        '<td>' + esc(d.cat) + '</td><td>' + esc(d.city) + '</td>' +
+        '<td>' + esc(d.phone) + '</td><td class="fl-mail">' + esc(d.email) + '</td>' +
+        '<td class="resp">★ ' + d.rating + ' <span style="color:var(--muted2);font-weight:500">(' + d.reviews + ')</span></td></tr>').join("") +
+      '</tbody></table></div>' +
+      (flResults.length > 400 ? '<p class="section-note" style="margin-top:10px">Showing first 400 — narrow by city or keyword, or download the full ' + flResults.length.toLocaleString() + ' as CSV.</p>' : '');
+    $("#flDl").addEventListener("click", downloadCSV);
+  }
+  function downloadCSV() {
+    if (!flResults || !flResults.length) return;
+    var head = ["Business", "Type", "Group", "City", "Phone", "Email", "Address", "Rating", "Reviews"];
+    var lines = [head.join(",")].concat(flResults.map(d =>
+      [d.n, d.cat, d.group, d.city, d.phone, d.email, d.addr, d.rating, d.reviews]
+        .map(v => '"' + String(v).replace(/"/g, '""') + '"').join(",")));
+    var blob = new Blob([lines.join("\n")], { type: "text/csv" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "jaggyai-leads-" + (flCat || "all").toLowerCase().replace(/[^a-z]+/g, "-") + "-" + (flCity || "bc").toLowerCase().replace(/[^a-z]+/g, "-") + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
   }
 
   /* ---------- CUSTOMER JOURNEY (the story owners actually want) ---------- */
