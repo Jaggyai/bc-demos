@@ -20,12 +20,13 @@
   /* ---------- ROUTER ---------- */
   const VIEWS = {
     dashboard: viewDashboard, journey: viewJourney, findleads: viewFindLeads, leads: viewLeads, pipeline: viewPipeline,
-    automations: viewAutomations, simulator: viewSimulator, assistant: viewAssistant
+    automations: viewAutomations, simulator: viewSimulator, assistant: viewAssistant, bizinfo: viewBusinessInfo
   };
   const TITLES = {
     dashboard: ["Dashboard", "Live overview of " + D.CLIENT.name + "'s lead engine"],
     journey: ["Customer Journey", "Exactly what happens when a customer comes in — step by step, while you work"],
     findleads: ["Find Leads", "Pull a fresh list of local businesses to win — by city and type"],
+    bizinfo: ["Business Info", "Tell your chatbot about your business — it answers customers 24/7"],
     leads: ["Leads (CRM)", "Every lead, scored and tracked in one place"],
     pipeline: ["Pipeline", "Drag-free Kanban — value at every stage"],
     automations: ["Automations", "The workflows running 24/7 in the background"],
@@ -454,6 +455,53 @@
     a.href = URL.createObjectURL(blob);
     a.download = "jaggyai-leads-" + (flCat || "all").toLowerCase().replace(/[^a-z]+/g, "-") + "-" + (flCity || "bc").toLowerCase().replace(/[^a-z]+/g, "-") + ".csv";
     document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  /* ---------- BUSINESS INFO (owner teaches the website chatbot) ---------- */
+  function bizSlug(s) { return (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+  function bizKey() { return "jaggy_bizinfo:" + bizSlug(D.CLIENT.name); }
+  function loadBizInfo() {
+    try { return JSON.parse(localStorage.getItem(bizKey()) || localStorage.getItem("jaggy_bizinfo:__last") || "{}"); }
+    catch (e) { return {}; }
+  }
+  function viewBusinessInfo(el) {
+    const info = loadBizInfo();
+    const fields = [
+      ["about",    "About — what your business does",        "We're a family-run plumbing company serving homeowners and businesses…", "area"],
+      ["history",  "Your story / history",                   "Started in 2009 by… / 15+ years serving the area / family-owned…",     "area"],
+      ["location", "Location / address",                     "123 Main St, Victoria, BC",                                            "input"],
+      ["areas",    "Areas you serve",                        "Greater Victoria, Saanich, Sooke, Sidney",                             "input"],
+      ["services", "Services you offer",                     "Drain cleaning, water heaters, leak repair, repiping, emergencies…",   "area"],
+      ["hours",    "Business hours",                         "Mon–Sat 7am–6pm · 24/7 emergency line",                                "input"],
+      ["pricing",  "Pricing / how you quote",                "Free estimates. Repairs from $150. Financing available on big jobs.",   "area"],
+      ["faqs",     "Common questions & answers",             "Are you licensed? Yes, fully licensed & insured. Do you warranty work? Yes, 1-year workmanship warranty.", "area"],
+      ["extra",    "Anything else customers ask about",      "Payment methods, warranties, brands you carry, parking, etc.",         "area"],
+    ];
+    el.innerHTML =
+      '<p class="section-note">Fill this in once. Your <b>website chatbot</b> uses it to answer customer questions about your business — 24/7, even the stuff that has nothing to do with booking. The more you add, the smarter it sounds.</p>' +
+      '<div class="bizform">' +
+      fields.map(f => {
+        const v = info[f[0]] || "";
+        const ctrl = f[3] === "area"
+          ? '<textarea id="bi_' + f[0] + '" placeholder="' + esc(f[2]) + '">' + esc(v) + '</textarea>'
+          : '<input id="bi_' + f[0] + '" placeholder="' + esc(f[2]) + '" value="' + esc(v) + '">';
+        return '<div class="bifield"><label>' + f[1] + '</label>' + ctrl + '</div>';
+      }).join("") +
+      '<div class="bisave"><button class="btn" id="biSave" style="width:auto;padding:12px 26px">💾 Save — teach my chatbot</button>' +
+      '<span id="biMsg" class="bimsg"></span></div>' +
+      '<p class="section-note" style="margin-top:6px">💡 To test it: save here, then open your website (🌐 View Website, top-right), click <b>Chat with us</b>, and ask something like “how long have you been in business?” or “what areas do you serve?”</p>' +
+      '</div>';
+    el.querySelector("#biSave").onclick = () => {
+      const obj = { business: D.CLIENT.name };
+      fields.forEach(f => { obj[f[0]] = (document.getElementById("bi_" + f[0]).value || "").trim(); });
+      try {
+        localStorage.setItem(bizKey(), JSON.stringify(obj));
+        localStorage.setItem("jaggy_bizinfo:__last", JSON.stringify(obj));
+        el.querySelector("#biMsg").textContent = "✓ Saved! Your website chatbot now knows this.";
+      } catch (e) {
+        el.querySelector("#biMsg").textContent = "Couldn't save in this browser.";
+      }
+    };
   }
 
   /* ---------- CUSTOMER JOURNEY (the story owners actually want) ---------- */

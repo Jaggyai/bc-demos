@@ -289,3 +289,13 @@ tbody tr:last-child td{border-bottom:none}
 .fl-spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:flspin .7s linear infinite}
 @keyframes flspin{to{transform:rotate(360deg)}}
 .fl-mail{color:var(--cyan)}
+
+/* ---------- BUSINESS INFO TAB ---------- */
+.bizform{max-width:780px;display:flex;flex-direction:column;gap:16px}
+.bifield{display:flex;flex-direction:column;gap:6px}
+.bifield label{font-size:13px;font-weight:700;color:var(--text)}
+.bifield input,.bifield textarea{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--text);font-size:14px;font-family:inherit;outline:none}
+.bifield input:focus,.bifield textarea:focus{border-color:var(--brand)}
+.bifield textarea{min-height:78px;resize:vertical;line-height:1.55}
+.bisave{display:flex;align-items:center;gap:14px;margin-top:6px;flex-wrap:wrap}
+.bimsg{font-size:13px;font-weight:700;color:var(--green)}
