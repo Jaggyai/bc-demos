@@ -490,6 +490,16 @@
       '<div class="bisave"><button class="btn" id="biSave" style="width:auto;padding:12px 26px">💾 Save — teach my chatbot</button>' +
       '<span id="biMsg" class="bimsg"></span></div>' +
       '<p class="section-note" style="margin-top:6px">💡 To test it: save here, then open your website (🌐 View Website, top-right), click <b>Chat with us</b>, and ask something like “how long have you been in business?” or “what areas do you serve?”</p>' +
+      '<div style="margin-top:20px;background:linear-gradient(135deg,rgba(34,211,238,.10),rgba(99,102,241,.06));border:1px solid #2a3f63;border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start;max-width:780px">' +
+        '<div style="font-size:26px">📞</div>' +
+        '<div style="flex:1"><div style="font-weight:800;font-size:15px">Phone Receptionist <span class="pill" style="margin-left:6px">Add-on</span></div>' +
+        '<div style="color:var(--muted);font-size:13.5px;line-height:1.55;margin-top:5px">Everything above can also answer your <b>phone</b>. Connect your Twilio number and an AI receptionist picks up 24/7 — using this same company info, history, hours and services to answer callers, take messages, and book jobs. Same brain, now on the phone.</div>' +
+        '<div style="display:flex;gap:9px;align-items:center;margin-top:12px;flex-wrap:wrap">' +
+          '<input placeholder="Your Twilio phone number" disabled style="background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;color:var(--muted2);font-size:13px;width:220px">' +
+          '<button class="btn ghost" disabled style="opacity:.55;cursor:not-allowed">Connect Twilio →</button>' +
+          '<span style="font-size:12px;color:var(--muted2)">available when you\'re ready</span>' +
+        '</div></div>' +
+      '</div>' +
       '</div>';
     el.querySelector("#biSave").onclick = () => {
       const obj = { business: D.CLIENT.name };
