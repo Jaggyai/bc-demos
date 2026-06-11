@@ -20,13 +20,17 @@
   /* ---------- ROUTER ---------- */
   const VIEWS = {
     dashboard: viewDashboard, journey: viewJourney, findleads: viewFindLeads, leads: viewLeads, pipeline: viewPipeline,
-    automations: viewAutomations, simulator: viewSimulator, assistant: viewAssistant, bizinfo: viewBusinessInfo
+    automations: viewAutomations, simulator: viewSimulator, assistant: viewAssistant, bizinfo: viewBusinessInfo,
+    calendar: viewCalendar, messages: viewMessages, money: viewMoney
   };
   const TITLES = {
     dashboard: ["Dashboard", "Live overview of " + D.CLIENT.name + "'s lead engine"],
     journey: ["Customer Journey", "Exactly what happens when a customer comes in — step by step, while you work"],
     findleads: ["Find Leads", "Pull a fresh list of local businesses to win — by city and type"],
     bizinfo: ["Business Info", "Tell your chatbot about your business — it answers customers 24/7"],
+    calendar: ["Calendar", "Every booked job — add it to your phone with one tap"],
+    messages: ["Messages", "Text your customers right from the dashboard"],
+    money: ["Quotes & Invoices", "Build a quote, send it, get paid"],
     leads: ["Leads (CRM)", "Every lead, scored and tracked in one place"],
     pipeline: ["Pipeline", "Drag-free Kanban — value at every stage"],
     automations: ["Automations", "The workflows running 24/7 in the background"],
@@ -609,6 +613,141 @@
     el.querySelector("#jplay").onclick = play;
     el.querySelector("#jall").onclick = showAll;
     reveal(0); // first step visible on open
+  }
+
+  /* ---------- CALENDAR / BOOKINGS (add to phone) ---------- */
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+  function icsDate(d) { return d.getUTCFullYear() + pad2(d.getUTCMonth() + 1) + pad2(d.getUTCDate()) + "T" + pad2(d.getUTCHours()) + pad2(d.getUTCMinutes()) + "00Z"; }
+  function appointments() {
+    const base = new Date(); base.setHours(0, 0, 0, 0);
+    const slots = [[9, 0, "9:00 AM"], [11, 0, "11:00 AM"], [13, 30, "1:30 PM"], [15, 0, "3:00 PM"]];
+    const src = D.LEADS.filter(l => ["Won", "Scheduled", "New Lead", "Contacted"].includes(l.stage)).slice(0, 12);
+    return src.map((l, i) => {
+      const d = new Date(base); d.setDate(base.getDate() + (i % 6));
+      const s = slots[i % slots.length]; d.setHours(s[0], s[1], 0, 0);
+      return { lead: l, start: d, end: new Date(d.getTime() + 3600000), label: s[2] };
+    }).sort((a, b) => a.start - b.start);
+  }
+  function gcalUrl(ap) {
+    const t = "Job: " + ap.lead.name + " — " + ap.lead.service;
+    const det = "Customer: " + ap.lead.name + "\nPhone: " + ap.lead.phone + "\nService: " + ap.lead.service + "\nBooked via " + D.CLIENT.name + ".";
+    return "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(t) +
+      "&dates=" + icsDate(ap.start) + "/" + icsDate(ap.end) + "&details=" + encodeURIComponent(det) + "&location=" + encodeURIComponent(ap.lead.city);
+  }
+  function downloadICS(ap) {
+    const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//JaggyAI//EN", "BEGIN:VEVENT",
+      "UID:" + ap.start.getTime() + "@jaggyai", "DTSTART:" + icsDate(ap.start), "DTEND:" + icsDate(ap.end),
+      "SUMMARY:Job: " + ap.lead.name + " - " + ap.lead.service,
+      "DESCRIPTION:Customer " + ap.lead.name + " " + ap.lead.phone, "LOCATION:" + ap.lead.city,
+      "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+    const u = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+    const a = document.createElement("a"); a.href = u; a.download = ap.lead.name.replace(/\s+/g, "_") + ".ics"; a.click();
+    setTimeout(() => URL.revokeObjectURL(u), 1000);
+  }
+  function viewCalendar(el) {
+    let cs = {}; try { cs = JSON.parse(localStorage.getItem("jaggy_calendar:" + bizSlug(D.CLIENT.name)) || "{}"); } catch (e) {}
+    const aps = appointments();
+    const days = {}; aps.forEach(ap => { const k = ap.start.toDateString(); (days[k] = days[k] || []).push(ap); });
+    const dayLabel = k => { const d = new Date(k), t = new Date(); t.setHours(0, 0, 0, 0); const diff = Math.round((d - t) / 86400000); return diff === 0 ? "Today" : diff === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }); };
+    el.innerHTML =
+      '<div class="card" style="max-width:780px;margin-bottom:18px"><h3 style="color:var(--text)">📲 Connect your calendar</h3>' +
+      '<p style="font-size:13px;color:var(--muted);margin:6px 0 12px">Add your email, then every booking gets an <b>Add to Calendar</b> button — tap it and the job lands on your phone instantly.</p>' +
+      '<div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">' +
+      '<input id="calEmail" placeholder="you@yourbusiness.ca" value="' + esc(cs.email || D.CLIENT.email || "") + '" style="background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:10px 13px;color:var(--text);font-size:14px;width:250px">' +
+      '<button class="btn" id="calSave" style="width:auto;padding:10px 18px">Save</button>' +
+      '<span id="calMsg" class="bimsg"></span></div>' +
+      '<p style="font-size:12px;color:var(--muted2);margin-top:10px">💡 Want it fully hands-free (no tapping)? Google Calendar 2-way sync connects when you go live.</p></div>' +
+      '<p class="section-note">Upcoming jobs — tap <b>📅 Google</b> or <b>⤓ Apple/Outlook</b> to drop any job straight onto your phone.</p>' +
+      Object.keys(days).map(k =>
+        '<div class="calday"><div class="caldayh">' + dayLabel(k) + '</div>' +
+        days[k].map(ap => {
+          const idx = aps.indexOf(ap);
+          return '<div class="appt"><div class="apptime">' + ap.label + '</div>' +
+            '<div class="apptmid"><div class="apptn">' + esc(ap.lead.name) + '</div><div class="apptmeta">' + esc(ap.lead.service) + ' · ' + esc(ap.lead.city) + ' · ' + esc(ap.lead.phone) + '</div></div>' +
+            '<div class="apptbtns"><a class="apptbtn g" href="' + gcalUrl(ap) + '" target="_blank" rel="noopener">📅 Google</a>' +
+            '<button class="apptbtn ics" data-i="' + idx + '">⤓ Apple/Outlook</button></div></div>';
+        }).join("") + '</div>').join("");
+    el.querySelector("#calSave").onclick = () => {
+      try { localStorage.setItem("jaggy_calendar:" + bizSlug(D.CLIENT.name), JSON.stringify({ email: document.getElementById("calEmail").value.trim() })); el.querySelector("#calMsg").textContent = "✓ Saved"; } catch (e) {}
+    };
+    el.querySelectorAll(".apptbtn.ics").forEach(b => b.onclick = () => downloadICS(aps[+b.dataset.i]));
+  }
+
+  /* ---------- MESSAGES (customer text inbox) ---------- */
+  function viewMessages(el) {
+    const threads = D.LEADS.slice(0, 8).map((l, i) => {
+      const msgs = [
+        { me: false, t: "Hi, is this " + D.CLIENT.name + "? I need help with " + l.service.toLowerCase() + "." },
+        { me: true, t: "Hi " + l.name.split(" ")[0] + "! Yes — happy to help. Want me to book you a free quote?" },
+      ];
+      if (i % 2 === 0) msgs.push({ me: false, t: "Yes please — what times do you have?" });
+      return { lead: l, msgs, unread: i < 2 };
+    });
+    el.innerHTML = '<p class="section-note">Text your customers right from here — full history, canned replies, one inbox. (Demo — real two-way texting connects to your number when you go live.)</p>' +
+      '<div class="msgwrap"><div class="msglist">' +
+      threads.map((th, i) => '<div class="msgli' + (i === 0 ? " active" : "") + '" data-i="' + i + '"><div class="msgav">' + esc(th.lead.name.charAt(0)) + '</div><div class="msgmid"><div class="msgn">' + esc(th.lead.name) + (th.unread ? ' <span class="msgdot"></span>' : "") + '</div><div class="msgprev">' + esc(th.msgs[th.msgs.length - 1].t).slice(0, 34) + '…</div></div></div>').join("") +
+      '</div><div class="msgthread" id="msgThread"></div></div>';
+    let cur = 0;
+    function renderThread() {
+      const th = threads[cur];
+      document.getElementById("msgThread").innerHTML =
+        '<div class="msgthh">' + esc(th.lead.name) + ' · ' + esc(th.lead.phone) + '</div>' +
+        '<div class="msgbody">' + th.msgs.map(m => '<div class="mbub ' + (m.me ? "me" : "them") + '">' + esc(m.t) + '</div>').join("") + '</div>' +
+        '<div class="msgquick">' + ["On my way 👍", "What's your address?", "You're booked! 🎉", "Here's your quote 📄"].map(q => '<button class="mq">' + esc(q) + '</button>').join("") + '</div>' +
+        '<div class="msgin"><input id="msgInput" placeholder="Type a text…"><button class="btn" id="msgSend" style="width:auto;padding:0 18px">Send</button></div>';
+      const send = t => { t = (t || document.getElementById("msgInput").value).trim(); if (!t) return; th.msgs.push({ me: true, t }); renderThread(); };
+      document.getElementById("msgSend").onclick = () => send();
+      document.getElementById("msgInput").addEventListener("keydown", e => { if (e.key === "Enter") send(); });
+      document.querySelectorAll("#msgThread .mq").forEach(b => b.onclick = () => send(b.textContent));
+    }
+    el.querySelectorAll(".msgli").forEach(li => li.onclick = () => { cur = +li.dataset.i; el.querySelectorAll(".msgli").forEach(x => x.classList.remove("active")); li.classList.add("active"); renderThread(); });
+    renderThread();
+  }
+
+  /* ---------- MONEY (quotes / invoices / payments) ---------- */
+  function viewMoney(el) {
+    const items = D.LEADS.filter(l => l.value > 0).map(l => ({
+      name: l.name, service: l.service, amount: l.value,
+      status: l.stage === "Completed" ? "Paid" : (["Won", "Scheduled"].includes(l.stage) ? "Sent" : "Draft")
+    }));
+    const sum = f => items.filter(f).reduce((s, x) => s + x.amount, 0);
+    function rowsHtml() {
+      return items.map((it, i) => {
+        const badge = it.status === "Paid" ? "st-Won" : (it.status === "Sent" ? "st-QuoteSent" : "st-NewLead");
+        const action = it.status === "Sent" ? '<button class="btn" data-pay="' + i + '" style="width:auto;padding:6px 12px;font-size:12px">Collect payment</button>'
+          : (it.status === "Draft" ? '<button class="btn ghost" data-send="' + i + '" style="padding:6px 12px;font-size:12px">Send</button>'
+            : '<span style="color:#86efac;font-size:12px;font-weight:700">✓ Paid</span>');
+        return '<tr><td class="lead-name">' + esc(it.name) + '</td><td>' + esc(it.service) + '</td><td class="val">' + money(it.amount) + '</td><td><span class="st ' + badge + '">' + it.status + '</span></td><td style="text-align:right">' + action + '</td></tr>';
+      }).join("");
+    }
+    function paint() {
+      el.querySelector("#mInvoiced").textContent = money(sum(x => x.status !== "Draft"));
+      el.querySelector("#mPaid").textContent = money(sum(x => x.status === "Paid"));
+      el.querySelector("#mOut").textContent = money(sum(x => x.status === "Sent"));
+      el.querySelector("#invBody").innerHTML = rowsHtml();
+      el.querySelectorAll("[data-pay]").forEach(b => b.onclick = () => { items[+b.dataset.pay].status = "Paid"; paint(); });
+      el.querySelectorAll("[data-send]").forEach(b => b.onclick = () => { items[+b.dataset.send].status = "Sent"; paint(); });
+    }
+    el.innerHTML =
+      '<div class="grid kpis" style="margin-bottom:16px">' +
+      '<div class="card kpi"><div class="label">Invoiced</div><div class="val" id="mInvoiced">—</div></div>' +
+      '<div class="card kpi"><div class="label">Paid</div><div class="val" id="mPaid" style="color:#86efac">—</div></div>' +
+      '<div class="card kpi"><div class="label">Outstanding</div><div class="val" id="mOut" style="color:#fcd34d">—</div></div></div>' +
+      '<div class="toolbar"><button class="btn" id="newQuote" style="width:auto;padding:10px 18px">➕ New Quote</button><span class="section-note" style="margin:0">Build a quote → send → get paid. (Real card payments via Stripe when you go live.)</span></div>' +
+      '<div id="quoteForm"></div>' +
+      '<div class="tablewrap"><table><thead><tr><th>Customer</th><th>Service</th><th>Amount</th><th>Status</th><th style="text-align:right">Action</th></tr></thead><tbody id="invBody"></tbody></table></div>';
+    el.querySelector("#newQuote").onclick = () => {
+      el.querySelector("#quoteForm").innerHTML = '<div class="card" style="max-width:560px;margin-bottom:14px"><h3 style="color:var(--text)">New quote</h3>' +
+        '<input id="qName" class="qin" placeholder="Customer name"><input id="qSvc" class="qin" placeholder="Service / description"><input id="qAmt" class="qin" type="number" placeholder="Amount ($)">' +
+        '<button class="btn" id="qSave" style="width:auto;padding:10px 18px;margin-top:4px">Create &amp; Send</button></div>';
+      el.querySelector("#qSave").onclick = () => {
+        const n = el.querySelector("#qName").value.trim(), s = el.querySelector("#qSvc").value.trim(), a = parseInt(el.querySelector("#qAmt").value) || 0;
+        if (!n || !a) return;
+        items.unshift({ name: n, service: s || "Service", amount: a, status: "Sent" });
+        el.querySelector("#quoteForm").innerHTML = ""; paint();
+      };
+    };
+    paint();
   }
 
   /* ---------- BRANDING (multi-tenant) ---------- */
