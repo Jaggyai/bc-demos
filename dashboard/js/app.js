@@ -419,7 +419,12 @@
       return;
     }
     if (!flResults.length) {
-      out.innerHTML = '<div class="tablewrap"><div class="fl-empty"><div class="big">🔍</div>No matches — try a different city or remove the keyword.</div></div>';
+      var DB = window.LEADS_DB || [];
+      var cityHasData = !flCity || DB.some(d => d.city === flCity);
+      var msg = cityHasData
+        ? '<div class="big">🔍</div>No matches — try a different lead type or clear the keyword.'
+        : '<div class="big">⏳</div><b>We\'re still gathering live leads for ' + esc(flCity) + '.</b><br>New cities come online every few hours. Try <b>Victoria</b> — it\'s fully loaded now.';
+      out.innerHTML = '<div class="tablewrap"><div class="fl-empty">' + msg + '</div></div>';
       return;
     }
     var rows = flResults.slice(0, 400);
@@ -427,22 +432,23 @@
     out.innerHTML =
       '<div class="fl-resbar"><div class="fl-count">' + flResults.length.toLocaleString() + ' <span>found · ' + esc(label) + '</span></div>' +
       '<button class="fl-dl" id="flDl">⬇ Download CSV</button></div>' +
-      '<div class="tablewrap"><table><thead><tr><th>Business</th><th>Type</th><th>City</th><th>Phone</th><th>Email</th><th>Rating</th></tr></thead><tbody>' +
+      '<div class="tablewrap"><table><thead><tr><th>Business</th><th>Type</th><th>City</th><th>Phone</th><th>Email</th><th>Website</th><th>Rating</th></tr></thead><tbody>' +
       rows.map(d =>
         '<tr><td class="lead-name">' + esc(d.n) + '<div class="lead-sub">' + esc(d.addr) + '</div></td>' +
         '<td>' + esc(d.cat) + '</td><td>' + esc(d.city) + '</td>' +
-        '<td>' + esc(d.phone) + '</td><td class="fl-mail">' + esc(d.email) + '</td>' +
-        '<td class="resp">★ ' + d.rating + ' <span style="color:var(--muted2);font-weight:500">(' + d.reviews + ')</span></td></tr>').join("") +
+        '<td>' + esc(d.phone) + '</td><td class="fl-mail">' + (d.email ? esc(d.email) : '<span style="color:var(--muted2)">—</span>') + '</td>' +
+        '<td>' + (d.site ? '<a href="' + esc(d.site) + '" target="_blank" rel="noopener" style="color:#a5b4fc">visit ↗</a>' : '<span style="color:var(--muted2)">—</span>') + '</td>' +
+        '<td class="resp">' + (d.rating ? '★ ' + d.rating + ' <span style="color:var(--muted2);font-weight:500">(' + d.reviews + ')</span>' : '<span style="color:var(--muted2)">—</span>') + '</td></tr>').join("") +
       '</tbody></table></div>' +
       (flResults.length > 400 ? '<p class="section-note" style="margin-top:10px">Showing first 400 — narrow by city or keyword, or download the full ' + flResults.length.toLocaleString() + ' as CSV.</p>' : '');
     $("#flDl").addEventListener("click", downloadCSV);
   }
   function downloadCSV() {
     if (!flResults || !flResults.length) return;
-    var head = ["Business", "Type", "Group", "City", "Phone", "Email", "Address", "Rating", "Reviews"];
+    var head = ["Business", "Type", "Group", "City", "Phone", "Email", "Website", "Address", "Rating", "Reviews"];
     var lines = [head.join(",")].concat(flResults.map(d =>
-      [d.n, d.cat, d.group, d.city, d.phone, d.email, d.addr, d.rating, d.reviews]
-        .map(v => '"' + String(v).replace(/"/g, '""') + '"').join(",")));
+      [d.n, d.cat, d.group, d.city, d.phone, d.email, d.site || "", d.addr, d.rating, d.reviews]
+        .map(v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"').join(",")));
     var blob = new Blob([lines.join("\n")], { type: "text/csv" });
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
