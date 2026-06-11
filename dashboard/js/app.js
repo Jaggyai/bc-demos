@@ -618,15 +618,20 @@
   /* ---------- CALENDAR / BOOKINGS (add to phone) ---------- */
   function pad2(n) { return (n < 10 ? "0" : "") + n; }
   function icsDate(d) { return d.getUTCFullYear() + pad2(d.getUTCMonth() + 1) + pad2(d.getUTCDate()) + "T" + pad2(d.getUTCHours()) + pad2(d.getUTCMinutes()) + "00Z"; }
+  function fmtTime(d) { let h = d.getHours(), m = d.getMinutes(); const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; return h + ":" + (m < 10 ? "0" : "") + m + " " + ap; }
   function appointments() {
     const base = new Date(); base.setHours(0, 0, 0, 0);
     const slots = [[9, 0, "9:00 AM"], [11, 0, "11:00 AM"], [13, 30, "1:30 PM"], [15, 0, "3:00 PM"]];
-    const src = D.LEADS.filter(l => ["Won", "Scheduled", "New Lead", "Contacted"].includes(l.stage)).slice(0, 12);
-    return src.map((l, i) => {
+    const out = [];
+    // real website-chatbot bookings — placed at the exact time the customer chose
+    D.LEADS.forEach(l => { if (l.bookedAt) { const d = new Date(l.bookedAt); if (!isNaN(d)) out.push({ lead: l, start: d, end: new Date(d.getTime() + 3600000), label: fmtTime(d), web: true }); } });
+    // demo-filler jobs from the pipeline
+    D.LEADS.filter(l => !l.bookedAt && ["Won", "Scheduled", "Contacted"].includes(l.stage)).slice(0, 8).forEach((l, i) => {
       const d = new Date(base); d.setDate(base.getDate() + (i % 6));
       const s = slots[i % slots.length]; d.setHours(s[0], s[1], 0, 0);
-      return { lead: l, start: d, end: new Date(d.getTime() + 3600000), label: s[2] };
-    }).sort((a, b) => a.start - b.start);
+      out.push({ lead: l, start: d, end: new Date(d.getTime() + 3600000), label: s[2], web: false });
+    });
+    return out.sort((a, b) => a.start - b.start);
   }
   function gcalUrl(ap) {
     const t = "Job: " + ap.lead.name + " — " + ap.lead.service;
@@ -662,8 +667,8 @@
         '<div class="calday"><div class="caldayh">' + dayLabel(k) + '</div>' +
         days[k].map(ap => {
           const idx = aps.indexOf(ap);
-          return '<div class="appt"><div class="apptime">' + ap.label + '</div>' +
-            '<div class="apptmid"><div class="apptn">' + esc(ap.lead.name) + '</div><div class="apptmeta">' + esc(ap.lead.service) + ' · ' + esc(ap.lead.city) + ' · ' + esc(ap.lead.phone) + '</div></div>' +
+          return '<div class="appt' + (ap.web ? ' web' : '') + '"><div class="apptime">' + ap.label + '</div>' +
+            '<div class="apptmid"><div class="apptn">' + esc(ap.lead.name) + (ap.web ? ' <span class="webbadge">🌐 booked online</span>' : '') + '</div><div class="apptmeta">' + esc(ap.lead.service) + ' · ' + esc(ap.lead.city) + ' · ' + esc(ap.lead.phone) + '</div></div>' +
             '<div class="apptbtns"><a class="apptbtn g" href="' + gcalUrl(ap) + '" target="_blank" rel="noopener">📅 Google</a>' +
             '<button class="apptbtn ics" data-i="' + idx + '">⤓ Apple/Outlook</button></div></div>';
         }).join("") + '</div>').join("");

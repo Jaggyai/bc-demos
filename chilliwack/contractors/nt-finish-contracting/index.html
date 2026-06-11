@@ -405,8 +405,8 @@ section { padding: 100px 24px; }
  document.getElementById('jaiX').onclick=function(){P.classList.remove('o');L.style.display='';};
  function add(h,c){var d=document.createElement('div');d.className='jai-m '+c;d.innerHTML=h;B.appendChild(d);sd();return d;}
  function bot(h){var t=add('<span style="opacity:.5">…</span>','b');setTimeout(function(){t.innerHTML=h;sd();speak(plain(h));},450);}
- function bookDate(){var d=new Date();d.setDate(d.getDate()+1);if(d.getDay()===0)d.setDate(d.getDate()+1);if(d.getDay()===6)d.setDate(d.getDate()+2);
-  var wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
+ function bookDateObj(){var d=new Date();d.setDate(d.getDate()+1);if(d.getDay()===0)d.setDate(d.getDate()+1);if(d.getDay()===6)d.setDate(d.getDate()+2);d.setHours(8,0,0,0);return d;}
+ function fmtBookDate(d){var wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
   var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
   return wd+', '+mo+' '+d.getDate();}
  function form(){
@@ -417,8 +417,8 @@ section { padding: 100px 24px; }
   f.querySelector('#jfb').onclick=function(){
    var n=(f.querySelector('#jfn').value||'').trim(),p=(f.querySelector('#jfp').value||'').trim(),s=f.querySelector('#jfs').value;
    if(!n||!p){bot("Just need a name and phone number so the team can reach you 🙂");return;}
-   var first=n.split(' ')[0], date=bookDate(), slot='8:00–10:00 AM';
-   var lead={name:n,phone:p,service:s,source:'Website Chatbot',business:BIZ,city:CITY,booked:date+' · '+slot,msg:'Booked a free quote via chatbot for '+date+' '+slot+'.',time:Date.now()};
+   var first=n.split(' ')[0], dObj=bookDateObj(), date=fmtBookDate(dObj), slot='8:00–10:00 AM';
+   var lead={name:n,phone:p,service:s,source:'Website Chatbot',business:BIZ,city:CITY,booked:date+' · '+slot,bookedAt:dObj.toISOString(),msg:'Booked a free quote via chatbot for '+date+' '+slot+'.',time:Date.now()};
    try{var a=JSON.parse(localStorage.getItem('jaggy_inbound_leads')||'[]');a.push(lead);localStorage.setItem('jaggy_inbound_leads',JSON.stringify(a));}catch(e){}
    f.remove();add(n+' · '+p+'<br>'+s,'u');
    bot("Got it, "+first+"! One sec while I lock that in… 📲");

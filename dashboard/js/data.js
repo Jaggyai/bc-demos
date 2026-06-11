@@ -159,8 +159,9 @@ window.JAGGY = (function () {
       city: lead.city || CLIENT.city,
       service: lead.service || (SERVICE_MAP[(CLIENT.category || "").toLowerCase()] || DEFAULT_SERVICES)[0],
       source: lead.source || "Website Chatbot",
-      stage: "New Lead", score: "Hot",
+      stage: lead.bookedAt ? "Scheduled" : "New Lead", score: "Hot",
       value: 0, response: "instant", date: "Just now", followups: 0,
+      booked: lead.booked || "", bookedAt: lead.bookedAt || "",
       notes: (lead.msg || "Came in through the website.") + " — auto-captured, owner notified."
     });
     CLIENT.newInbound++;

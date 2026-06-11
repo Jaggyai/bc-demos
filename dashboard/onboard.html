@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JaggyAI — Client Setup Studio</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  body{padding:0}
+  .ob-head{background:var(--bg2);border-bottom:1px solid var(--line);padding:18px 26px;display:flex;align-items:center;gap:12px}
+  .ob-wrap{max-width:920px;margin:0 auto;padding:24px 26px 80px}
+  .ob-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.ob-grid{grid-template-columns:1fr}}
+  .ob-field{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
+  .ob-field label{font-size:13px;font-weight:700}
+  .ob-field input,.ob-field select{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--text);font-size:14px;font-family:inherit;outline:none}
+  .ob-field input:focus,.ob-field select:focus{border-color:var(--brand)}
+  .ob-out{margin-top:22px;display:none}
+  .ob-out.show{display:block}
+  .linkrow{display:flex;gap:9px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;flex-wrap:wrap}
+  .linkrow .lk{flex:1;min-width:180px;font-size:12.5px;color:#a5b4fc;word-break:break-all;font-family:monospace}
+  .linkrow .lbl{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;width:78px;flex:0 0 78px}
+  .minibtn{font-size:12px;font-weight:700;padding:7px 12px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:var(--surface2);color:var(--text)}
+  .minibtn.p{background:var(--grad);color:#fff;border:none}
+  .minibtn:hover{filter:brightness(1.1)}
+  .check{display:flex;gap:10px;align-items:flex-start;padding:9px 0;font-size:14px;border-bottom:1px solid var(--line)}
+  .check:last-child{border-bottom:none}
+  .check input{margin-top:3px}
+  textarea.ob-email{width:100%;min-height:230px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:13px;color:var(--text);font-size:13px;line-height:1.6;font-family:inherit;resize:vertical}
+  .clientrow{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:11px 14px;margin-bottom:8px;flex-wrap:wrap}
+  .clientrow .cn{font-weight:700;font-size:14px;flex:1;min-width:150px}
+  .clientrow .cm{color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+  <div class="ob-head">
+    <div class="logo-mark">J</div><div class="logo-word">Jaggy<span>AI</span></div>
+    <div style="font-weight:700;font-size:15px;margin-left:6px">Client Setup Studio <span style="color:var(--muted);font-weight:500">· onboard a paying client in 2 minutes</span></div>
+    <a href="clients.html" class="minibtn" style="margin-left:auto">← Command Center</a>
+  </div>
+  <div class="ob-wrap">
+    <div class="card">
+      <h3 style="color:var(--text);font-size:15px">New client details</h3>
+      <div class="ob-grid" style="margin-top:10px">
+        <div class="ob-field"><label>Business name</label><input id="f_name" placeholder="True Home Plumbing & Gas"></div>
+        <div class="ob-field"><label>City</label><input id="f_city" placeholder="Victoria"></div>
+        <div class="ob-field"><label>Trade</label><select id="f_cat">
+          <option>Plumber</option><option>Electrician</option><option>HVAC contractor</option><option>Landscaper</option>
+          <option>General contractor</option><option>Roofer</option><option>Concrete contractor</option><option>Excavating contractor</option>
+          <option>Dry wall contractor</option><option>Handyman</option><option>Interior designer</option><option>Service business</option>
+        </select></div>
+        <div class="ob-field"><label>Owner email</label><input id="f_email" type="email" placeholder="owner@business.ca"></div>
+        <div class="ob-field"><label>Owner phone</label><input id="f_phone" placeholder="(778) 555-0100"></div>
+        <div class="ob-field"><label>Demo website URL (optional)</label><input id="f_site" placeholder="https://jaggyai.github.io/bc-demos/..."></div>
+      </div>
+      <button class="btn" id="gen" style="width:auto;padding:12px 24px;margin-top:14px">⚡ Generate client setup</button>
+    </div>
+
+    <div class="ob-out" id="out">
+      <div class="card" style="margin-top:16px">
+        <h3 style="color:var(--text);font-size:15px">🔗 Their two links (this is what you sell with)</h3>
+        <div class="linkrow"><span class="lbl">Dashboard</span><span class="lk" id="lkDash"></span><button class="minibtn p" data-copy="lkDash">Copy</button><a class="minibtn" id="openDash" target="_blank">Open</a></div>
+        <div class="linkrow" id="siteRow"><span class="lbl">Website</span><span class="lk" id="lkSite"></span><button class="minibtn p" data-copy="lkSite">Copy</button><a class="minibtn" id="openSite" target="_blank">Open</a></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3 style="color:var(--text);font-size:15px">✉️ Welcome email <span style="color:var(--muted);font-weight:500;font-size:12px">— copy &amp; send to the owner</span></h3>
+        <textarea class="ob-email" id="email"></textarea>
+        <button class="minibtn p" data-copy="email" style="margin-top:10px">Copy email</button>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3 style="color:var(--text);font-size:15px">✅ Setup checklist</h3>
+        <div class="check"><input type="checkbox"><div><b>Send the welcome email</b> above with their two links.</div></div>
+        <div class="check"><input type="checkbox"><div><b>Owner fills Business Info</b> (dashboard → Business Info) so the chatbot can answer customers.</div></div>
+        <div class="check"><input type="checkbox"><div><b>Owner connects calendar email</b> (dashboard → Calendar) so bookings hit their phone.</div></div>
+        <div class="check"><input type="checkbox"><div><b>(Optional add-on) Connect Twilio</b> for real SMS texting + phone receptionist.</div></div>
+        <div class="check"><input type="checkbox"><div><b>Confirm pricing &amp; go-live</b> — suggested: $1,500–3,000 setup + $300–800/mo.</div></div>
+        <button class="btn" id="saveClient" style="width:auto;padding:10px 20px;margin-top:12px">💾 Save client to my roster</button>
+        <span id="saveMsg" style="font-size:13px;font-weight:700;color:var(--green);margin-left:10px"></span>
+      </div>
+    </div>
+
+    <div id="roster" style="margin-top:26px"></div>
+  </div>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s);};
+  var DASHBASE="https://jaggyai.github.io/bc-demos/dashboard/index.html";
+  var cur=null;
+  function val(id){return ($('#'+id).value||'').trim();}
+  function build(){
+    var name=val('f_name'); if(!name){$('#f_name').focus();return;}
+    var city=val('f_city')||'British Columbia', cat=$('#f_cat').value, email=val('f_email'), phone=val('f_phone'), site=val('f_site');
+    var dash=DASHBASE+'?name='+encodeURIComponent(name)+'&city='+encodeURIComponent(city)+'&cat='+encodeURIComponent(cat)+'&phone='+encodeURIComponent(phone)+(site?'&site='+encodeURIComponent(site):'');
+    cur={name:name,city:city,cat:cat,email:email,phone:phone,site:site,dash:dash};
+    $('#lkDash').textContent=dash; $('#openDash').href=dash;
+    if(site){$('#siteRow').style.display='';$('#lkSite').textContent=site;$('#openSite').href=site;} else {$('#siteRow').style.display='none';}
+    var first=(name.split(' ')[0]||'there');
+    $('#email').value=
+'Subject: Your new website + dashboard are ready 🎉\n\n'+
+'Hi '+(email?email.split('@')[0]:first)+',\n\n'+
+'Great news — your new website and business dashboard are live:\n\n'+
+(site?('🌐 Your website: '+site+'\n'):'')+
+'📊 Your dashboard: '+dash+'\n\n'+
+'Here’s how to get set up (about 10 minutes):\n'+
+'1. Open your dashboard → "Business Info" → tell your chatbot about your business (history, services, hours, areas served). It’ll answer your customers 24/7.\n'+
+'2. Go to "Calendar" → add your email so every booking lands on your phone.\n'+
+'3. That’s it — your website is already capturing leads and booking jobs for you.\n\n'+
+'Any questions, just reply to this email.\n\n'+
+'— Jag, JaggyAI';
+    $('#out').classList.add('show');
+    $('#out').scrollIntoView({behavior:'smooth'});
+  }
+  $('#gen').onclick=build;
+  document.addEventListener('click',function(e){
+    var c=e.target.getAttribute&&e.target.getAttribute('data-copy'); if(!c)return;
+    var el=$('#'+c); var t=el.value!==undefined?el.value:el.textContent;
+    navigator.clipboard.writeText(t).then(function(){var o=e.target.textContent;e.target.textContent='✓ Copied';setTimeout(function(){e.target.textContent=o;},1200);});
+  });
+  function loadRoster(){try{return JSON.parse(localStorage.getItem('jaggy_clients')||'[]');}catch(e){return [];}}
+  function renderRoster(){
+    var r=loadRoster();
+    $('#roster').innerHTML=r.length? '<h3 style="color:var(--text);font-size:15px;margin-bottom:10px">📒 My clients ('+r.length+')</h3>'+
+      r.map(function(c,i){return '<div class="clientrow"><div class="cn">'+c.name+'<div class="cm">'+c.city+' · '+c.cat+(c.email?' · '+c.email:'')+'</div></div>'+
+        '<a class="minibtn" target="_blank" href="'+c.dash+'">Dashboard</a>'+(c.site?'<a class="minibtn" target="_blank" href="'+c.site+'">Website</a>':'')+
+        '<button class="minibtn" data-del="'+i+'">✕</button></div>';}).join('') : '';
+    $('#roster').querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){var r=loadRoster();r.splice(+b.dataset.del,1);localStorage.setItem('jaggy_clients',JSON.stringify(r));renderRoster();};});
+  }
+  $('#saveClient').onclick=function(){ if(!cur)return; var r=loadRoster(); r.unshift(cur); localStorage.setItem('jaggy_clients',JSON.stringify(r)); $('#saveMsg').textContent='✓ Saved to roster'; renderRoster(); };
+  renderRoster();
+})();
+</script>
+</body>
+</html>
