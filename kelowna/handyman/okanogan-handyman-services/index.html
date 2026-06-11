@@ -352,6 +352,10 @@ section { padding: 100px 24px; }
 .jai-i{display:flex;gap:8px;padding:12px;border-top:1px solid #e2e8f0;background:#fff}
 .jai-i input{flex:1;border:1px solid #e2e8f0;border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:inherit}
 .jai-i button{background:#0f172a;color:#fff;border:none;border-radius:9px;width:44px;cursor:pointer;font-size:15px}
+.jai-ic{background:#eef2ff !important;color:#0f172a !important;border:1px solid #e2e8f0 !important;border-radius:9px;width:42px;cursor:pointer;font-size:15px}
+.jai-ic:hover{border-color:#4f46e5 !important}
+.jai-ic.rec{background:#ef4444 !important;color:#fff !important;border-color:#ef4444 !important;animation:jaiRec 1s infinite}
+@keyframes jaiRec{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.5)}50%{box-shadow:0 0 0 7px rgba(239,68,68,0)}}
 .jai-link{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;color:#4f46e5}
 </style>
 <button class="jai-l p" id="jaiL"><span style="position:relative"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="jd"></span></span> Chat with us</button>
@@ -359,7 +363,7 @@ section { padding: 100px 24px; }
   <div class="jai-h"><div class="a">🛠️</div><div><div class="t">Okanogan Handyman Services</div><div class="s">● Online · replies instantly</div></div><button class="x" id="jaiX">&times;</button></div>
   <div class="jai-b" id="jaiB"><div class="jai-m b">Hi! 👋 Welcome to Okanogan Handyman Services. I can answer questions and book your <b>free quote</b> any time, 24/7. What can I help with?</div></div>
   <div class="jai-c" id="jaiC"><button class="jai-chip">What do you offer?</button><button class="jai-chip">Pricing</button><button class="jai-chip">Service area</button><button class="jai-chip">Book a free quote</button></div>
-  <div class="jai-i"><input id="jaiIn" placeholder="Type a message…" autocomplete="off"><button id="jaiS">➤</button></div>
+  <div class="jai-i"><button id="jaiMic" class="jai-ic" title="Talk to us">🎤</button><input id="jaiIn" placeholder="Type or tap 🎤 to talk…" autocomplete="off"><button id="jaiSpk" class="jai-ic" title="Voice on/off">🔇</button><button id="jaiS">➤</button></div>
 </div>
 <script>
 (function(){
@@ -400,7 +404,7 @@ section { padding: 100px 24px; }
  L.onclick=function(){P.classList.add('o');L.style.display='none';sd();};
  document.getElementById('jaiX').onclick=function(){P.classList.remove('o');L.style.display='';};
  function add(h,c){var d=document.createElement('div');d.className='jai-m '+c;d.innerHTML=h;B.appendChild(d);sd();return d;}
- function bot(h){var t=add('<span style="opacity:.5">…</span>','b');setTimeout(function(){t.innerHTML=h;sd();},450);}
+ function bot(h){var t=add('<span style="opacity:.5">…</span>','b');setTimeout(function(){t.innerHTML=h;sd();speak(plain(h));},450);}
  function bookDate(){var d=new Date();d.setDate(d.getDate()+1);if(d.getDay()===0)d.setDate(d.getDate()+1);if(d.getDay()===6)d.setDate(d.getDate()+2);
   var wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
   var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
@@ -436,6 +440,17 @@ section { padding: 100px 24px; }
  document.getElementById('jaiS').onclick=function(){send();};
  document.getElementById('jaiIn').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
  Array.prototype.forEach.call(document.querySelectorAll('#jaiC .jai-chip'),function(c){c.onclick=function(){send(c.textContent);};});
+ /* === Free voice mode: talk to it (🎤) + it talks back (🔊), browser-only, no external service === */
+ var VOICE=false;
+ function plain(h){var d=document.createElement('div');d.innerHTML=String(h).replace(/<br\s*\/?>/gi,'. ');var s=(d.textContent||'');return s.replace(/📊.*$/,'').replace(/\s+/g,' ').trim();}
+ function pickVoice(){var vs=(window.speechSynthesis?speechSynthesis.getVoices():[])||[];var pref=['Natural','Online','Aria','Jenny','Sonia','Libby','Michelle','Emma','Google US English','Samantha','Zira'];for(var p=0;p<pref.length;p++)for(var i=0;i<vs.length;i++){if(/^en/i.test(vs[i].lang)&&vs[i].name.indexOf(pref[p])>-1)return vs[i];}for(var j=0;j<vs.length;j++){if(/en-US/i.test(vs[j].lang))return vs[j];}return vs[0]||null;}
+ function speak(text){if(!VOICE||!window.speechSynthesis||!text)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);var v=pickVoice();if(v)u.voice=v;u.rate=1.02;u.pitch=1;speechSynthesis.speak(u);}catch(e){}}
+ if(window.speechSynthesis){try{speechSynthesis.onvoiceschanged=pickVoice;pickVoice();}catch(e){}}
+ var spk=document.getElementById('jaiSpk');
+ if(spk)spk.onclick=function(){VOICE=!VOICE;spk.textContent=VOICE?'🔊':'🔇';spk.style.opacity=VOICE?'1':'.6';if(!VOICE&&window.speechSynthesis)speechSynthesis.cancel();};
+ var SR=window.SpeechRecognition||window.webkitSpeechRecognition, mic=document.getElementById('jaiMic'), jin=document.getElementById('jaiIn');
+ if(mic&&SR){mic.onclick=function(){VOICE=true;if(spk){spk.textContent='🔊';spk.style.opacity='1';}try{var r=new SR();r.lang='en-US';r.interimResults=false;r.maxAlternatives=1;mic.classList.add('rec');mic.textContent='●';jin.placeholder='Listening…';r.onresult=function(e){send(e.results[0][0].transcript);};r.onend=function(){mic.classList.remove('rec');mic.textContent='🎤';jin.placeholder='Type or tap 🎤 to talk…';};r.onerror=r.onend;r.start();}catch(err){mic.classList.remove('rec');mic.textContent='🎤';}};}
+ else if(mic){mic.style.display='none';}
 })();
 </script>
 <!-- /JAGGYAI-CHATBOT -->
