@@ -259,8 +259,8 @@
     }));
     // Live automation test buttons — fire the real Make.com webhooks
     const HOOKS = {
-      review: "https://hook.us2.make.com/bkj4rt7iq5x0j2n52x5krkla5qmfgkw7",
-      invoice: "https://hook.us2.make.com/729mrxqtx320q3wuimbx2dkybigpwj1g"
+      review: "https://hook.us2.make.com/5di136oplsbgbrm57bctysagqvfxbu91",
+      invoice: "https://hook.us2.make.com/vf1wzgwzwalh5a7k6o2oug9ry7bvtqhv"
     };
     el.querySelectorAll("[data-fire]").forEach(b => b.onclick = () => {
       const kind = b.dataset.fire, biz = D.CLIENT.name;
