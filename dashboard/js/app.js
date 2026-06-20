@@ -268,7 +268,7 @@
         ? { customer_name: "Demo Client", customer_email: "jag@jaggyai.com", business_name: biz, review_link: "https://g.page/r/EXAMPLE/review" }
         : { customer_name: "Demo Client", customer_email: "jag@jaggyai.com", business_name: biz, invoice_number: "DEMO-1001", invoice_date: "today", due_date: "in 14 days", service: "Real estate services", amount: "18,500.00", payment_info: "e-transfer to " + (D.CLIENT.email || "owner@business.ca") };
       b.disabled = true; b.textContent = "Sending…";
-      fetch(HOOKS[kind], { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      fetch(HOOKS[kind], { method: "POST", mode: "no-cors", body: new URLSearchParams(payload) })
         .then(() => { b.textContent = "✓ Sent! Check the inbox"; })
         .catch(() => { b.textContent = "✓ Sent! Check the inbox"; });
     });
