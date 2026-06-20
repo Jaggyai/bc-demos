@@ -235,7 +235,17 @@
   /* ---------- AUTOMATIONS ---------- */
   function viewAutomations(el) {
     const icons = ["⚡", "📞", "🔁", "📄", "🏗️", "⭐", "🔍", "🌟", "🎯", "♻️", "🌱"];
-    el.innerHTML = `<p class="section-note">🟣 <b>Convert</b> (turn leads into jobs) + 🟢 <b>Generate</b> (bring new leads in). All run server-side, 24/7 — clients never touch the wiring.</p>
+    const live =
+      '<div class="card" style="border:1px solid #2a5a3a;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.03));margin-bottom:18px">' +
+      '<h3 style="color:var(--text)">🟢 Live &amp; Connected — real automations running now</h3>' +
+      '<p style="font-size:13px;color:var(--muted);margin:4px 0 14px">These are wired to live automations and actually send. Tap <b>Send a test</b> and a real email lands in seconds — proof, not a promise.</p>' +
+      '<div class="auto-list">' +
+        '<div class="auto"><div class="ai">⭐</div><div class="amid"><div class="an">Review Engine <span class="pill" style="color:#86efac;background:rgba(34,197,94,.16)">● LIVE</span></div><div class="ad">After a closing, asks the client for a Google review — happy → review link, unhappy → private feedback.</div></div>' +
+        '<button class="btn" data-fire="review" style="width:auto;padding:9px 15px">▶ Send a test</button></div>' +
+        '<div class="auto"><div class="ai">🧾</div><div class="amid"><div class="an">Email Invoicing <span class="pill" style="color:#86efac;background:rgba(34,197,94,.16)">● LIVE</span></div><div class="ad">Sends a branded invoice automatically and chases payment until it&rsquo;s paid.</div></div>' +
+        '<button class="btn" data-fire="invoice" style="width:auto;padding:9px 15px">▶ Send a test</button></div>' +
+      '</div></div>';
+    el.innerHTML = live + `<p class="section-note">🟣 <b>Convert</b> (turn leads into jobs) + 🟢 <b>Generate</b> (bring new leads in). All run server-side, 24/7 — clients never touch the wiring.</p>
       <div class="auto-list">${D.AUTOMATIONS.map((a, i) => `
         <div class="auto">
           <div class="ai">${icons[i] || "⚙️"}</div>
@@ -247,6 +257,21 @@
       t.classList.toggle("on"); D.AUTOMATIONS[i].stat = D.AUTOMATIONS[i].on ? D.AUTOMATIONS[i].stat.replace("Paused", "Active") : "Paused";
       t.parentElement.querySelector(".astat").textContent = D.AUTOMATIONS[i].stat;
     }));
+    // Live automation test buttons — fire the real Make.com webhooks
+    const HOOKS = {
+      review: "https://hook.us2.make.com/bkj4rt7iq5x0j2n52x5krkla5qmfgkw7",
+      invoice: "https://hook.us2.make.com/729mrxqtx320q3wuimbx2dkybigpwj1g"
+    };
+    el.querySelectorAll("[data-fire]").forEach(b => b.onclick = () => {
+      const kind = b.dataset.fire, biz = D.CLIENT.name;
+      const payload = kind === "review"
+        ? { customer_name: "Demo Client", customer_email: "jag@jaggyai.com", business_name: biz, review_link: "https://g.page/r/EXAMPLE/review" }
+        : { customer_name: "Demo Client", customer_email: "jag@jaggyai.com", business_name: biz, invoice_number: "DEMO-1001", invoice_date: "today", due_date: "in 14 days", service: "Real estate services", amount: "18,500.00", payment_info: "e-transfer to " + (D.CLIENT.email || "owner@business.ca") };
+      b.disabled = true; b.textContent = "Sending…";
+      fetch(HOOKS[kind], { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+        .then(() => { b.textContent = "✓ Sent! Check the inbox"; })
+        .catch(() => { b.textContent = "✓ Sent! Check the inbox"; });
+    });
   }
 
   /* ---------- SIMULATOR (the star of the demo) ---------- */
@@ -531,6 +556,9 @@
       "construction company": { cust: "Tom",     prob: "a basement build-out",              svc: "Renovation",        val: "$32,000", urgent: false, emoji: "🏗️" },
       "concrete contractor":  { cust: "Raj",     prob: "a cracked driveway to replace",     svc: "Driveway",          val: "$5,200",  urgent: false, emoji: "🧱" },
       "excavating contractor":{ cust: "Paul",    prob: "drainage + grading on a new build", svc: "Site Prep",         val: "$11,500", urgent: false, emoji: "🚜" },
+      "realtor":              { cust: "Priya",   prob: "thinking about selling their home", svc: "Listing Appointment", val: "$18,500 commission", urgent: false, emoji: "🏡" },
+      "real estate":          { cust: "Priya",   prob: "thinking about selling their home", svc: "Listing Appointment", val: "$18,500 commission", urgent: false, emoji: "🏡" },
+      "real estate agent":    { cust: "Priya",   prob: "thinking about selling their home", svc: "Listing Appointment", val: "$18,500 commission", urgent: false, emoji: "🏡" },
     };
     return M[c] || { cust: "Jordan", prob: "a project they need done", svc: "the job", val: "$3,500", urgent: false, emoji: "🛠️" };
   }

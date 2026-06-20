@@ -108,6 +108,9 @@ window.JAGGY = (function () {
     "interior designer":    ["Consultation","Full Redesign","Space Planning","Staging","Materials & Color","Estimate"],
     "concrete contractor":  ["Driveway","Patio","Foundation","Sidewalk","Concrete Repair","Estimate"],
     "roofer":               ["Roof Replacement","Roof Repair","Leak / Emergency","Inspection","Gutters","Estimate"],
+    "realtor":              ["Buyer Consultation","Listing Appointment","Home Valuation","Property Showing","Market Update","Closing"],
+    "real estate":          ["Buyer Consultation","Listing Appointment","Home Valuation","Property Showing","Market Update","Closing"],
+    "real estate agent":    ["Buyer Consultation","Listing Appointment","Home Valuation","Property Showing","Market Update","Closing"],
   };
   const DEFAULT_SERVICES = ["New Project","Repair","Maintenance","Emergency Call-out","Consultation","Estimate"];
 
