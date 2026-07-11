@@ -24,7 +24,7 @@
     calendar: viewCalendar, messages: viewMessages, money: viewMoney
   };
   const TITLES = {
-    dashboard: ["Dashboard", "Live overview of " + D.CLIENT.name + "'s lead engine"],
+    dashboard: ["Dashboard", "Live overview of {biz}'s lead engine"],
     journey: ["Customer Journey", "Exactly what happens when a customer comes in — step by step, while you work"],
     findleads: ["Find Leads", "Pull a fresh list of local businesses to win — by city and type"],
     bizinfo: ["Business Info", "Tell your chatbot about your business — it answers customers 24/7"],
@@ -40,7 +40,7 @@
   function go(v) {
     document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.v === v));
     const [t, s] = TITLES[v];
-    $("#pageTitle").textContent = t; $("#pageSub").textContent = s;
+    $("#pageTitle").textContent = t; $("#pageSub").textContent = s.replace("{biz}", D.CLIENT.name);
     VIEWS[v]($("#content"));
   }
 
