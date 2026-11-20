@@ -119,6 +119,7 @@ window.JAGGY = (function () {
 
   try {
     const p = new URLSearchParams(window.location.search);
+    if (/buyers/.test(window.location.search) && !p.get("name")) { p.set("name", "Overseas Roofing Ltd"); p.set("city", "Surrey, BC"); p.set("cat", "Roofing"); }  // roofing buyer-leads link
     const bizName = p.get("name");
     if (bizName) {
       const city = p.get("city") || "British Columbia";

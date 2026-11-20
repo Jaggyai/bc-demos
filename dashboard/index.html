@@ -28,6 +28,7 @@
     <aside class="sidebar">
       <div class="brand"><div class="logo-mark">J</div><div class="logo-word">Jaggy<span>AI</span></div></div>
       <nav class="nav">
+        <button data-v="buyers" id="navBuyers" style="display:none"><span class="ic">🎯</span> Buyer Leads</button>
         <button data-v="dashboard" class="active"><span class="ic">▤</span> Dashboard</button>
         <button data-v="findleads"><span class="ic">🧲</span> Find Leads</button>
         <button data-v="bizinfo"><span class="ic">📝</span> Business Info</button>
@@ -67,6 +68,7 @@
   <div class="drawer" id="drawer"></div>
 
   <script src="js/leads-db.js"></script>
+  <script>if (/buyers/.test(location.search)) document.write('<script src="js/roofing-buyers.js"><\/script>');</script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script src="js/tour.js"></script>

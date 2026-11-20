@@ -119,6 +119,7 @@
     const login = document.getElementById("loginBtn");
     if (login) login.addEventListener("click", () => {
       let seen = false; try { seen = localStorage.getItem("jaggy_tour_seen"); } catch (e) {}
+      if (/buyers/.test(location.search)) seen = true;  // roofing buyer-leads link opens straight on the real leads, no auto tour
       if (!seen) setTimeout(start, 750);
       else { const b = document.getElementById("tourBtn"); if (b) b.classList.add("pulse"); }
     });

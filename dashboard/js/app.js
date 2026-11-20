@@ -13,17 +13,18 @@
     function enter() {
       $("#login").style.opacity = "0";
       $("#login").style.transition = "opacity .35s";
-      setTimeout(() => { $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); go("dashboard"); }, 350);
+      setTimeout(() => { $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); go(window.ROOF_BUYERS && /buyers/.test(location.search) ? "buyers" : "dashboard"); }, 350);
     }
   }
 
   /* ---------- ROUTER ---------- */
   const VIEWS = {
-    dashboard: viewDashboard, journey: viewJourney, findleads: viewFindLeads, leads: viewLeads, pipeline: viewPipeline,
+    buyers: viewBuyers, dashboard: viewDashboard, journey: viewJourney, findleads: viewFindLeads, leads: viewLeads, pipeline: viewPipeline,
     automations: viewAutomations, simulator: viewSimulator, assistant: viewAssistant, bizinfo: viewBusinessInfo,
     calendar: viewCalendar, messages: viewMessages, money: viewMoney
   };
   const TITLES = {
+    buyers: ["Buyer Leads", "Who is building, renovating and hiring roofers right now — real public data"],
     dashboard: ["Dashboard", "Live overview of {biz}'s lead engine"],
     journey: ["Customer Journey", "Exactly what happens when a customer comes in — step by step, while you work"],
     findleads: ["Find Leads", "Pull a fresh list of local businesses to win — by city and type"],
@@ -37,11 +38,18 @@
     simulator: ["Live Demo", "Watch a new lead get answered in seconds"],
     assistant: ["AI Assistant", "The 24/7 chatbot that answers & books"]
   };
+  if (window.ROOF_BUYERS) { var nb = document.getElementById("navBuyers"); if (nb) nb.style.display = ""; }
   function go(v) {
     document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.v === v));
     const [t, s] = TITLES[v];
     $("#pageTitle").textContent = t; $("#pageSub").textContent = s.replace("{biz}", D.CLIENT.name);
     VIEWS[v]($("#content"));
+    if (window.ROOF_BUYERS && v !== "buyers" && v !== "findleads") {
+      var note = document.createElement("div"); note.className = "fl-panel";
+      note.style.cssText = "background:rgba(251,191,36,.10);border-color:rgba(251,191,36,.35);font-size:13px;margin-bottom:14px";
+      note.innerHTML = "ℹ️ <b>Sample numbers.</b> The figures on this screen show what the dashboard looks like once it is connected to " + esc(D.CLIENT.name) + "'s own website, phone and quotes. Their real lead data is in the <b>Buyer Leads</b> tab.";
+      $("#content").insertBefore(note, $("#content").firstChild);
+    }
   }
 
   /* ---------- DASHBOARD ---------- */
@@ -389,6 +397,62 @@
     return esc(D.BOT_FALLBACK);
   }
 
+  /* ---------- BUYER LEADS (roofing demo: real permit + builder + request data) ---------- */
+  var byTab = "b2b", byCity = "", byQ = "", byType = "";
+  function viewBuyers(el) {
+    var R = window.ROOF_BUYERS; if (!R) { el.innerHTML = '<div class="fl-empty">No buyer data loaded.</div>'; return; }
+    var T = R.totals || {};
+    var withEmail = T.withEmail, roofJobs = T.roofJobs, newBuilds = T.newBuilds;
+    var cities = ["Surrey", "Vancouver", "Victoria"];
+    function kpi(n, l) { return '<div class="fl-panel" style="flex:1;min-width:150px;margin:0"><div style="font-size:26px;font-weight:800">' + n.toLocaleString() + '</div><div class="lead-sub">' + l + '</div></div>'; }
+    el.innerHTML =
+      '<p class="fl-intro">Companies that buy roofing work — property and strata managers, builders, developers and restoration firms across the Lower Mainland and Vancouver Island — plus live building permits and people publicly asking for roofers.</p>' +
+      '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">' + kpi(T.b2b || 0, "B2B buyers with email") + kpi(T.jobs, "active jobs · 90 days") + kpi(newBuilds, "new builds (need a roof)") + kpi(T.builders, "builders & developers") + kpi(withEmail, "with a contact email") + kpi(roofJobs, "roof-specific permits") + '</div>' +
+      '<div class="fl-panel"><div class="fl-row">' +
+        '<div class="fl-cats" style="margin:0">' + [["b2b", "B2B buyers (email)"], ["builders", "Builders on permits"], ["jobs", "Active jobs"], ["requests", "Asking for a roofer"]].map(function (t) { return '<button class="fl-cat' + (byTab === t[0] ? ' on' : '') + '" data-t="' + t[0] + '">' + t[1] + '</button>'; }).join("") + '</div>' +
+        '<div class="fl-field"><label>City</label><select id="byCity"><option value="">All</option>' + cities.map(function (c) { return '<option' + (byCity === c ? ' selected' : '') + '>' + c + '</option>'; }).join("") + '</select></div>' +
+        '<div class="fl-field" style="flex:1"><label>Search</label><input id="byQ" placeholder="builder, street, keyword…" value="' + esc(byQ) + '"></div>' +
+        '<button class="fl-dl" id="byDl">🔒 Unlock full list</button>' +
+      '</div></div><div id="byOut"></div>';
+    el.querySelectorAll("[data-t]").forEach(function (b) { b.addEventListener("click", function () { byTab = b.dataset.t; viewBuyers(el); }); });
+    $("#byCity").addEventListener("change", function (e) { byCity = e.target.value; renderBuyers(); });
+    $("#byQ").addEventListener("input", function (e) { byQ = e.target.value; renderBuyers(); });
+    $("#byDl").addEventListener("click", function () { var rows = buyerRows(); var csv = rows.csv.map(function (r) { return r.map(function (c) { return '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"'; }).join(","); }).join("\n"); var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "buyer-leads-" + byTab + ".csv"; a.click(); });
+    renderBuyers();
+  }
+  function buyerRows() {
+    var R = window.ROOF_BUYERS, q = byQ.toLowerCase().trim(), money = function (v) { return v ? "$" + Number(v).toLocaleString() : ""; };
+    if (byTab === "builders") {
+      var rows = R.builders.filter(function (b) { return (!byCity || b[1].indexOf(byCity) > -1) && (!q || (b[0] + " " + b[1]).toLowerCase().indexOf(q) > -1); });
+      return { n: rows.length, head: ["Builder", "Where", "Jobs", "Permit value (90d)", "Email", "Phone", "Website"],
+        html: rows.slice(0, 300).map(function (b) { return '<tr><td class="lead-name">' + esc(b[0]) + (b[7] && b[7].indexOf("check") > -1 ? '<div class="lead-sub">name match — verify</div>' : '') + '</td><td>' + esc(b[1]) + '</td><td>' + b[2] + '</td><td>' + money(b[3]) + '</td><td class="fl-mail">' + (b[5] ? esc(b[5]) : '<span style="color:var(--muted2)">—</span>') + '</td><td>' + (b[6] ? esc(b[6]) : '<span style="color:var(--muted2)">—</span>') + '</td><td>' + (b[4] ? '<a href="' + esc(b[4]) + '" target="_blank" rel="noopener" style="color:#a5b4fc">visit ↗</a>' : '<span style="color:var(--muted2)">—</span>') + '</td></tr>'; }).join(""),
+        csv: [["Builder", "Where", "Jobs 90d", "Total value", "Email", "Phone", "Website"]].concat(rows.map(function (b) { return [b[0], b[1], b[2], b[3], b[5], b[6], b[4]]; })) };
+    }
+    if (byTab === "b2b") {
+      var bb = (R.b2b || []).filter(function (b) { return (!byCity || b[2] === byCity) && (!q || b.join(" ").toLowerCase().indexOf(q) > -1); });
+      return { n: bb.length, head: ["Company", "Buyer type", "City", "Email", "Phone", "Website"],
+        html: bb.map(function (b) { return '<tr><td class="lead-name">' + esc(b[0]) + '</td><td>' + esc(b[1]) + '</td><td>' + esc(b[2]) + '</td><td class="fl-mail">' + esc(b[3]) + '</td><td>' + esc(b[4]) + '</td><td>' + (b[5] ? '<a href="' + esc(b[5]) + '" target="_blank" rel="noopener" style="color:#a5b4fc">visit ↗</a>' : '—') + '</td></tr>'; }).join(""), csv: [] };
+    }
+    if (byTab === "jobs") {
+      var js = R.jobs.filter(function (j) { return (!byCity || j[0] === byCity) && (!q || j.join(" ").toLowerCase().indexOf(q) > -1); });
+      return { n: js.length, head: ["Issued", "City", "Type", "Where", "Builder", "Value", "Work"],
+        html: js.slice(0, 300).map(function (j) { return '<tr><td>' + j[1] + '</td><td>' + j[0] + '</td><td>' + esc(j[2]) + '</td><td class="lead-name">' + esc(j[3]) + '</td><td>' + (j[4] ? esc(j[4]) : '<span style="color:var(--muted2)">—</span>') + '</td><td>' + money(j[5]) + '</td><td class="lead-sub" style="max-width:340px">' + esc(j[6]) + '</td></tr>'; }).join(""),
+        csv: [["Issued", "City", "Type", "Where", "Builder", "Value", "Work"]].concat(js) };
+    }
+    var rq = R.requests.filter(function (r) { return (!byCity || r[1] === byCity) && (!q || r.join(" ").toLowerCase().indexOf(q) > -1); });
+    return { n: rq.length, head: ["Posted", "Platform", "City", "What they asked", "Link"],
+      html: rq.map(function (r) { return '<tr><td>' + r[2] + '</td><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td class="lead-name">' + esc(r[3]) + '</td><td><a href="' + esc(r[4]) + '" target="_blank" rel="noopener" style="color:#a5b4fc">open post ↗</a></td></tr>'; }).join(""),
+      csv: [["Posted", "Platform", "City", "Ask", "Link"]].concat(rq.map(function (r) { return [r[2], r[0], r[1], r[3], r[4]]; })) };
+  }
+  function renderBuyers() {
+    var out = $("#byOut"); if (!out) return; var r = buyerRows(), T = window.ROOF_BUYERS.totals || {}, total = T[byTab] || r.n;
+    var hidden = Math.max(0, total - r.n), show = Math.min(hidden, 12), ph = "";
+    var fake = { 0: "Hidden builder name Ltd", 1: "Surrey", 2: "8", 3: "$1,250,000", 4: "contact@hiddenbuilder.ca", 5: "(604) 555-0123", 6: "visit ↗" };
+    for (var i = 0; i < show; i++) { ph += '<tr style="filter:blur(6px);user-select:none;pointer-events:none" aria-hidden="true">' + r.head.map(function (h, c) { return '<td>' + (byTab === "builders" ? fake[c] : byTab === "jobs" ? ["2026-11-01", "Vancouver", "New build", "2500-block Main St", "Hidden Builder Ltd", "$750,000", "New single family dwelling"][c] : byTab === "b2b" ? ["Hidden Company Ltd", "Property manager", "Surrey", "contact@hiddencompany.ca", "(604) 555-0123", "visit ↗"][c] : ["2026-11-01", "reddit", "Surrey", "Looking for a roofer", "open post"][c]) + '</td>'; }).join("") + '</tr>'; }
+    out.innerHTML = '<div class="fl-resbar"><div class="fl-count">' + total.toLocaleString() + ' <span>total · preview shows the first ' + r.n + '</span></div></div><div class="tablewrap"><table><thead><tr>' + r.head.map(function (h) { return '<th>' + h + '</th>'; }).join("") + '</tr></thead><tbody>' + (r.html || '<tr><td colspan="7"><div class="fl-empty">No matches in the preview.</div></td></tr>') + ph + '</tbody></table>' +
+      (hidden ? '<div style="text-align:center;padding:18px;font-weight:700;border-top:1px solid var(--line)">🔒 ' + hidden.toLocaleString() + ' more leads hidden in this preview<div class="lead-sub" style="font-weight:500;margin-top:4px">Contact Jag at JaggyAI to unlock the full list with contact details.</div></div>' : '') + '</div>';
+  }
+
   /* ---------- FIND LEADS (the Outscraper-style button owners expect) ---------- */
   var flCity = "", flCat = "", flSearch = "", flResults = null;
   function viewFindLeads(el) {
@@ -457,11 +521,12 @@
       out.innerHTML = '<div class="tablewrap"><div class="fl-empty">' + msg + '</div></div>';
       return;
     }
-    var rows = flResults.slice(0, 400);
+    var PRE = !!window.ROOF_BUYERS;   // roofing preview link: first 3 only, rest blurred
+    var rows = flResults.slice(0, PRE ? 3 : 400);
     var label = (flCat || "leads") + (flCity ? " in " + flCity : " across BC");
     out.innerHTML =
       '<div class="fl-resbar"><div class="fl-count">' + flResults.length.toLocaleString() + ' <span>found · ' + esc(label) + '</span></div>' +
-      '<button class="fl-dl" id="flDl">⬇ Download CSV</button></div>' +
+      '<button class="fl-dl" id="flDl">' + (PRE ? '🔒 Unlock full list' : '⬇ Download CSV') + '</button></div>' +
       '<div class="tablewrap"><table><thead><tr><th>Business</th><th>Type</th><th>City</th><th>Phone</th><th>Email</th><th>Website</th><th>Rating</th></tr></thead><tbody>' +
       rows.map(d =>
         '<tr><td class="lead-name">' + esc(d.n) + '<div class="lead-sub">' + esc(d.addr) + '</div></td>' +
@@ -469,9 +534,10 @@
         '<td>' + esc(d.phone) + '</td><td class="fl-mail">' + (d.email ? esc(d.email) : '<span style="color:var(--muted2)">—</span>') + '</td>' +
         '<td>' + (d.site ? '<a href="' + esc(d.site) + '" target="_blank" rel="noopener" style="color:#a5b4fc">visit ↗</a>' : '<span style="color:var(--muted2)">—</span>') + '</td>' +
         '<td class="resp">' + (d.rating ? '★ ' + d.rating + ' <span style="color:var(--muted2);font-weight:500">(' + d.reviews + ')</span>' : '<span style="color:var(--muted2)">—</span>') + '</td></tr>').join("") +
-      '</tbody></table></div>' +
-      (flResults.length > 400 ? '<p class="section-note" style="margin-top:10px">Showing first 400 — narrow by city or keyword, or download the full ' + flResults.length.toLocaleString() + ' as CSV.</p>' : '');
-    $("#flDl").addEventListener("click", downloadCSV);
+      (PRE ? Array(Math.min(10, Math.max(0, flResults.length - 3))).join(",").split(",").concat(flResults.length > 3 ? [""] : []).slice(0, Math.min(10, flResults.length - 3)).map(() => '<tr style="filter:blur(6px);user-select:none;pointer-events:none" aria-hidden="true"><td class="lead-name">Hidden Business Name Ltd<div class="lead-sub">1234 Hidden St, Surrey, BC</div></td><td>Hidden category</td><td>Surrey</td><td>(604) 555-0123</td><td class="fl-mail">contact@hidden.ca</td><td>visit ↗</td><td>★ 4.5 (12)</td></tr>').join("") : "") +
+      '</tbody></table>' + (PRE && flResults.length > 3 ? '<div style="text-align:center;padding:18px;font-weight:700;border-top:1px solid var(--line)">🔒 ' + (flResults.length - 3).toLocaleString() + ' more leads hidden in this preview<div class="lead-sub" style="font-weight:500;margin-top:4px">Contact Jag at JaggyAI to unlock the full list.</div></div>' : '') + '</div>' +
+      (!PRE && flResults.length > 400 ? '<p class="section-note" style="margin-top:10px">Showing first 400 — narrow by city or keyword, or download the full ' + flResults.length.toLocaleString() + ' as CSV.</p>' : '');
+    $("#flDl").addEventListener("click", PRE ? function () { alert("This is a preview — contact Jag at JaggyAI to unlock the full list."); } : downloadCSV);
   }
   function downloadCSV() {
     if (!flResults || !flResults.length) return;

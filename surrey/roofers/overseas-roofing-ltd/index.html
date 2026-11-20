@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overseas Roofing Ltd. | Surrey Roofing Contractor — Lower Mainland & Vancouver Island</title>
+<meta name="description" content="Concept roofing website by JaggyAI — sample content.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1422;--navy2:#161e2d;--card:#1a2436;--line:rgba(255,255,255,.09);--amber:#f8b326;--amber2:#fdcc0d;--text:#eef2f8;--muted:#9aa7bd;--r:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Outfit,system-ui,Segoe UI,sans-serif;background:var(--navy);color:var(--text);line-height:1.55;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s,box-shadow .3s}
+.nav.s{background:rgba(13,20,34,.92);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:26px;height:72px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:18px}
+.brand i{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--amber),#ff8a00);display:grid;place-items:center;color:#111;font-style:normal;font-weight:900}
+.brand small{display:block;font-size:10.5px;letter-spacing:1.6px;color:var(--muted);font-weight:600}
+.nav nav{margin-left:auto;display:flex;gap:22px;white-space:nowrap;font-weight:500;font-size:15px;color:#cfd7e6}
+.nav nav a:hover{color:var(--amber)}
+.btn{white-space:nowrap;display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--amber),#ff9d0a);color:#111;font-weight:800;padding:13px 22px;border-radius:12px;border:0;cursor:pointer;font-family:inherit;font-size:15px;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 26px rgba(248,179,38,.28)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(248,179,38,.42)}
+.btn.ghost{background:rgba(255,255,255,.07);color:#fff;box-shadow:none;border:1px solid var(--line)}
+/* hero */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:96px 0 40px;background:radial-gradient(1100px 620px at 78% 38%,rgba(248,179,38,.16),transparent 62%),radial-gradient(900px 600px at 0% 100%,rgba(56,112,255,.14),transparent 60%),var(--navy)}
+.hero .wrap{display:grid;grid-template-columns:1.02fr 1fr;gap:26px;align-items:center;width:100%}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--amber);background:rgba(248,179,38,.1);border:1px solid rgba(248,179,38,.3);padding:7px 13px;border-radius:100px}
+.eyebrow b{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.2)}
+h1{font-size:clamp(38px,5.4vw,68px);line-height:1.03;font-weight:900;letter-spacing:-1.4px;margin:18px 0 16px}
+h1 span{background:linear-gradient(90deg,var(--amber2),#ff8a00);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{font-size:18px;color:#c4cede;max-width:520px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 30px}
+.proof{display:flex;gap:22px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.proof b{color:#fff;font-size:15px}
+.stage{position:relative;height:min(74vh,620px);min-height:430px}
+#roof3d{width:100%;height:100%;display:block;cursor:grab;touch-action:pan-y}
+#roof3d:active{cursor:grabbing}
+.hud{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:9px;align-items:center}
+.pills{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;background:rgba(13,20,34,.72);backdrop-filter:blur(10px);border:1px solid var(--line);padding:7px;border-radius:14px}
+.pill{font-family:inherit;font-size:13px;font-weight:600;color:#cfd7e6;background:transparent;border:0;padding:8px 13px;border-radius:9px;cursor:pointer}
+.pill.on{background:var(--amber);color:#111}
+.pill.t{border:1px solid var(--line)}
+.pill.t.on{background:#2563eb;color:#fff;border-color:#2563eb}
+.hint{font-size:12px;color:var(--muted)}
+.tag{position:absolute;top:8px;right:6px;background:rgba(13,20,34,.78);border:1px solid var(--line);backdrop-filter:blur(10px);border-radius:13px;padding:10px 14px;font-size:13px;max-width:230px}
+.tag b{display:block;color:var(--amber);font-size:15px}
+/* sections */
+section{padding:92px 0;position:relative}
+.kicker{color:var(--amber);font-weight:700;letter-spacing:1.6px;font-size:12.5px;text-transform:uppercase}
+h2{font-size:clamp(28px,3.6vw,44px);font-weight:800;letter-spacing:-.8px;line-height:1.12;margin:10px 0 14px}
+.lead{color:var(--muted);font-size:17px;max-width:680px}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.stats{background:linear-gradient(180deg,var(--navy2),var(--navy));border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:46px 0}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center}
+.stat b{font-size:clamp(34px,4.4vw,56px);font-weight:900;background:linear-gradient(180deg,#fff,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent;display:block;line-height:1}
+.stat span{color:var(--muted);font-size:14px;letter-spacing:.4px}
+.grid{display:grid;gap:18px;margin-top:38px}
+.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:linear-gradient(160deg,var(--card),#131b2b);border:1px solid var(--line);border-radius:var(--r);padding:26px;transform-style:preserve-3d;transition:transform .18s ease-out,border-color .3s,box-shadow .3s;position:relative;overflow:hidden;will-change:transform}
+.card:hover{border-color:rgba(248,179,38,.5);box-shadow:0 26px 60px rgba(0,0,0,.45)}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(248,179,38,.16),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover::after{opacity:1}
+.card .ic{width:50px;height:50px;border-radius:13px;background:rgba(248,179,38,.13);display:grid;place-items:center;font-size:24px;margin-bottom:16px;transform:translateZ(34px)}
+.card h3{font-size:19px;font-weight:700;margin-bottom:7px;transform:translateZ(22px)}
+.card p{color:var(--muted);font-size:14.5px;transform:translateZ(12px)}
+.types{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.types span{border:1px solid var(--line);background:rgba(255,255,255,.04);padding:10px 16px;border-radius:100px;font-weight:600;font-size:14px;transition:.25s}
+.types span:hover{background:var(--amber);color:#111;transform:translateY(-3px)}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:40px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 18px;position:relative}
+.step::before{counter-increment:s;content:"0" counter(s);font-size:40px;font-weight:900;color:rgba(248,179,38,.9);line-height:1;display:block;margin-bottom:10px}
+.step h3{font-size:16.5px;margin-bottom:5px}.step p{font-size:13.5px;color:var(--muted)}
+.band{background:linear-gradient(120deg,#f8b326,#ff8a00);color:#141414;border-radius:26px;padding:44px;display:grid;grid-template-columns:1.4fr auto;gap:24px;align-items:center}
+.band h2{margin:0 0 8px;color:#111}.band p{font-weight:500;max-width:620px}
+.band .btn{background:#111;color:#fff;box-shadow:none}
+.marq{overflow:hidden;margin-top:34px;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marq div{display:flex;gap:16px;width:max-content;animation:mq 34s linear infinite}
+.marq span{border:1px solid var(--line);background:var(--card);padding:13px 22px;border-radius:13px;font-weight:700;color:#dfe6f2;white-space:nowrap}
+@keyframes mq{to{transform:translateX(-50%)}}
+.revs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:38px}
+.rev{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.rev .st{color:var(--amber2);letter-spacing:3px;margin-bottom:10px}
+.rev p{font-size:14.5px;color:#d5dceb}
+.rev .who{display:flex;align-items:center;gap:11px;margin-top:16px;font-weight:700;font-size:14.5px}
+.rev .who i{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:grid;place-items:center;font-style:normal;font-size:14px}
+.rev .who small{display:block;color:var(--muted);font-weight:500}
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+.tm{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px 20px}
+.tm i{width:84px;height:84px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:28px;color:#111;background:linear-gradient(135deg,var(--amber2),#ff8a00)}
+.tm span{color:var(--amber);font-size:13.5px;font-weight:600;letter-spacing:.6px}
+.contact{display:grid;grid-template-columns:1fr 1.05fr;gap:30px;margin-top:38px}
+.info a,.info div.r{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line)}
+.info .ii{width:44px;height:44px;border-radius:12px;background:rgba(248,179,38,.13);display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.info small{color:var(--muted);display:block;font-size:12.5px;letter-spacing:.8px;text-transform:uppercase}
+.info b{font-size:17px}
+form{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;gap:12px}
+form h3{font-size:22px}
+input,select,textarea{width:100%;background:#0f1726;border:1px solid var(--line);color:#fff;border-radius:11px;padding:13px 14px;font-family:inherit;font-size:15px}
+input:focus,select:focus,textarea:focus{outline:2px solid rgba(248,179,38,.6);border-color:transparent}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ok{display:none;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.4);color:#86efac;padding:13px;border-radius:11px;font-weight:600}
+footer{border-top:1px solid var(--line);padding:30px 0 96px;color:var(--muted);font-size:13.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.callbar{display:none}
+@media(max-width:1120px){.brand small{display:none}.nav nav{gap:16px;font-size:14px}}
+@media(max-width:940px){
+ .nav nav{display:none}.hero .wrap{grid-template-columns:1fr}.stage{height:440px;order:-1;margin-top:8px}.hero{padding-top:84px}
+ .g3,.g4,.revs,.team{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.stats .wrap{grid-template-columns:1fr 1fr;gap:26px}
+ .contact,.band{grid-template-columns:1fr}.tag{display:none}
+ .callbar{display:flex;position:fixed;left:12px;bottom:14px;z-index:60}
+}
+@media(max-width:560px){.g3,.g4,.revs,.team,.two{grid-template-columns:1fr}section{padding:66px 0}.band{padding:30px 24px}}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.marq div{animation:none}html{scroll-behavior:auto}}
+
+/* photo redesign */
+.hero{padding:0;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden;background:#0a0f1a}
+.hero .bg{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;will-change:transform;transition:transform .5s ease-out}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,12,22,.93) 0%,rgba(8,12,22,.74) 38%,rgba(8,12,22,.18) 72%,rgba(8,12,22,.25) 100%),linear-gradient(0deg,rgba(13,20,34,1) 0%,rgba(13,20,34,0) 34%)}
+.hero .wrap{position:relative;z-index:2;display:block;padding-top:150px;padding-bottom:86px}
+.hero .copy{max-width:640px}
+.hero .float{position:absolute;right:22px;bottom:96px;z-index:2;background:rgba(13,20,34,.66);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:18px 22px;display:flex;gap:26px;will-change:transform;transition:transform .5s ease-out}
+.hero .float b{display:block;font-size:26px;font-weight:800;color:var(--amber)}
+.hero .float span{font-size:12.5px;color:#c4cede}
+.viewer{display:grid;grid-template-columns:1.25fr .75fr;gap:34px;align-items:center;margin-top:40px}
+.frame{position:relative;aspect-ratio:4/3;border-radius:24px;perspective:1300px}
+.frame .in{position:absolute;inset:0;border-radius:24px;overflow:hidden;transform-style:preserve-3d;transition:transform .25s ease-out;box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.1)}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity .8s ease,transform 1.4s ease}
+.frame img.on{opacity:1;transform:scale(1)}
+.frame .shine{position:absolute;inset:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.2),transparent 45%);pointer-events:none}
+.frame .cap{position:absolute;left:18px;bottom:18px;background:rgba(13,20,34,.78);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:9px 15px;font-weight:700;transform:translateZ(40px)}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;font-family:inherit;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;transition:.25s}
+.opt b{display:block;font-size:17px}.opt span{color:var(--muted);font-size:14px}
+.opt.on{border-color:var(--amber);background:linear-gradient(120deg,rgba(248,179,38,.16),var(--card));transform:translateX(6px)}
+.photos{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px;margin-top:38px}
+.ph{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;border:1px solid var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover;transition:transform .9s ease}
+.ph:hover img{transform:scale(1.07)}
+.ph div{position:absolute;left:0;right:0;bottom:0;padding:38px 18px 15px;background:linear-gradient(0deg,rgba(8,12,22,.92),transparent);font-weight:700}
+.ph div small{display:block;font-weight:500;color:#c4cede;font-size:13.5px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:center}
+.split img{width:100%;border-radius:24px;aspect-ratio:4/3;object-fit:cover;box-shadow:0 34px 80px rgba(0,0,0,.5);border:1px solid var(--line)}
+.rev .who img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--amber)}
+@media(max-width:940px){.viewer,.split{grid-template-columns:1fr}.photos{grid-template-columns:1fr}.hero .float{position:static;margin:26px 0 0;width:max-content;max-width:100%}.hero .wrap{padding-top:120px;padding-bottom:60px}}
+@media(prefers-reduced-motion:reduce){.hero .bg,.hero .float,.frame .in{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav"><div class="wrap">
+  <a class="brand" href="#top"><i>OR</i><div><span class="brand-text">Overseas Roofing Ltd.</span><small>SURREY · LOWER MAINLAND · VANCOUVER ISLAND</small></div></a>
+  <nav><a href="#services">Services</a><a href="#process">Process</a><a href="#why">Why Us</a><a href="#reviews">Reviews</a><a href="#team">Team</a><a href="#contact">Contact</a></nav>
+  <a class="btn" href="tel:+17785550100">📞 (778) 555-0100</a>
+</div></header>
+
+<section class="hero" id="top">
+  <video class="bg" id="heroBg" autoplay muted loop playsinline poster="img/hero.jpg"><source src="img/hero.mp4" type="video/mp4"></video>
+  <div class="wrap">
+    <div class="copy">
+      <span class="eyebrow"><b></b> Free on-site estimates · Same-day emergency repairs</span>
+      <h1>Roofs built to beat <span>BC weather.</span></h1>
+      <p class="sub">Shingle, flat roof and skylight installations for homes, strata and commercial buildings — with clear written quotes, tidy job sites and a written workmanship warranty.</p>
+      <div class="cta"><a class="btn" href="#contact">Get my free estimate →</a><a class="btn ghost" href="tel:+17785550100">Call (778) 555-0100</a></div>
+      <div class="proof"><div><b>★★★★★</b><br>Your Google rating</div><div><b>Licensed</b><br>&amp; insured</div><div><b>Free</b><br>estimates</div><div><b>Written</b><br>warranty</div></div>
+    </div>
+    <div class="float" id="heroFloat"><div><b>24 hrs</b><span>Response time</span></div><div><b>500+</b><span>Roofs completed</span></div><div><b>10+ yrs</b><span>Experience</span></div></div>
+  </div>
+</section>
+
+<div class="stats"><div class="wrap">
+  <div class="stat"><b data-n="10" data-s="+">0</b><span>Years of experience</span></div>
+  <div class="stat"><b data-n="500" data-s="+">0</b><span>Roofs completed</span></div>
+  <div class="stat"><b data-n="100" data-s="%">0</b><span>Satisfaction focus</span></div>
+  <div class="stat"><b data-n="24" data-s=" hrs">0</b><span>Response time</span></div>
+</div></div>
+
+<section id="roofs"><div class="wrap">
+  <div class="rv"><div class="kicker">See it on a real home</div><h2>Pick your roof</h2><p class="lead">Choose a roof type and see how it looks. Move your mouse over the photo.</p></div>
+  <div class="viewer rv">
+    <div class="frame" id="frame"><div class="in">
+      <img class="on" src="img/asphalt.jpg" alt="House with a new asphalt shingle roof" data-k="asphalt">
+      <img src="img/metal.jpg" alt="House with a new standing-seam metal roof" data-k="metal" loading="lazy">
+      <img src="img/tile.jpg" alt="House with a new concrete tile roof" data-k="tile" loading="lazy">
+      <img src="img/slate.jpg" alt="House with a new slate roof" data-k="slate" loading="lazy">
+      <div class="shine"></div><div class="cap" id="cap">Asphalt shingle</div>
+    </div></div>
+    <div class="opts" id="opts">
+      <button class="opt on" data-k="asphalt" data-c="Asphalt shingle"><b>Asphalt shingle</b><span>The Lower Mainland favourite — affordable and durable.</span></button>
+      <button class="opt" data-k="metal" data-c="Standing-seam metal"><b>Metal</b><span>Standing-seam and snaplock panels, built to last decades.</span></button>
+      <button class="opt" data-k="tile" data-c="Concrete tile"><b>Concrete tile</b><span>Heavy-duty, classic look.</span></button>
+      <button class="opt" data-k="slate" data-c="Slate"><b>Slate</b><span>Elegant, durable and low maintenance.</span></button>
+    </div>
+  </div>
+</div></section>
+
+<section id="services"><div class="wrap">
+  <div class="rv"><div class="kicker">What we do</div><h2>Complete roofing for homes, strata & commercial</h2><p class="lead">From a small leak to a full tear-off — done properly, cleaned up properly.</p></div>
+  <div class="photos">
+    <div class="ph rv"><img src="img/crew.jpg" alt="Roofer installing shingles" loading="lazy"><div>Residential re-roofing<small>Full tear-off and replacement</small></div></div>
+    <div class="ph rv"><img src="img/flat.jpg" alt="Crew installing a flat roof membrane" loading="lazy"><div>Flat &amp; commercial<small>Torch-on and membrane systems</small></div></div>
+    <div class="ph rv"><img src="img/skylight.jpg" alt="New skylight in a living room" loading="lazy"><div>Skylights<small>Installed and flashed properly</small></div></div>
+  </div>
+  <div class="grid g3">
+    <div class="card rv"><div class="ic">🏠</div><h3>Repair · Replacement · Installation</h3><p>Long-lasting roof repair or full replacement, with a clear written quote and a written workmanship warranty.</p></div>
+    <div class="card rv"><div class="ic">🏢</div><h3>Commercial & Strata Roofing</h3><p>Flat roof and shingle systems for property managers, strata councils and developers across the Lower Mainland.</p></div>
+    <div class="card rv"><div class="ic">🔍</div><h3>Roof Inspections</h3><p>Thorough, accurate assessments that catch small problems before they become expensive ones. Free estimates.</p></div>
+    <div class="card rv"><div class="ic">🔥</div><h3>Torch-On & Membrane</h3><p>Leak-free flat roofing — torch-on, peel & stick, membrane and built-up tar & gravel systems.</p></div>
+    <div class="card rv"><div class="ic">☀️</div><h3>Skylights</h3><p>Skylights installed and flashed correctly, so the only thing coming through is daylight.</p></div>
+    <div class="card rv"><div class="ic">⛈️</div><h3>24/7 Emergency Repairs</h3><p>Storm damage or a sudden leak? Same-day emergency repairs and tarping whenever possible.</p></div>
+  </div>
+  <div class="types rv"><span>Asphalt Shingle</span><span>Metal</span><span>Snaplock</span><span>Slate Shingles</span><span>Concrete Tile</span><span>Torch-On</span><span>Peel & Stick</span><span>Membrane</span><span>Built-Up (Tar & Gravel)</span><span>Cedar Shakes</span></div>
+</div></section>
+
+<section id="process" style="background:var(--navy2)"><div class="wrap">
+  <div class="rv"><div class="kicker">How it works</div><h2>A proven five-step process</h2><p class="lead">No surprises. You know what is happening, when, and what it costs — before we start.</p></div>
+  <div class="steps">
+    <div class="step rv"><h3>Free inspection</h3><p>We come out, get on the roof and document what we find.</p></div>
+    <div class="step rv"><h3>Detailed proposal</h3><p>A clear, itemized written quote. Zero hidden fees.</p></div>
+    <div class="step rv"><h3>Material selection</h3><p>Choose the material and colour that fits your home and budget.</p></div>
+    <div class="step rv"><h3>Install & updates</h3><p>A tidy site and regular updates while we work.</p></div>
+    <div class="step rv"><h3>Final walkthrough</h3><p>Magnetic nail sweep, full clean-up and a walkthrough with you.</p></div>
+  </div>
+  <div class="band rv" style="margin-top:44px"><div><h2>Book your free roof inspection.</h2><p>No obligation. We get on the roof, show you what we find and give you a clear written quote.</p></div><a class="btn" href="#contact">Secure my free inspection →</a></div>
+</div></section>
+
+<section id="why"><div class="wrap">
+  <div class="split rv"><img src="img/handshake.jpg" alt="Roofing contractor shaking hands with homeowners" loading="lazy">
+  <div><div class="kicker">Why Overseas Roofing</div><h2>Your home, treated like our own</h2><p class="lead">Licensed and insured local roofers who treat every job like it is their own home. You get a clear written quote, a tidy site and a final walkthrough before we call it done.</p><div class="cta"><a class="btn" href="#contact">Book a free inspection →</a></div></div></div>
+  <div class="grid g4">
+    <div class="card rv"><div class="ic">🛡️</div><h3>Workmanship Warranty</h3><p>Every new roof we install is covered by a written warranty on our installation.</p></div>
+    <div class="card rv"><div class="ic">✅</div><h3>Licensed & Fully Insured</h3><p>Full liability and workers' compensation coverage for your protection.</p></div>
+    <div class="card rv"><div class="ic">💬</div><h3>Transparent Pricing</h3><p>Clear, itemized quotes with honest, upfront pricing on every project.</p></div>
+    <div class="card rv"><div class="ic">🧲</div><h3>Respect for Your Property</h3><p>Driveway cover boards, protected belongings and magnetic sweepers for nails.</p></div>
+  </div>
+  <div class="marq rv"><div><span>Asphalt Shingles</span><span>Standing-Seam Metal</span><span>Torch-On Flat Roofs</span><span>Concrete Tile</span><span>Slate</span><span>Skylights</span><span>Gutters &amp; Soffit</span><span>Roof Inspections</span><span>Emergency Repairs</span><span>Asphalt Shingles</span><span>Standing-Seam Metal</span><span>Torch-On Flat Roofs</span><span>Concrete Tile</span><span>Slate</span><span>Skylights</span><span>Gutters &amp; Soffit</span><span>Roof Inspections</span><span>Emergency Repairs</span></div></div>
+  <div class="grid g3">
+    <div class="card rv"><div class="ic">📜</div><h3>Manufacturer warranties</h3><p>Your real manufacturer and extended warranty details go here.</p></div>
+    <div class="card rv"><div class="ic">🏅</div><h3>Certifications</h3><p>Your real certifications and accreditations go here.</p></div>
+    <div class="card rv"><div class="ic">🤝</div><h3>Trusted partners</h3><p>The builders, strata and developers you work with go here.</p></div>
+  </div>
+</div></section>
+
+<section id="reviews" style="background:var(--navy2)"><div class="wrap">
+  <div class="rv"><div class="kicker">Client reviews</div><h2>Homeowners and contractors recommend us</h2><p class="lead">Sample reviews — your real Google reviews are pulled in here automatically.</p></div>
+  <div class="revs">
+    <div class="rev rv"><div class="st">★★★★★</div><p>"They found the real cause of our leak when two other companies could not. Honest advice, no upselling."</p><div class="who"><img src="img/p2.jpg" alt="" loading="lazy"><div>Linda C.<small>Sample review</small></div></div></div>
+    <div class="rev rv"><div class="st">★★★★★</div><p>"Flat roof redone on our townhouse. Professional from the quote to the final walkthrough."</p><div class="who"><img src="img/p1.jpg" alt="" loading="lazy"><div>Raj K.<small>Sample review</small></div></div></div>
+    <div class="rev rv"><div class="st">★★★★★</div><p>"Skylight replaced and flashing redone. Quick, tidy and exactly the price they quoted."</p><div class="who"><img src="img/p3.jpg" alt="" loading="lazy"><div>Tom W.<small>Sample review</small></div></div></div>
+    <div class="rev rv"><div class="st">★★★★★</div><p>"Called about a leak on Monday and it was fixed by Tuesday. Clear quote, fair price and they cleaned up everything afterwards."</p><div class="who"><i>AB</i><div>Alex B.<small>Sample review</small></div></div></div>
+    <div class="rev rv"><div class="st">★★★★★</div><p>"Full roof replacement on our two-storey. The crew was on time every day and the roof looks fantastic."</p><div class="who"><i>PS</i><div>Priya S.<small>Sample review</small></div></div></div>
+    <div class="rev rv"><div class="st">★★★★★</div><p>"As a builder I need trades who show up. They finished our new-build roof on schedule and the quality was excellent."</p><div class="who"><i>DM</i><div>Dan M.<small>Sample review</small></div></div></div>
+  </div>
+</div></section>
+
+<section id="team"><div class="wrap">
+  <div class="rv"><div class="kicker">The people on your roof</div><h2>Meet the team</h2><p class="lead">Sample names — your real team and photos go here.</p></div>
+  <div class="team">
+    <div class="tm rv"><i>JD</i><h3>John Doe</h3><span>OWNER</span></div>
+    <div class="tm rv"><i>SP</i><h3>Sam Patel</h3><span>PROJECT MANAGER</span></div>
+    <div class="tm rv"><i>MC</i><h3>Maria Chen</h3><span>SITE SUPERVISOR</span></div>
+  </div>
+</div></section>
+
+<section id="contact" style="background:var(--navy2)"><div class="wrap">
+  <div class="rv"><div class="kicker">Let's talk</div><h2>Get your free on-site estimate</h2><p class="lead">Tell us about your roof and we'll get back to you fast. Urgent leak? Call — we answer 7 days a week.</p></div>
+  <div class="contact">
+    <div class="info rv">
+      <a href="tel:+17785550100"><div class="ii">📞</div><div><small>Phone</small><b>(778) 555-0100</b></div></a>
+      <a href="mailto:info@yourcompany.ca"><div class="ii">✉️</div><div><small>Email</small><b>info@yourcompany.ca</b></div></a>
+      <div class="r"><div class="ii">📍</div><div><small>Address</small><b>123 Sample Street<br>Surrey, BC</b></div></div>
+      <div class="r"><div class="ii">🕖</div><div><small>Office hours</small><b>Mon – Sat: 7:00 AM to 6:00 PM</b></div></div>
+    </div>
+    <form class="rv" id="qf">
+      <h3>Request a free estimate</h3>
+      <div class="two"><input required placeholder="Your name" name="name"><input required placeholder="Phone" name="phone" type="tel"></div>
+      <div class="two"><input placeholder="Email" name="email" type="email"><input placeholder="City / neighbourhood" name="city"></div>
+      <select name="service"><option>Roof replacement</option><option>Roof repair / leak</option><option>Flat roof (torch-on / membrane)</option><option>Skylight</option><option>Commercial / strata</option><option>Inspection</option><option>Emergency</option></select>
+      <textarea rows="3" placeholder="Tell us about your roof — type, age, any leaks" name="msg"></textarea>
+      <button class="btn" type="submit" style="justify-content:center">Request my free estimate →</button>
+      <div class="ok" id="ok">✓ Thanks! We'll call you back shortly. For anything urgent, call (778) 555-0100.</div>
+    </form>
+  </div>
+</div></section>
+
+<footer><div class="wrap"><div>© 2026 Overseas Roofing Ltd. · Roofing services in the Lower Mainland & Vancouver Island</div><div>Concept website by JaggyAI · sample content — names, numbers and reviews are placeholders</div></div></footer>
+<a class="btn callbar" href="tel:+17785550100">📞 Call now</a>
+
+<script>
+(function(){
+  /* ---------- page dynamics ---------- */
+  var nav=document.getElementById('nav');
+  addEventListener('scroll',function(){nav.classList.toggle('s',scrollY>30)},{passive:true});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.14});
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.transitionDelay=(i%4)*70+'ms';io.observe(el)});
+  var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;cio.unobserve(e.target);var el=e.target,n=+el.dataset.n,s=el.dataset.s,t0=performance.now();
+    (function tick(t){var p=Math.min(1,(t-t0)/1600),v=Math.round(n*(1-Math.pow(1-p,3)));el.textContent=v.toLocaleString()+s;if(p<1)requestAnimationFrame(tick)})(t0)})},{threshold:.5});
+  document.querySelectorAll('[data-n]').forEach(function(el){cio.observe(el)});
+  document.querySelectorAll('.card').forEach(function(c){
+    c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+      c.style.transform='perspective(900px) rotateX('+((.5-y)*10)+'deg) rotateY('+((x-.5)*12)+'deg) translateY(-4px)';c.style.setProperty('--mx',x*100+'%');c.style.setProperty('--my',y*100+'%')});
+    c.addEventListener('mouseleave',function(){c.style.transform=''})});
+  document.getElementById('qf').addEventListener('submit',function(e){e.preventDefault();document.getElementById('ok').style.display='block'});
+
+  /* ---------- roof photo viewer (3D tilt + crossfade) ---------- */
+  var fr=document.getElementById('frame'),inn=fr.querySelector('.in'),cap=document.getElementById('cap'),still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function pick(k,c){fr.querySelectorAll('img').forEach(function(i){i.classList.toggle('on',i.dataset.k===k)});document.querySelectorAll('#opts .opt').forEach(function(b){b.classList.toggle('on',b.dataset.k===k)});cap.textContent=c}
+  var opts=[].slice.call(document.querySelectorAll('#opts .opt')),auto=true,ai=0;
+  opts.forEach(function(b,i){b.addEventListener('click',function(){auto=false;ai=i;pick(b.dataset.k,b.dataset.c)})});
+  if(!still)setInterval(function(){if(!auto)return;var r=fr.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;ai=(ai+1)%opts.length;pick(opts[ai].dataset.k,opts[ai].dataset.c)},3800);
+  fr.addEventListener('mousemove',function(e){if(still)return;var r=fr.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+    inn.style.transform='rotateX('+((.5-y)*9)+'deg) rotateY('+((x-.5)*12)+'deg) scale(1.02)';inn.style.setProperty('--mx',x*100+'%');inn.style.setProperty('--my',y*100+'%')});
+  fr.addEventListener('mouseleave',function(){inn.style.transform=''});
+  /* ---------- hero parallax ---------- */
+  var hb=document.getElementById('heroBg'),hf=document.getElementById('heroFloat'),hero=document.getElementById('top');
+  if(!still)hero.addEventListener('mousemove',function(e){var x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;hb.style.transform='translate('+(-x*26)+'px,'+(-y*18)+'px) scale(1.03)';hf.style.transform='translate('+(x*18)+'px,'+(y*12)+'px)'});
+  if(still){hb.removeAttribute('autoplay');hb.pause()}
+  window.__site={pick:pick,ok:true};
+})();
+</script>
+<!-- JAGGYAI-CHATBOT -->
+<style>
+.jai-l{position:fixed;bottom:22px;right:22px;z-index:2147483000;display:flex;align-items:center;gap:9px;background:#4f46e5;color:#fff;border:none;cursor:pointer;padding:13px 18px 13px 15px;border-radius:100px;font-family:system-ui,Arial,sans-serif;font-weight:700;font-size:15px;box-shadow:0 10px 30px rgba(79,70,229,.45)}
+.jai-l:hover{filter:brightness(1.08)}
+.jai-l svg{width:21px;height:21px}
+.jai-l .jd{position:absolute;top:-3px;right:-3px;width:13px;height:13px;background:#22c55e;border:2px solid #fff;border-radius:50%}
+@keyframes jaiP{0%,100%{box-shadow:0 10px 30px rgba(79,70,229,.45)}50%{box-shadow:0 10px 30px rgba(79,70,229,.45),0 0 0 12px rgba(79,70,229,0)}}
+.jai-l.p{animation:jaiP 2s ease-out 4}
+.jai-p{position:fixed;bottom:22px;right:22px;z-index:2147483000;width:372px;max-width:calc(100vw - 28px);height:560px;max-height:calc(100vh - 44px);background:#fff;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden;font-family:system-ui,Arial,sans-serif}
+.jai-p.o{display:flex}
+.jai-h{background:#0f172a;color:#fff;padding:15px 17px;display:flex;align-items:center;gap:11px}
+.jai-h .a{width:40px;height:40px;border-radius:10px;background:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.jai-h .t{font-weight:800;font-size:14.5px}
+.jai-h .s{font-size:11.5px;color:rgba(255,255,255,.7)}
+.jai-h .x{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.8);font-size:22px;cursor:pointer;line-height:1}
+.jai-b{flex:1;overflow-y:auto;padding:16px;background:#f1f5f9;display:flex;flex-direction:column;gap:10px}
+.jai-m{max-width:84%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.5}
+.jai-m.b{background:#fff;color:#0f172a;align-self:flex-start;border:1px solid #e2e8f0;border-bottom-left-radius:4px}
+.jai-m.u{background:#0f172a;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.jai-m.sys{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;align-self:stretch;max-width:100%;font-size:13px}
+.jai-c{display:flex;gap:7px;flex-wrap:wrap;padding:0 13px 9px;background:#f1f5f9}
+.jai-chip{font-size:12px;color:#0f172a;background:#fff;border:1px solid #e2e8f0;padding:7px 11px;border-radius:100px;cursor:pointer;font-family:inherit}
+.jai-chip:hover{border-color:#4f46e5;color:#4f46e5}
+.jai-f{background:#fff;border:1px solid #e2e8f0;border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:8px}
+.jai-f input,.jai-f select{padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit}
+.jai-f button{background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:11px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit}
+.jai-i{display:flex;gap:8px;padding:12px;border-top:1px solid #e2e8f0;background:#fff}
+.jai-i input{flex:1;border:1px solid #e2e8f0;border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:inherit}
+.jai-i button{background:#0f172a;color:#fff;border:none;border-radius:9px;width:44px;cursor:pointer;font-size:15px}
+.jai-ic{background:#eef2ff !important;color:#0f172a !important;border:1px solid #e2e8f0 !important;border-radius:9px;width:42px;cursor:pointer;font-size:15px}
+.jai-ic:hover{border-color:#4f46e5 !important}
+.jai-ic.rec{background:#ef4444 !important;color:#fff !important;border-color:#ef4444 !important;animation:jaiRec 1s infinite}
+@keyframes jaiRec{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.5)}50%{box-shadow:0 0 0 7px rgba(239,68,68,0)}}
+.jai-link{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;color:#4f46e5}
+</style>
+<button class="jai-l p" id="jaiL"><span style="position:relative"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="jd"></span></span> Chat with us</button>
+<div class="jai-p" id="jaiP">
+  <div class="jai-h"><div class="a">🏠</div><div><div class="t">Overseas Roofing Ltd.</div><div class="s">● Online · replies instantly</div></div><button class="x" id="jaiX">&times;</button></div>
+  <div class="jai-b" id="jaiB"><div class="jai-m b">Hi! 👋 Welcome to Overseas Roofing Ltd.. I can answer questions and book your <b>free quote</b> any time, 24/7. What can I help with?</div></div>
+  <div class="jai-c" id="jaiC"><button class="jai-chip">What do you offer?</button><button class="jai-chip">Pricing</button><button class="jai-chip">Service area</button><button class="jai-chip">Book a free quote</button></div>
+  <div class="jai-i"><button id="jaiMic" class="jai-ic" title="Talk to us">🎤</button><input id="jaiIn" placeholder="Type or tap 🎤 to talk…" autocomplete="off"><button id="jaiSpk" class="jai-ic" title="Voice on/off">🔇</button><button id="jaiS">➤</button></div>
+</div>
+<script>
+(function(){
+ /* === Set DEMO=false for a real paying client (hides the demo dashboard link) === */
+ var DEMO=true;
+ var BIZ="Overseas Roofing Ltd.", CITY="Surrey";
+ var SERVICES=["Roof Replacement","Roof Repair / Leak","Flat Roof","Gutters & Soffit","Free Estimate"];
+ var GH="https://jaggyai.github.io/bc-demos/dashboard/index.html?name=Overseas%20Roofing%20Ltd.&city=Surrey&cat=Roofing%20contractor&site=";
+ var LR="../../../../jaggyai-suite/index.html?name=Overseas%20Roofing%20Ltd.&city=Surrey&cat=Roofing%20contractor&site=";
+ var DASH=(location.hostname.indexOf("github")>-1?GH:LR)+encodeURIComponent(location.href);
+ /* === Business knowledge the owner typed in the dashboard's Business Info tab === */
+ function bslug(s){return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+ function getINFO(){try{return JSON.parse(localStorage.getItem('jaggy_bizinfo:'+bslug(BIZ))||localStorage.getItem('jaggy_bizinfo:__last')||'{}');}catch(e){return {};}}
+ var INFOMAP=[
+  {k:['history','your story','how long','founded','established','years in business','been in business','since when'],f:'history'},
+  {k:['where','located','address','location','based','find you'],f:'location'},
+  {k:['area','serve','service area','cover','come to','do you go','neighbourhood','neighborhood'],f:'areas'},
+  {k:['hour','open','close','what time','when are you'],f:'hours'},
+  {k:['price','cost','how much','rate','charge','fee','expensive'],f:'pricing'},
+  {k:['licens','insur','warrant','guarantee','payment','financ','bonded'],f:'faqs'},
+  {k:['service','offer','do you do','do you provide','what do you'],f:'services'},
+  {k:['about','who are you','tell me about','what is'],f:'about'}
+ ];
+ function infoAnswer(t){var I=getINFO();if(!I)return null;for(var i=0;i<INFOMAP.length;i++){if(INFOMAP[i].k.some(function(k){return t.indexOf(k)>-1;})){var v=I[INFOMAP[i].f];if(v&&(''+v).trim())return v;}}return null;}
+ var KB=[
+  {k:['service','offer','do you','what do'],a:"We handle "+SERVICES.slice(0,4).join(', ')+" and more. Want a free quote?"},
+  {k:['price','cost','quote','estimate','how much','rate'],a:"Every job starts with a FREE quote so we can give you an accurate price. Tap 'Book a free quote' and I'll set it up."},
+  {k:['area','serve','where','location','region'],a:"We proudly serve "+CITY+" and the surrounding area. What part are you in?"},
+  {k:['hour','open','time'],a:"Our team works regular hours, but this assistant takes requests 24/7. How can I help?"},
+  {k:['hi','hello','hey'],a:"Hi there! 👋 Are you after a quick repair, a bigger project, or just pricing?"},
+  {k:['thank'],a:"You're welcome! 🙌 Want me to set up your free quote?"}
+ ];
+ var FB="Happy to help! The fastest next step is a free quote — tap 'Book a free quote' and I'll set it up.";
+ var BOOK=['book','quote','estimate','appointment','schedule','yes','sign me up','urgent','emergency','get started'];
+ var P=document.getElementById('jaiP'),B=document.getElementById('jaiB'),L=document.getElementById('jaiL');
+ function sd(){B.scrollTop=B.scrollHeight;}
+ L.onclick=function(){P.classList.add('o');L.style.display='none';sd();};
+ document.getElementById('jaiX').onclick=function(){P.classList.remove('o');L.style.display='';};
+ function add(h,c){var d=document.createElement('div');d.className='jai-m '+c;d.innerHTML=h;B.appendChild(d);sd();return d;}
+ function bot(h){var t=add('<span style="opacity:.5">…</span>','b');setTimeout(function(){t.innerHTML=h;sd();speak(plain(h));},450);}
+ function bookDateObj(){var d=new Date();d.setDate(d.getDate()+1);if(d.getDay()===0)d.setDate(d.getDate()+1);if(d.getDay()===6)d.setDate(d.getDate()+2);d.setHours(8,0,0,0);return d;}
+ function fmtBookDate(d){var wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
+  var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+  return wd+', '+mo+' '+d.getDate();}
+ function form(){
+  var f=document.createElement('div');f.className='jai-f';
+  var opts=SERVICES.map(function(s){return '<option>'+s+'</option>';}).join('');
+  f.innerHTML='<div style="font-weight:700;font-size:13px;color:#0f172a">📋 Book your free quote</div><input id="jfn" placeholder="Your name"><input id="jfp" placeholder="Phone number"><select id="jfs">'+opts+'</select><button id="jfb">Send to the team →</button>';
+  B.appendChild(f);sd();
+  f.querySelector('#jfb').onclick=function(){
+   var n=(f.querySelector('#jfn').value||'').trim(),p=(f.querySelector('#jfp').value||'').trim(),s=f.querySelector('#jfs').value;
+   if(!n||!p){bot("Just need a name and phone number so the team can reach you 🙂");return;}
+   var first=n.split(' ')[0], dObj=bookDateObj(), date=fmtBookDate(dObj), slot='8:00–10:00 AM';
+   var lead={name:n,phone:p,service:s,source:'Website Chatbot',business:BIZ,city:CITY,booked:date+' · '+slot,bookedAt:dObj.toISOString(),msg:'Booked a free quote via chatbot for '+date+' '+slot+'.',time:Date.now()};
+   try{var a=JSON.parse(localStorage.getItem('jaggy_inbound_leads')||'[]');a.push(lead);localStorage.setItem('jaggy_inbound_leads',JSON.stringify(a));}catch(e){}
+   f.remove();add(n+' · '+p+'<br>'+s,'u');
+   bot("Got it, "+first+"! One sec while I lock that in… 📲");
+   setTimeout(function(){
+     add('📲 <b>Text sent to '+p+':</b><br>“Hi '+first+'! ✅ You\'re booked with '+BIZ+' for a free '+s+' quote on <b>'+date+', '+slot+'</b>. We\'ll text a reminder the day before. Reply C to reschedule.”','sys');
+     add('📧 <b>Email confirmation</b> is on its way to you with the appointment details + what to expect.','sys');
+     add('👤 <b>'+BIZ+' was notified instantly</b> and will reach out to confirm. See you '+date+'! 🎉','sys');
+     if(DEMO) add('<a class="jai-link" target="_blank" href="'+DASH+'&inbound='+encodeURIComponent(JSON.stringify(lead))+'">📊 (Demo) see this lead hit the dashboard →</a>','b');
+   },1000);
+  };
+ }
+ function reply(t){t=t.toLowerCase();
+  if(BOOK.some(function(b){return t.indexOf(b)>-1;})){bot("Great — let's get you booked. Fill this in and the team will text you a confirmed time:");setTimeout(form,600);return;}
+  var ia=infoAnswer(t); if(ia) return bot(esc(ia).replace(/\n/g,'<br>'));
+  for(var i=0;i<KB.length;i++){if(KB[i].k.some(function(k){return t.indexOf(k)>-1;}))return bot(KB[i].a);}
+  bot(FB);
+ }
+ function send(x){var v=(x||document.getElementById('jaiIn').value).trim();if(!v)return;document.getElementById('jaiIn').value='';add(v.replace(/</g,'&lt;'),'u');reply(v);}
+ document.getElementById('jaiS').onclick=function(){send();};
+ document.getElementById('jaiIn').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+ Array.prototype.forEach.call(document.querySelectorAll('#jaiC .jai-chip'),function(c){c.onclick=function(){send(c.textContent);};});
+ /* === Free voice mode: talk to it (🎤) + it talks back (🔊), browser-only, no external service === */
+ var VOICE=false;
+ function plain(h){var d=document.createElement('div');d.innerHTML=String(h).replace(/<br\s*\/?>/gi,'. ');var s=(d.textContent||'');return s.replace(/📊.*$/,'').replace(/\s+/g,' ').trim();}
+ function pickVoice(){var vs=(window.speechSynthesis?speechSynthesis.getVoices():[])||[];var pref=['Natural','Online','Aria','Jenny','Sonia','Libby','Michelle','Emma','Google US English','Samantha','Zira'];for(var p=0;p<pref.length;p++)for(var i=0;i<vs.length;i++){if(/^en/i.test(vs[i].lang)&&vs[i].name.indexOf(pref[p])>-1)return vs[i];}for(var j=0;j<vs.length;j++){if(/en-US/i.test(vs[j].lang))return vs[j];}return vs[0]||null;}
+ function speak(text){if(!VOICE||!window.speechSynthesis||!text)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);var v=pickVoice();if(v)u.voice=v;u.rate=1.02;u.pitch=1;speechSynthesis.speak(u);}catch(e){}}
+ if(window.speechSynthesis){try{speechSynthesis.onvoiceschanged=pickVoice;pickVoice();}catch(e){}}
+ var spk=document.getElementById('jaiSpk');
+ if(spk)spk.onclick=function(){VOICE=!VOICE;spk.textContent=VOICE?'🔊':'🔇';spk.style.opacity=VOICE?'1':'.6';if(!VOICE&&window.speechSynthesis)speechSynthesis.cancel();};
+ var SR=window.SpeechRecognition||window.webkitSpeechRecognition, mic=document.getElementById('jaiMic'), jin=document.getElementById('jaiIn');
+ if(mic&&SR){mic.onclick=function(){VOICE=true;if(spk){spk.textContent='🔊';spk.style.opacity='1';}try{var r=new SR();r.lang='en-US';r.interimResults=false;r.maxAlternatives=1;mic.classList.add('rec');mic.textContent='●';jin.placeholder='Listening…';r.onresult=function(e){send(e.results[0][0].transcript);};r.onend=function(){mic.classList.remove('rec');mic.textContent='🎤';jin.placeholder='Type or tap 🎤 to talk…';};r.onerror=r.onend;r.start();}catch(err){mic.classList.remove('rec');mic.textContent='🎤';}};}
+ else if(mic){mic.style.display='none';}
+})();
+</script>
+<!-- /JAGGYAI-CHATBOT -->
+</body>
+</html>
