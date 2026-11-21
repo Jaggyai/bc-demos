@@ -398,7 +398,7 @@
   }
 
   /* ---------- BUYER LEADS (roofing demo: real permit + builder + request data) ---------- */
-  var byTab = "buyers", byCity = "", byQ = "", byType = "";
+  var byTab = "web", byCity = "", byQ = "", byType = "";
   function viewBuyers(el) {
     var R = window.ROOF_BUYERS; if (!R) { el.innerHTML = '<div class="fl-empty">No buyer data loaded.</div>'; return; }
     var T = R.totals || {};
@@ -406,10 +406,10 @@
     var cities = ["Surrey", "Vancouver", "Victoria"];
     function kpi(n, l) { return '<div class="fl-panel" style="flex:1;min-width:150px;margin:0"><div style="font-size:26px;font-weight:800">' + n.toLocaleString() + '</div><div class="lead-sub">' + l + '</div></div>'; }
     el.innerHTML =
-      '<p class="fl-intro"><b>Buyer leads</b> are people and projects that need a roof right now — public requests for a roofer and roof permits just issued across the Lower Mainland and Vancouver Island. <b>Property managers &amp; developers</b> are the strata, rental and development companies that buy roofing work all year.</p>' +
-      '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">' + kpi(T.buyers || 0, "buyer leads · need a roof now") + kpi(T.b2b || 0, "property managers & developers") + kpi(T.jobs, "active jobs · 90 days") + kpi(newBuilds, "new builds (need a roof)") + kpi(T.builders, "builders & developers") + kpi(withEmail, "with a contact email") + kpi(roofJobs, "roof-specific permits") + '</div>' +
+      '<p class="fl-intro"><b>Website leads</b> are homeowners who ask your own website or chatbot for a roof estimate — name, phone and email land here the moment they submit. <b>Buyer leads</b> are people and projects that need a roof right now — public requests for a roofer and roof permits just issued across the Lower Mainland and Vancouver Island. <b>Property managers &amp; developers</b> are the strata, rental and development companies that buy roofing work all year.</p>' +
+      '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">' + kpi(webLeads().length, "website leads (3 are samples)") + kpi(T.buyers || 0, "buyer leads · need a roof now") + kpi(T.b2b || 0, "property managers & developers") + kpi(T.jobs, "active jobs · 90 days") + kpi(newBuilds, "new builds (need a roof)") + kpi(T.builders, "builders & developers") + kpi(withEmail, "with a contact email") + kpi(roofJobs, "roof-specific permits") + '</div>' +
       '<div class="fl-panel"><div class="fl-row">' +
-        '<div class="fl-cats" style="margin:0">' + [["buyers", "Buyer leads"], ["b2b", "Property managers & developers"], ["builders", "Builders on permits"], ["jobs", "All active jobs"]].map(function (t) { return '<button class="fl-cat' + (byTab === t[0] ? ' on' : '') + '" data-t="' + t[0] + '">' + t[1] + '</button>'; }).join("") + '</div>' +
+        '<div class="fl-cats" style="margin:0">' + [["web", "Website leads"], ["buyers", "Buyer leads"], ["b2b", "Property managers & developers"], ["builders", "Builders on permits"], ["jobs", "All active jobs"]].map(function (t) { return '<button class="fl-cat' + (byTab === t[0] ? ' on' : '') + '" data-t="' + t[0] + '">' + t[1] + '</button>'; }).join("") + '</div>' +
         '<div class="fl-field"><label>City</label><select id="byCity"><option value="">All</option>' + cities.map(function (c) { return '<option' + (byCity === c ? ' selected' : '') + '>' + c + '</option>'; }).join("") + '</select></div>' +
         '<div class="fl-field" style="flex:1"><label>Search</label><input id="byQ" placeholder="builder, street, keyword…" value="' + esc(byQ) + '"></div>' +
         '<button class="fl-dl" id="byDl">🔒 Unlock full list</button>' +
@@ -420,6 +420,20 @@
     $("#byDl").addEventListener("click", function () { var rows = buyerRows(); var csv = rows.csv.map(function (r) { return r.map(function (c) { return '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"'; }).join(","); }).join("\n"); var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "buyer-leads-" + byTab + ".csv"; a.click(); });
     renderBuyers();
   }
+  function webLeads() {
+    var out = [], me = (D.CLIENT.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    try {
+      JSON.parse(localStorage.getItem("jaggy_inbound_leads") || "[]").slice().reverse().forEach(function (l) {
+        if (!l || !l.name) return;
+        if (l.business && l.business.toLowerCase().replace(/[^a-z0-9]/g, "") !== me) return;
+        out.push({ name: l.name, phone: l.phone || "", email: l.email || "", city: l.city || "", need: l.msg || l.service || "Estimate request", source: l.source || "Website", when: l.ts ? new Date(l.ts).toLocaleString() : "Just now", sample: false });
+      });
+    } catch (e) {}
+    return out.concat([
+      { name: "Priya S.", phone: "(604) 555-0142", email: "priya.s@example.com", city: "Surrey", need: "Roof leaking over the kitchen — wants an estimate this week", source: "Website form", when: "Sample", sample: true },
+      { name: "Dan M.", phone: "(778) 555-0177", email: "dan.m@example.com", city: "Burnaby", need: "Full re-roof, two-storey — booked a Thursday inspection", source: "Chatbot booking", when: "Sample", sample: true },
+      { name: "Linda C.", phone: "(250) 555-0121", email: "linda.c@example.com", city: "Victoria", need: "Skylight flashing leak after the last storm", source: "Website form", when: "Sample", sample: true }]);
+  }
   function buyerRows() {
     var R = window.ROOF_BUYERS, q = byQ.toLowerCase().trim(), money = function (v) { return v ? "$" + Number(v).toLocaleString() : ""; };
     if (byTab === "builders") {
@@ -427,6 +441,11 @@
       return { n: rows.length, head: ["Builder", "Where", "Jobs", "Permit value (90d)", "Email", "Phone", "Website"],
         html: rows.slice(0, 300).map(function (b) { return '<tr><td class="lead-name">' + esc(b[0]) + (b[7] && b[7].indexOf("check") > -1 ? '<div class="lead-sub">name match — verify</div>' : '') + '</td><td>' + esc(b[1]) + '</td><td>' + b[2] + '</td><td>' + money(b[3]) + '</td><td class="fl-mail">' + (b[5] ? esc(b[5]) : '<span style="color:var(--muted2)">—</span>') + '</td><td>' + (b[6] ? esc(b[6]) : '<span style="color:var(--muted2)">—</span>') + '</td><td>' + (b[4] ? '<a href="' + esc(b[4]) + '" target="_blank" rel="noopener" style="color:#a5b4fc">visit ↗</a>' : '<span style="color:var(--muted2)">—</span>') + '</td></tr>'; }).join(""),
         csv: [["Builder", "Where", "Jobs 90d", "Total value", "Email", "Phone", "Website"]].concat(rows.map(function (b) { return [b[0], b[1], b[2], b[3], b[5], b[6], b[4]]; })) };
+    }
+    if (byTab === "web") {
+      var wl = webLeads().filter(function (b) { return (!byCity || b.city === byCity) && (!q || (b.name + " " + b.city + " " + b.need).toLowerCase().indexOf(q) > -1); });
+      return { n: wl.length, head: ["Lead", "Phone", "Email", "City", "What they need", "Source", "When"],
+        html: wl.map(function (b) { return '<tr><td class="lead-name">' + esc(b.name) + (b.sample ? ' <span class="pill" style="background:rgba(251,191,36,.18);color:#fbbf24;border:0;padding:2px 8px;font-size:11px;border-radius:99px">SAMPLE</span>' : ' <span style="background:rgba(34,197,94,.18);color:#4ade80;padding:2px 8px;font-size:11px;border-radius:99px">NEW</span>') + '</td><td>' + esc(b.phone) + '</td><td class="fl-mail">' + esc(b.email) + '</td><td>' + esc(b.city) + '</td><td class="lead-sub" style="max-width:260px">' + esc(b.need) + '</td><td>' + esc(b.source) + '</td><td>' + esc(b.when) + '</td></tr>'; }).join(""), csv: [] };
     }
     if (byTab === "buyers") {
       var by = (R.buyers || []).filter(function (b) { return (!byCity || b[2] === byCity) && (!q || b.join(" ").toLowerCase().indexOf(q) > -1); });
@@ -453,7 +472,7 @@
     var out = $("#byOut"); if (!out) return; var r = buyerRows(), T = window.ROOF_BUYERS.totals || {}, total = T[byTab] || r.n;
     var hidden = Math.max(0, total - r.n), show = Math.min(hidden, 12), ph = "";
     var fake = { 0: "Hidden builder name Ltd", 1: "Surrey", 2: "8", 3: "$1,250,000", 4: "contact@hiddenbuilder.ca", 5: "(604) 555-0123", 6: "visit ↗" };
-    for (var i = 0; i < show; i++) { ph += '<tr style="filter:blur(6px);user-select:none;pointer-events:none" aria-hidden="true">' + r.head.map(function (h, c) { return '<td>' + (byTab === "builders" ? fake[c] : byTab === "jobs" ? ["2026-11-01", "Vancouver", "New build", "2500-block Main St", "Hidden Builder Ltd", "$750,000", "New single family dwelling"][c] : byTab === "buyers" ? ["Asked for a roofer", "2026-11-01", "Surrey", "reddit", "Looking for a roofer — hidden", "open ↗"][c] : byTab === "b2b" ? ["Hidden Company Ltd", "Property manager", "Surrey", "contact@hiddencompany.ca", "(604) 555-0123", "visit ↗"][c] : ["2026-11-01", "reddit", "Surrey", "Looking for a roofer", "open post"][c]) + '</td>'; }).join("") + '</tr>'; }
+    for (var i = 0; i < show; i++) { ph += '<tr style="filter:blur(6px);user-select:none;pointer-events:none" aria-hidden="true">' + r.head.map(function (h, c) { return '<td>' + (byTab === "builders" ? fake[c] : byTab === "jobs" ? ["2026-11-01", "Vancouver", "New build", "2500-block Main St", "Hidden Builder Ltd", "$750,000", "New single family dwelling"][c] : byTab === "web" ? [] : byTab === "buyers" ? ["Asked for a roofer", "2026-11-01", "Surrey", "reddit", "Looking for a roofer — hidden", "open ↗"][c] : byTab === "b2b" ? ["Hidden Company Ltd", "Property manager", "Surrey", "contact@hiddencompany.ca", "(604) 555-0123", "visit ↗"][c] : ["2026-11-01", "reddit", "Surrey", "Looking for a roofer", "open post"][c]) + '</td>'; }).join("") + '</tr>'; }
     out.innerHTML = '<div class="fl-resbar"><div class="fl-count">' + total.toLocaleString() + ' <span>total · preview shows the first ' + r.n + '</span></div></div><div class="tablewrap"><table><thead><tr>' + r.head.map(function (h) { return '<th>' + h + '</th>'; }).join("") + '</tr></thead><tbody>' + (r.html || '<tr><td colspan="7"><div class="fl-empty">No matches in the preview.</div></td></tr>') + ph + '</tbody></table>' +
       (hidden ? '<div style="text-align:center;padding:18px;font-weight:700;border-top:1px solid var(--line)">🔒 ' + hidden.toLocaleString() + ' more leads hidden in this preview<div class="lead-sub" style="font-weight:500;margin-top:4px">Contact Jag at JaggyAI to unlock the full list with contact details.</div></div>' : '') + '</div>';
   }

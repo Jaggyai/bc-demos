@@ -180,7 +180,7 @@ window.JAGGY = (function () {
     const stored = JSON.parse(localStorage.getItem("jaggy_inbound_leads") || "[]");
     // Only show ones for this business (or all if dashboard isn't branded).
     stored.slice(-8).forEach(l => {
-      if (!CLIENT.branded || !l.business || l.business === CLIENT.name) ingest(l, "ls");
+      if (!CLIENT.branded || !l.business || l.business.toLowerCase().replace(/[^a-z0-9]/g, "") === CLIENT.name.toLowerCase().replace(/[^a-z0-9]/g, "")) ingest(l, "ls");
     });
   } catch (e) {}
 
