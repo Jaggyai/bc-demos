@@ -65,7 +65,14 @@
     p.textContent = "Private preview · " + daysLeft(t) + " day" + (daysLeft(t) === 1 ? "" : "s") + " left";
     (document.body || doc).appendChild(p);
     branding();
-    if (isDash) { var b = document.getElementById("loginBtn"); if (b) b.click(); }  // skip the demo login screen
+    if (isDash) {  // skip the demo login screen once the dashboard script is ready
+      var tries = 0, iv = setInterval(function () {
+        var app = document.getElementById("app"), b = document.getElementById("loginBtn");
+        if (app && !app.classList.contains("hidden")) { clearInterval(iv); return; }
+        if (b && window.JAGGY && ++tries > 0) { b.click(); }
+        if (tries > 40) clearInterval(iv);
+      }, 120);
+    }
   }
   function gate(t, expired) {
     var d = document.createElement("div"); d.id = "ovr-gate";
