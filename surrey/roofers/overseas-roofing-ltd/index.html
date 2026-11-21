@@ -55,7 +55,7 @@ h2{font-size:clamp(38px,5.6vw,72px);letter-spacing:.005em}
 .marks{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
 .marks .ln{fill:none;stroke:var(--chalk);stroke-width:4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:snap 1.1s var(--ease) .5s forwards}
 .marks .tk{stroke:var(--chalk);stroke-width:3;stroke-linecap:round;opacity:0;animation:fadein .4s ease forwards}
-.marks text{font-family:var(--stencil);font-weight:900;font-size:34px;letter-spacing:.06em;fill:var(--hi);opacity:0;animation:fadein .5s ease forwards;paint-order:stroke;stroke:rgba(11,12,14,.65);stroke-width:5px}
+.marks text{font-family:var(--stencil);font-weight:900;font-size:27px;letter-spacing:.06em;fill:var(--hi);opacity:0;animation:fadein .5s ease forwards;paint-order:stroke;stroke:rgba(11,12,14,.65);stroke-width:5px}
 @keyframes snap{to{stroke-dashoffset:0}}
 @keyframes fadein{to{opacity:1}}
 .hero-in{position:relative;z-index:3;padding-top:120px;padding-bottom:64px;width:100%}
@@ -214,22 +214,24 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <svg class="marks" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <path class="ln" pathLength="1" d="M560 610 L1160 360"/>
     <g>
-      <line class="tk" style="animation-delay:.9s" x1="640" y1="577" x2="655" y2="612"/>
-      <line class="tk" style="animation-delay:1.1s" x1="780" y1="519" x2="795" y2="554"/>
-      <line class="tk" style="animation-delay:1.3s" x1="920" y1="461" x2="935" y2="496"/>
-      <line class="tk" style="animation-delay:1.5s" x1="1060" y1="402" x2="1075" y2="437"/>
+      <line class="tk" style="animation-delay:.9s" x1="567" y1="592" x2="577" y2="618"/>
+      <line class="tk" style="animation-delay:1.1s" x1="675" y1="547" x2="685" y2="573"/>
+      <line class="tk" style="animation-delay:1.3s" x1="795" y1="497" x2="805" y2="523"/>
+      <line class="tk" style="animation-delay:1.5s" x1="915" y1="447" x2="925" y2="473"/>
+      <line class="tk" style="animation-delay:1.7s" x1="1035" y1="397" x2="1045" y2="423"/>
     </g>
-    <text style="animation-delay:1s" transform="translate(600 585) rotate(-22.6)">TEAR-OFF</text>
-    <text style="animation-delay:1.2s" transform="translate(738 527) rotate(-22.6)">RE-DECK</text>
-    <text style="animation-delay:1.4s" transform="translate(872 471) rotate(-22.6)">UNDERLAY</text>
-    <text style="animation-delay:1.6s" transform="translate(1000 418) rotate(-22.6)">SHINGLE + FLASH</text>
+    <text style="animation-delay:1s" transform="translate(575 598) rotate(-22.6)" y="-18">TEAR-OFF</text>
+    <text style="animation-delay:1.2s" transform="translate(683 553) rotate(-22.6)" y="46">RE-DECK</text>
+    <text style="animation-delay:1.4s" transform="translate(803 503) rotate(-22.6)" y="-18">UNDERLAY</text>
+    <text style="animation-delay:1.6s" transform="translate(923 453) rotate(-22.6)" y="46">SHINGLE</text>
+    <text style="animation-delay:1.8s" transform="translate(1043 403) rotate(-22.6)" y="-18">FLASH</text>
   </svg>
   <div class="wrap hero-in">
     <h1>Roofs built to beat <em>BC weather.</em></h1>
     <p class="sub">Shingle, flat roof and skylight installations for homes, strata and commercial buildings — with clear written quotes, tidy job sites and a written workmanship warranty.</p>
     <div class="cta"><a class="btn" href="#contact">Get my free estimate →</a><a class="btn ghost" href="tel:+17785550100">Call (778) 555-0100</a></div>
     <p class="note">Free on-site estimates · Same-day emergency repairs</p>
-    <ul class="phases" aria-hidden="true"><li>Tear-off</li><li>Re-deck</li><li>Underlay</li><li>Shingle + flash</li></ul>
+    <ul class="phases" aria-hidden="true"><li>Tear-off</li><li>Re-deck</li><li>Underlay</li><li>Shingle</li><li>Flash</li></ul>
   </div>
 </section>
 
